@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/user"></ion-back-button>
+    </ion-buttons>
+    <ion-title>注册</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row justify-content-center align-items-center>
+      <ion-col>
+        <form [formGroup]="registerForm" (submit)="onSubmit()">
+          <ion-item>
+            <ion-label color="primary" position="floating">用户名</ion-label>
+            <ion-input type="text" formControlName="username" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label color="primary" position="floating">新密码</ion-label>
+            <ion-input type="password" type="text" formControlName="password" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label color="primary" position="floating">确认密码</ion-label>
+            <ion-input type="password" type="text" formControlName="repassword" required></ion-input>
+          </ion-item>
+          <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!registerForm.valid">注册</ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

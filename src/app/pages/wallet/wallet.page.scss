@@ -1,0 +1,153 @@
+.miandiv-wallet {
+  width: 331px;
+  height: 500px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.wallet-img-class {
+  width: 40%;
+  height: 40%;
+}
+
+.wallet-img-div {
+  z-index: 9999;
+  position: absolute;
+  width: 100%;
+}
+
+.img-right {
+  float: right;
+  width: 31px;
+  height: 50px;
+  margin-right: 25px;
+  margin-top: 18px;
+}
+
+.img-left {
+  float: left;
+  width: 60px;
+  height: 27px;
+  margin-left: 25px;
+  margin-top: 18px;
+}
+
+.div-title {
+  text-align: center;
+  width: 100%;
+  margin-top: 75px;
+}
+
+.title-size {
+  font-size: 22px;
+}
+
+.title-panel {
+  margin-top: 24px;
+}
+
+.btn-size {
+  font-size: 14px;
+  width: 95px;
+  height: 30px;
+  border-color: #51d3cc;
+  color: #51d3cc;
+}
+
+.btn-recive {
+  float: left;
+  margin-left: 50px;
+}
+
+.btn-send {
+  float: right;
+  margin-right: 50px;
+}
+
+.card-addstyle {
+  width: 100%;
+  margin: 0 0 0 0;
+  height: 4rem;
+}
+
+.card-style {
+  width: 100%;
+  margin: 0 0 0 0;
+  margin-top: 120px;
+}
+
+.btn-add {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-add textsize {
+  font-size: 1rem;
+}
+
+.icon-div {
+  margin-top: 32px;
+}
+
+.icon-image {
+  height: 1.5rem;
+  width: 1.5rem;
+  float: left;
+}
+
+.lable-style {
+  float: left;
+  height: 2rem;
+  margin: 2px 0 0 5px;
+}
+
+.div-price {
+  float: left;
+  margin-top: 10%;
+}
+
+.price-padding {
+  font-size: 1rem;
+  width: 100%;
+}
+
+.price-padding-left {
+  float: left;
+}
+
+.price-padding-right {
+  float: right;
+}
+
+.div-border {
+  border-bottom: solid gray 1px;
+  margin-bottom: 1rem;
+}
+
+.addmoney-class {
+  color: #51d3cc;
+  font-size: 1.5rem;
+}
+
+.walletname {
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto
+}
+
+.mian-wallet-backup-div {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.mian-wallet-btn {
+  width: 172px;
+  height: 43px;
+  text-align: center;
+  background-color: #51d3cc;
+  font-size: 15px;
+}
