@@ -35,3 +35,6 @@ UserInterfaceState.xcuserstate
 
 # 暂不提交测试文件
 src/**/*.spec.ts
+
+yarn.lock
+package-lock.json

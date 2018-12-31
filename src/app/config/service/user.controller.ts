@@ -3,17 +3,17 @@ export const UserController = {
    * 用户登录
    */
   login: {
-    controller: "",
-    action: "login",
-    method: "POST"
+    controller: '',
+    action: 'login',
+    method: 'POST'
   },
   /**
    * 用户注册
    */
   register: {
-    controller: "",
-    action: "register",
-    method: "POST"
+    controller: '',
+    action: 'register',
+    method: 'POST'
   },
   /**
    * 获取用户列表
@@ -33,16 +33,16 @@ export const UserController = {
    * 发送短信验证码
    */
   sendSmsCode: {
-    controller: "",
-    action: "sendSmsCode",
-    method: "POST"
+    controller: '',
+    action: 'sendSmsCode',
+    method: 'POST'
   },
   /**
    * 重置密码
    */
   resetPassowrd: {
-    controller: "users",
-    action: "resetPassword",
-    method: "POST"
+    controller: 'users',
+    action: 'resetPassword',
+    method: 'POST'
   }
-};
+}

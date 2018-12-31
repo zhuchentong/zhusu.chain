@@ -1,3 +1,1 @@
-export const dictConfig = {
-  
-};
+export const dictConfig = {}

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { Routes, RouterModule } from '@angular/router'
 
 const routes: Routes = [
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
@@ -7,8 +7,11 @@ const routes: Routes = [
   { path: 'hotel', loadChildren: './pages/hotel/hotel.module#HotelPageModule' },
   { path: 'order', loadChildren: './pages/order/order.module#OrderPageModule' },
   { path: 'user', loadChildren: './pages/user/user.module#UserPageModule' },
-  { path: 'wallet', loadChildren: './pages/wallet/wallet.module#WalletPageModule' }
-];
+  {
+    path: 'wallet',
+    loadChildren: './pages/wallet/wallet.module#WalletPageModule'
+  }
+]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

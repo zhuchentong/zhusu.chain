@@ -1,5 +1,14 @@
 .user-page{
   background-color:gray;
+
+  .login-icon{
+    width:80px;
+    height:80px;
+    border-radius: 100%;
+    line-height: 80px;
+    text-align: center;
+    background: lightgray;
+  }
   .user-button{
     .user-button-image{
       margin:auto;

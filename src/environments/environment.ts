@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  url:{
-    server:"http://127.0.0.1:9002"
+  url: {
+    server: 'http://127.0.0.1:9002'
   }
-};
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

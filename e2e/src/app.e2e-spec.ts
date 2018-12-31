@@ -1,14 +1,14 @@
-import { AppPage } from './app.po';
+import { AppPage } from './app.po'
 
 describe('new App', () => {
-  let page: AppPage;
+  let page: AppPage
 
   beforeEach(() => {
-    page = new AppPage();
-  });
+    page = new AppPage()
+  })
 
   it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getPageTitle()).toContain('Tab One');
-  });
-});
+    page.navigateTo()
+    expect(page.getPageTitle()).toContain('Tab One')
+  })
+})

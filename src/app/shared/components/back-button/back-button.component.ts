@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core'
+import { NavController } from '@ionic/angular'
 
 @Component({
   selector: 'app-back-button',
@@ -7,16 +7,13 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./back-button.component.scss']
 })
 export class BackButtonComponent implements OnInit {
+  constructor(private navCtrl: NavController) {}
 
-  constructor(
-    private navCtrl: NavController
-  ) { }
-
-  ngOnInit() {
+  public ngOnInit() {
+    return
   }
 
-  onClick(){
+  private onClick() {
     this.navCtrl.goBack()
   }
-
 }

@@ -1,29 +1,36 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import { STOEnum, currencyEnum, tokenEnum } from 'app/config/enum.config'
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular'
+import { LoggerService } from '@ngx-toolkit/logger'
 @Injectable({
   providedIn: 'root'
 })
 export class CommonService {
-  constructor(
-    public toastCtrl: ToastController,
-    public atrCtrl: AlertController
-  ) {
-  }
-
-  public content = "请等待...";
+  public content = '请等待...'
   public from = 'tab'
 
-  async message(message: string, duration: number) {
-    let toast = await this.toastCtrl.create({
-      message: message,
-      duration: duration
-    });
-    toast.present();
+  constructor(
+    public toastCtrl: ToastController,
+    public atrCtrl: AlertController,
+    private logger: LoggerService
+  ) {}
+
+  public async message(message: string, duration: number = 3000) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration
+    })
+    toast.present()
   }
 
-  async showPromptAlert(title: string, textName: string, inputType: any, cancel: Function, confirm: Function) {
-    let alert = await this.atrCtrl.create({
+  public async showPromptAlert(
+    title: string,
+    textName: string,
+    inputType: any,
+    cancel: (data: any) => void,
+    confirm: (data: any) => void
+  ) {
+    const alert = await this.atrCtrl.create({
       header: title,
       inputs: [
         {
@@ -36,191 +43,231 @@ export class CommonService {
         {
           text: '取消',
           role: 'cancel',
-          handler: data => {
-            cancel(data);
-          }
+          handler: cancel
         },
         {
           text: '确定',
-          handler: data => {
-            confirm(data);
-          }
+          handler: confirm
         }
       ]
-    });
-    alert.present();
+    })
+    alert.present()
   }
 
-  async showCommonAlert(title: string, subTitle: string, text: string, confirm: Function) {
-    let alert = await this.atrCtrl.create({
+  public async showCommonAlert(
+    title: string,
+    subTitle: string,
+    text: string,
+    confirm: (data: any) => void
+  ) {
+    const alert = await this.atrCtrl.create({
       header: title,
       subHeader: subTitle,
-      buttons: [{
-        text: text,
-        handler: data => {
-          confirm(data);
+      buttons: [
+        {
+          text,
+          handler: confirm
         }
-      }]
-    });
-    alert.present();
+      ]
+    })
+    alert.present()
   }
 
-  checkPassword(password: string) {
-    let message = "";
-    if (password == undefined) {
-      message = "密码不能位空！";
+  public checkPassword(password: string) {
+    let result = false
+    if (password === undefined) {
+      this.message('密码不能位空！')
     } else if (password.length < 6) {
-      message = "密码至少为6位！";
+      this.message('密码不能位空！')
+    } else {
+      result = true
     }
-    return message;
+    return result
     // else{
-    //   //校验规则 只允许输入8-16位数字、字母   
-    //   var reg = /^[A-Za-z0-9]{6,16}$/;     
+    //   //校验规则 只允许输入8-16位数字、字母
+    //   var reg = /^[A-Za-z0-9]{6,16}$/;
     //   if(reg.test(password)){
     //     return true;
-    //   }   
+    //   }
     // }
   }
 
-  checkPoneNo(phoneNo: string) {
-    let pno = /^[1][3,4,5,6,7,8][0-9]{9}$/;
-    let message = "";
-    if (!pno.test(phoneNo)) {
-      message = "手机号码错误，请核查！";
+  /**
+   * 检测手机号
+   * @param phoneNo 手机号码
+   */
+  public checkPhoneNo(phoneNo: string) {
+    const reg = /^[1][3,4,5,6,7,8][0-9]{9}$/
+    const result = reg.test(phoneNo)
+
+    if (!result) {
+      this.message('手机号码错误，请核查！')
     }
-    return message;
+
+    return result
   }
 
-  isEmpty(obj: any) {
-    if (obj == null || typeof (obj) == 'string') {
-      return true;
+  /**
+   * 判空处理
+   * @param obj
+   */
+  public isEmpty(obj: any) {
+    if (obj == null || typeof obj === 'string') {
+      return true
     } else {
-      return false;
+      return false
     }
   }
 
-  //=========== 操作 localStorage ======
-  isFirstLogin() {
-    if (localStorage.length == 0) {
-      return true;
+  /**
+   * 操作 localStorage
+   * TODO:如何用户清理了缓存怎么办
+   */
+  public isFirstLogin() {
+    if (localStorage.length === 0) {
+      return true
     } else if (localStorage.getItem(this.getCurrentUser()) == null) {
-      return true;
+      return true
     } else {
-      return false;
+      return false
     }
   }
 
-  insertLocal(key: string, value: string) {
+  /**
+   * 插入storage
+   * @param key
+   * @param value
+   */
+  public insertLocal(key: string, value: string) {
     if (!localStorage.getItem(key)) {
-      localStorage.setItem(key, value);
+      localStorage.setItem(key, value)
     }
   }
 
-  setCurrency(value: string) {
-    localStorage.setItem(STOEnum.currentCurrency, value);
+  public setCurrency(value: string) {
+    localStorage.setItem(STOEnum.currentCurrency, value)
   }
 
-  setDefaultCurrency() {
-    localStorage.setItem(STOEnum.currentCurrency, currencyEnum.CNY);
+  public setDefaultCurrency() {
+    localStorage.setItem(STOEnum.currentCurrency, currencyEnum.CNY)
   }
 
-  getCurrency() {
-    return localStorage.getItem(STOEnum.currentCurrency);
+  public getCurrency() {
+    return localStorage.getItem(STOEnum.currentCurrency)
   }
 
-  getCurrentWalletJson() {
-    return this.parseWalletJson(this.getCurrentUser()).json;
+  public getCurrentWalletJson() {
+    return this.parseWalletJson(this.getCurrentUser()).json
   }
 
-  insertLocalStorage(address: string, json: any, name: string) {
-    let username = this.getCurrentUser();
+  public insertLocalStorage(address: string, json: any, name: string) {
+    let username = this.getCurrentUser()
     if (localStorage.getItem(address)) {
-      let wallet = this.parseWalletJson(address);
+      const wallet = this.parseWalletJson(address)
       if (wallet.username.indexOf(username) < 0) {
-        username = wallet.username + "," + username;
-        name = wallet.name;
+        username = wallet.username + ',' + username
+        name = wallet.name
       }
     }
-    var data = {
-      name: name,
-      address: address,
-      json: json,
-      username: username
-    };
-    localStorage.setItem(address, JSON.stringify(data));
-    localStorage.setItem(this.getCurrentUser(), JSON.stringify(data));
+    const data = {
+      name,
+      address,
+      json,
+      username
+    }
+    localStorage.setItem(address, JSON.stringify(data))
+    localStorage.setItem(this.getCurrentUser(), JSON.stringify(data))
   }
 
-  deleteAddress(address: string) {
-    let wallet = this.parseWalletJson(address);
-    if (wallet.address == this.parseWalletJson(this.getCurrentUser()).address) {
-      localStorage.removeItem(address);
-      localStorage.removeItem(this.getCurrentUser());
-      for (var i = 0; i < localStorage.length; i++) {
+  public deleteAddress(address: string) {
+    const wallet = this.parseWalletJson(address)
+    if (
+      wallet.address === this.parseWalletJson(this.getCurrentUser()).address
+    ) {
+      localStorage.removeItem(address)
+      localStorage.removeItem(this.getCurrentUser())
+      for (let i = 0; i < localStorage.length; i++) {
         if (localStorage.key(i) !== STOEnum.currentCurrency) {
-          localStorage.setItem(this.getCurrentUser(), localStorage.getItem(localStorage.key(i)));
-          return;
+          localStorage.setItem(
+            this.getCurrentUser(),
+            localStorage.getItem(localStorage.key(i))
+          )
+          return
         }
       }
     } else {
-      localStorage.removeItem(address);
+      localStorage.removeItem(address)
     }
   }
 
-  setCurrentWallet(address: string) {
-    let wallet = this.parseWalletJson(address);
-    localStorage.setItem(this.getCurrentUser(), JSON.stringify(wallet));
+  public setCurrentWallet(address: string) {
+    const wallet = this.parseWalletJson(address)
+    localStorage.setItem(this.getCurrentUser(), JSON.stringify(wallet))
   }
 
-  getCurrentWallet() {
-    let wallet = this.parseWalletJson(this.getCurrentUser());
+  public getCurrentWallet() {
+    const wallet = this.parseWalletJson(this.getCurrentUser())
     if (wallet) {
-      return { name: wallet.name, address: wallet.address };
+      return { name: wallet.name, address: wallet.address }
     } else {
-      return { name: '', address: '' };
+      return { name: '', address: '' }
     }
   }
 
-  getWalletList(): any[] {
-    let list: any[] = [];
-    let username = this.getCurrentUser();
-    for (var i = 0; i < localStorage.length; i++) {
-      //key(i)获得相应的键，再用getItem()方法获得对应的值
-      if (localStorage.key(i)!.indexOf('0x') >= 0) {
-        let wallet = this.parseWalletJson(localStorage.key(i));
+  public getWalletList(): any[] {
+    const list: any[] = []
+    const username = this.getCurrentUser()
+    for (let i = 0; i < localStorage.length; i++) {
+      // key(i)获得相应的键，再用getItem()方法获得对应的值
+      if (localStorage.key(i).indexOf('0x') >= 0) {
+        const wallet = this.parseWalletJson(localStorage.key(i))
         if (wallet.username.indexOf(username) >= 0) {
-          list.push({ name: wallet.name, address: wallet.address, selected: false });
+          list.push({
+            name: wallet.name,
+            address: wallet.address,
+            selected: false
+          })
         }
       }
     }
-    return list;
+    return list
   }
 
-  updateWalletName(address: string, name: string) {
-    let wallet = this.parseWalletJson(address);
-    wallet.name = name;
-    localStorage.setItem(address, JSON.stringify(wallet));
-  }
-  //========================================
-  setToken(access_token: string, refresh_token: string) {
-    sessionStorage.setItem('access_token', access_token);
-    sessionStorage.setItem("refresh_token", refresh_token);
+  /**
+   * 更新钱包名称
+   * @param address
+   * @param name
+   */
+  public updateWalletName(address: string, name: string) {
+    const wallet = this.parseWalletJson(address)
+    wallet.name = name
+    localStorage.setItem(address, JSON.stringify(wallet))
   }
 
-  getCurrentUser(): any {
-    return 'default'//sessionStorage.getItem("current_user")  //钱包无需登录，username保存的就是 current_user，hwh
+  /**
+   * 设置token
+   * @param accessToken
+   * @param refreshToken
+   */
+  public setToken(accessToken: string, refreshToken: string) {
+    sessionStorage.setItem('access_token', accessToken)
+    sessionStorage.setItem('refresh_token', refreshToken)
+  }
+
+  public getCurrentUser(): any {
+    return 'default' // sessionStorage.getItem("current_user")  //钱包无需登录，username保存的就是 current_user，hwh
   }
 
   public parseWalletJson(key: string) {
-    let json = localStorage.getItem(key);
-    let data: any;
+    const json = localStorage.getItem(key)
+    let data: any
     if (json) {
       try {
-        data = JSON.parse(json);
+        data = JSON.parse(json)
       } catch (error) {
-        console.log(error);
+        this.logger.error(error)
       }
     }
-    return data;
+    return data
   }
 }

@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
-import { TabsPage } from './tabs.page';
+import { TabsPage } from './tabs.page'
 
 const routes: Routes = [
   {
@@ -19,7 +19,8 @@ const routes: Routes = [
       {
         path: 'order',
         loadChildren: '../pages/order/order.module#OrderPageModule'
-      },{
+      },
+      {
         path: 'user',
         loadChildren: '../pages/user/user.module#UserPageModule'
       },
@@ -36,7 +37,7 @@ const routes: Routes = [
     pathMatch: 'full'
   }
   // TODO:404
-];
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
