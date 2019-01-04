@@ -1,0 +1,51 @@
+.page.home {
+  .slider-container {
+    height: 200px;
+  }
+  .search-container {
+    margin: 0 10px;
+    & > * {
+      margin: 5px 0;
+    }
+    .level {
+      height: 50px;
+      border-radius: 5px;
+      background-color: lightgray;
+      padding: 0 10px;
+      width: 100%;
+    }
+    .search-button {
+      width: 100%;
+    }
+  }
+  .recommand-container {
+    margin: 5px 0;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+    .label {
+      font-size: 10px;
+      transform: scale(0.8);
+    }
+  }
+  .ad-container {
+    margin: 10px;
+    .split {
+      padding: 5px;
+    }
+    .ad-item {
+      $radius: 5px;
+      min-height: 100px;
+      background: red;
+      &.left {
+        border-top-left-radius: $radius;
+        border-bottom-left-radius: $radius;
+      }
+      &.right {
+        border-top-right-radius: $radius;
+        border-bottom-right-radius: $radius;
+      }
+    }
+  }
+}

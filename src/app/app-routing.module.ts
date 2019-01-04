@@ -10,7 +10,8 @@ const routes: Routes = [
   {
     path: 'wallet',
     loadChildren: './pages/wallet/wallet.module#WalletPageModule'
-  }
+  },
+  { path: 'common', loadChildren: './pages/common/common.module#CommonModule' }
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

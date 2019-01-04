@@ -2,9 +2,7 @@
   <!--用户登录-->
   <ion-grid *ngIf="!currentUser" class="user-login">
     <ion-row align-items-center justify-content-center>
-      <div class="login-icon" routerLink="/user/login">
-        立即登录
-      </div>
+      <div class="login-icon" routerLink="/user/login">立即登录</div>
     </ion-row>
   </ion-grid>
   <!--用户区-->
@@ -15,17 +13,13 @@
         <ion-col size="auto">
           <ion-item routerLink="/user/login">
             <ion-avatar>
-              <img src="/assets/image/user_photo.jpg">
+              <img src="/assets/image/user_photo.jpg" />
             </ion-avatar>
           </ion-item>
         </ion-col>
         <ion-col>
-          <div>
-            测试人员
-          </div>
-          <div>
-            Home
-          </div>
+          <div>测试人员</div>
+          <div>Home</div>
           <div>1,233,555,00</div>
         </ion-col>
       </ion-row>
@@ -34,25 +28,29 @@
     <!--用户按钮-->
     <ion-grid *ngIf="currentUser" class="user-button">
       <ion-row align-items-center justify-content-center>
-        <ion-col *ngFor="let item of userButtons" text-center (click)="onOpenButton()">
-          <div class="user-button-image">
-            <img [src]="item.icon" />
-          </div>
-          <ion-text>{{item.label}}</ion-text>
+        <ion-col
+          *ngFor="let item of userButtons"
+          text-center
+          (click)="onOpenButton()"
+        >
+          <div class="user-button-image"><img [src]="item.icon" /></div>
+          <ion-text>{{ item.label }}</ion-text>
         </ion-col>
       </ion-row>
     </ion-grid>
   </div>
   <!--广告区-->
-  <div class="user-ad">
-    <img src="assets/image/user_background.jpg" />
-  </div>
+  <div class="user-ad"><img src="assets/image/user_background.jpg" /></div>
   <!--菜单区-->
   <div *ngIf="currentUser" class="user-menu">
     <ion-list>
       <ion-item>
         <ion-label>个人信息</ion-label>
-        <ion-icon slot="end" name="arrow-forward" (click)="onOpenMenu()"></ion-icon>
+        <ion-icon
+          slot="end"
+          name="arrow-forward"
+          (click)="onOpenMenu()"
+        ></ion-icon>
       </ion-item>
       <ion-item>
         <ion-label>实名认证</ion-label>

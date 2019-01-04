@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <app-back-button slot="start"></app-back-button>
+    <ion-title>城市</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="page city-list">
+  <div *ngFor="let province of cityData">
+    <div class="province">{{ province.name }}</div>
+    <div class="row">
+      <div
+        *ngFor="let city of province.children"
+        class="city"
+        (click)="onSelectCity(city)"
+      >
+        {{ city.name }}
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,9 +1,48 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>hotel</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
-
+<ion-content class="page hotel">
+  <ion-slides class="slider-container" pager="true" [options]="slideOptions">
+    <ion-slide> <h1>Slide 1</h1> </ion-slide>
+    <ion-slide> <h1>Slide 2</h1> </ion-slide>
+    <ion-slide> <h1>Slide 3</h1> </ion-slide>
+  </ion-slides>
+  <div class="search-container row nowarp">
+    <app-select-position></app-select-position>
+    <app-select-date></app-select-date>
+    <div
+      class="level row middle-span"
+      [ngStyle]="{ color: level >= 0 ? 'black' : 'darkgray' }"
+      (click)="onSelectLevel()"
+    >
+      {{ level >= 0 ? levelList[level] : '1~5星级/不限' }}
+    </div>
+    <ion-button class="search-button" expand="block" (click)="(onSreach)"
+      >搜索</ion-button
+    >
+  </div>
+  <div class="recommand-container row nowrap around-span">
+    <div
+      class="recommand-item col middle-span center-span"
+      *ngFor="let item of recommandList"
+    >
+      <img [src]="item.icon" />
+      <div class="label">{{ item.label }}</div>
+    </div>
+  </div>
+  <div class="ad-container">
+    <div class="row nowrap">
+      <div #aditem class="col-span ad-item left"></div>
+      <div class="split"></div>
+      <div class="col col-span nowrap">
+        <div #item class="row-span ad-item right"></div>
+        <div class="split"></div>
+        <div #aditem class="row-span ad-item right"></div>
+      </div>
+    </div>
+    <div class="split"></div>
+    <div class="row nowrap">
+      <div #aditem class="col-span ad-item left"></div>
+      <div class="split"></div>
+      <div #aditem class="col-span ad-item left"></div>
+    </div>
+  </div>
+  <app-end-line></app-end-line>
 </ion-content>

@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core'
 import { NetService } from 'app/utils/net.service'
 import { UserController } from 'app/config/service/user.controller'
-import { AuthService } from 'app/utils/auth.service'
+import { User } from 'app/models/user.model'
+import { Observable } from 'rxjs'
 
 @Injectable()
 export class UserService {
-  constructor(private net: NetService) {}
+  constructor(private net: NetService) { }
 
   /**
    * 获取用户
    */
-  public getUser() {
+  public getUser(): Observable<User> {
     return this.net.send({
-      service: UserController.getUser
+      service: UserController.getUser,
+      model: User
     })
   }
 
@@ -33,9 +35,9 @@ export class UserService {
     return this.net.send({
       service: UserController.register,
       params: {
-        username: '001',
-        password: 'test01',
-        displayName: 'test01'
+        username: user.username,
+        password: user.password,
+        displayName: user.displayName
       }
     })
   }
@@ -44,10 +46,11 @@ export class UserService {
    * 用户登录
    * @param user
    */
-  public login(user) {
+  public login(user): Observable<User> {
     return this.net.send({
       service: UserController.login,
-      params: user
+      params: user,
+      model: User
     })
   }
 

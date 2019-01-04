@@ -1,0 +1,22 @@
+$height: 80px;
+:host {
+  width: 100%;
+}
+
+.component.select-date {
+  height: $height;
+  border-radius: 5px;
+  background-color: lightgray;
+  padding: 0 10px;
+
+  ion-datetime {
+    font-weight: bold;
+  }
+  .split {
+    width: 30px;
+  }
+
+  .days {
+    width: 50px;
+  }
+}

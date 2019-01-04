@@ -5,10 +5,7 @@ import { LaunchService } from './services/launch.service'
 @NgModule({
   declarations: [],
   imports: [CommonModule],
-  providers: [NetService, LaunchService]
+  providers: [NetService, LaunchService],
+  exports: []
 })
-export class CoreModule {
-  constructor(private launchService: LaunchService) {
-    launchService.launch()
-  }
-}
+export class CoreModule {}

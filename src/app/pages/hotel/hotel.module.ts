@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 
 import { HotelPage } from './hotel.page'
+import { SharedModule } from 'app/shared/shared.module'
 
 const routes: Routes = [
   {
@@ -15,12 +16,8 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [HotelPage]
+  imports: [SharedModule, RouterModule.forChild(routes)],
+  declarations: [HotelPage ],
+  providers: []
 })
 export class HotelPageModule {}

@@ -1,0 +1,13 @@
+.result-item {
+  .name {
+    font-size: 12px;
+    margin-right: 5px;
+  }
+  .district {
+    font-size: 10px;
+    color: darkgray;
+  }
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

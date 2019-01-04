@@ -1,0 +1,38 @@
+$height: 50px;
+:host {
+  width: 100%;
+}
+
+.component.select-position {
+  height: $height;
+  line-height: $height;
+  border-radius: 5px;
+  background-color: lightgray;
+  padding: 0 10px;
+  .city {
+    font-size: 1.1rem;
+    height: $height;
+    min-width: 80px;
+  }
+  .address {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: $height;
+  }
+  .split {
+    height: $height - 20px;
+    width: 1px;
+    background-color: darkgray;
+  }
+  .geolocation {
+    flex-basis: 80px;
+    width: 80px; // transform: scale(0.5, 0.5);
+    &>* {
+      display: block;
+    }
+    label {
+      transform: scale(0.8);
+    }
+  }
+}

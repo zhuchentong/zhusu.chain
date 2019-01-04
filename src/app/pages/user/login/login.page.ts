@@ -6,6 +6,9 @@ import { AuthService } from 'app/utils/auth.service'
 import { NavController, LoadingController } from '@ionic/angular'
 import { CommonService } from 'app/utils/common.service'
 import { LoggerService } from '@ngx-toolkit/logger'
+import { User } from 'app/models/user.model'
+import { Store } from '@ngxs/store'
+import { LoginAction } from 'app/store/action/user.action'
 
 @Component({
   selector: 'app-login',
@@ -13,38 +16,6 @@ import { LoggerService } from '@ngx-toolkit/logger'
   styleUrls: ['./login.page.scss']
 })
 export class LoginPage implements OnInit {
-  // private currentUser
-  // private loginForm: FormGroup;
-
-  // constructor(
-  //   private userService: UserService,
-  //   public formBuilder: FormBuilder,
-  //   private authService: AuthService,
-  //   private router: Router,
-  //   private navCtrl: NavController
-  // ) {
-
-  // }
-
-  // ngOnInit() {
-  //   this.loginForm = this.formBuilder.group({
-  //     username: new FormControl('', Validators.required),
-  //     password: new FormControl('', Validators.required)
-  //   });
-  // }
-
-  // onSubmit() {
-  //   this.authService.login(
-  //     this.loginForm.value.username,
-  //     this.loginForm.value.password
-  //   ).subscribe(data => {
-  //   })
-  // }
-  // back() {
-  //   this.navCtrl.goBack()
-  // }
-
-  // TODO: 提取loading为装饰器
   @Input('serverUrl')
   private serverUrl: string = 'http://localhost:9002' // 服务器地址
   @Input('rpcURL')
@@ -71,8 +42,9 @@ export class LoginPage implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
-    private logger: LoggerService
-  ) {}
+    private logger: LoggerService,
+    private store: Store
+  ) { }
 
   public ngOnInit() {
     this.initLogin()
@@ -100,9 +72,9 @@ export class LoginPage implements OnInit {
 
   private async login() {
     // 验证表单，发起http请求
-    this.loading = await this.loadingCtrl.create({
-      message: this.commonService.content
-    })
+    // this.loading = await this.loadingCtrl.create({
+    //   message: this.commonService.content
+    // })
 
     // 检测手机号
     if (!this.commonService.checkPhoneNo(this.loginForm.value.username)) {
@@ -110,32 +82,27 @@ export class LoginPage implements OnInit {
     }
 
     if (this.loginForm.valid) {
-      this.loading.present()
-      this.authService
-        .login(this.loginForm.value.username, this.loginForm.value.password)
-        .subscribe(
-          (res: any) => {
-            // TODO:修改到auth拦截器中完成
-            // sessionStorage.setItem('access_token', res.access_token);
-            // sessionStorage.setItem("refresh_token", res.refresh_token);
-            // sessionStorage.setItem("current_user", this.loginForm.value.username);
-            if (this.commonService.isFirstLogin()) {
-              this.commonService.setDefaultCurrency()
-              // TODO: 首次登录进入钱包
-              // TODO: 首次登录注册钱包
-              this.router.navigate(['/wallet'], { replaceUrl: true })
-            } else {
-              // 登录成功，返回之前页面
-              this.navCtrl.goBack()
-            }
-            this.loading.dismiss()
-          },
-          (err: any) => {
-            this.logger.error(err)
-            this.loading.dismiss()
-            this.commonService.message('登陆失败，请重试！', 3000)
+      this.userService.login(this.loginForm.value).subscribe(
+        user => {
+          this.store.dispatch(new LoginAction(user))
+
+          if (this.commonService.isFirstLogin()) {
+            this.commonService.setDefaultCurrency()
+            // TODO: 首次登录进入钱包
+            // TODO: 首次登录注册钱包
+            this.router.navigate(['/wallet'], { replaceUrl: true })
+          } else {
+            // 登录成功，返回之前页面
+            this.navCtrl.goBack()
           }
-        )
+          // this.loading.dismiss()
+        },
+        (err: any) => {
+          this.logger.error(err)
+          // this.loading.dismiss()
+          this.commonService.message('登陆失败，请重试！', 3000)
+        }
+      )
     }
   }
 
@@ -172,23 +139,23 @@ export class LoginPage implements OnInit {
   /**
    * 用户注册
    */
-  private register(): void {
+  private async  register() {
     // 检测手机号
-    if (!this.commonService.checkPhoneNo(this.loginForm.value.username)) {
-      return
-    }
-    // 检测密码
-    if (!this.commonService.checkPassword(this.registerForm.value.password)) {
-      return
-    }
+    // if (!this.commonService.checkPhoneNo(this.loginForm.value.username)) {
+    //   return
+    // }
+    // // 检测密码
+    // if (!this.commonService.checkPassword(this.registerForm.value.password)) {
+    //   return
+    // }
 
-    this.loading = this.loadingCtrl.create({
+    this.loading = await this.loadingCtrl.create({
       message: this.commonService.content
     })
 
     // 验证注册码
     if (
-      sessionStorage.getItem('smscode') === this.registerForm.value.registercode
+      sessionStorage.getItem('smscode') === this.registerForm.value.registercode || true
     ) {
       this.loading.present()
       this.userService

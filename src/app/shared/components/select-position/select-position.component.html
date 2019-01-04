@@ -1,0 +1,11 @@
+<section class="component select-position row nowarp middle-span">
+  <div class="city" (click)="onSelectCity()">{{ location?.city?.name }}</div>
+  <div class="address col-span" (click)="onSearchAddress()">
+    {{ location?.address }}
+  </div>
+  <div class="split"></div>
+  <div class="geolocation col middle-span center-span" (click)="onLocation()">
+    <ion-icon src="assets/icon/target.svg"></ion-icon>
+    <label>当前位置</label>
+  </div>
+</section>

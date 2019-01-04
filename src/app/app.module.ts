@@ -18,7 +18,10 @@ import { SharedModule } from './shared/shared.module'
 // 插件模块
 import { NgxAmapModule } from 'ngx-amap'
 import { LoggerModule, Level } from '@ngx-toolkit/logger'
-
+import { NgxsModule } from '@ngxs/store'
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin'
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin'
+import { states } from 'app/store'
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -29,10 +32,15 @@ import { LoggerModule, Level } from '@ngx-toolkit/logger'
     HttpClientModule,
     CoreModule,
     SharedModule.forRoot(),
-    LoggerModule.forRoot(isDevMode() ? Level.INFO : Level.ERROR),
+    // 日志模块
+    LoggerModule.forRoot(isDevMode() ? Level.LOG : Level.ERROR),
+    // 地图模块
     NgxAmapModule.forRoot({
-      apiKey: '你申请的key'
-    })
+      apiKey: 'ee14bb1f33c09ee81390d6b79cd1718d'
+    }),
+    NgxsModule.forRoot(states),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot()
   ],
   providers: [
     UserService,

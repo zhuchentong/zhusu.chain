@@ -1,0 +1,6 @@
+.modal.top-50 {
+  --height:50%;
+  .modal-wrapper {
+    transform: translateY(50%)!important;
+  }
+}

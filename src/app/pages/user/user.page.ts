@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService } from 'app/utils/auth.service'
+import { UserState } from 'app/store/state/user.state'
+import { Select, Store } from '@ngxs/store'
+import { Observable } from 'rxjs'
+import { User } from 'app/models/user.model'
+import { LoggerService } from '@ngx-toolkit/logger'
 
 @Component({
   selector: 'app-user',
@@ -53,15 +58,20 @@ export class UserPage implements OnInit {
 
   private currentUser
 
-  constructor(private authService: AuthService) {}
+  @Select(UserState)
+  private user$: Observable<User>
+
+  constructor(
+    private authService: AuthService,
+    private logger: LoggerService,
+    private store: Store
+  ) {}
 
   public ngOnInit() {
     // 获取当前用户信息
-    this.currentUser = this.authService.currentUserValue
+    const currentUser = this.store.selectSnapshot<User>(state => state.user)
     // 更新当前用户信息
-    this.authService.currentUser.subscribe(user => {
-      this.currentUser = user
-    })
+    this.user$.subscribe(user => (this.currentUser = user))
   }
 
   /**

@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <app-back-button slot="start"></app-back-button>
+    <ion-searchbar
+      #searchbar
+      cancelButtonIcon
+      cancelButtonText="返回"
+      debounce="500"
+      placeholder="搜索"
+      (ionChange)="onSearchChange(searchbar.value)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list *ngIf="result && result.length">
+    <ion-item
+      *ngFor="let item of result"
+      class="result-item"
+      (click)="onSelectAddress(item)"
+    >
+      <label class="name">{{ item.name }}</label>
+      <label class="district">{{ item.address }}</label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,32 @@
+<section class="component select-date row nowarp middle-span">
+  <div class="col-span">
+    <div>{{ startDate | week: 'today' }}</div>
+    <ion-datetime
+      placeholder="入店日期"
+      [(ngModel)]="startDate"
+      display-format="M月DD日"
+      picker-format="YYYY MM DD"
+      [min]="today"
+      (ionChange)="onDateChange()"
+      cancelText="取消"
+      doneText="确定"
+    ></ion-datetime>
+  </div>
+  <div class="split">至</div>
+  <div class="col-span">
+    <div>{{ endDate | week: 'today' }}</div>
+    <ion-datetime
+      placeholder="离店日期"
+      [(ngModel)]="endDate"
+      display-format="MM月DD日"
+      picker-format="YYYY MM DD"
+      (ionChange)="onDateChange()"
+      cancelText="取消"
+      [min]="today"
+      doneText="确定"
+    ></ion-datetime>
+  </div>
+  <div class="days">
+    <label *ngIf="startDate && endDate"> 共{{ days }}日 </label>
+  </div>
+</section>

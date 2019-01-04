@@ -9,6 +9,8 @@ import { Observable, throwError } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { AuthService } from 'app/utils/auth.service'
 import { LoggerService } from '@ngx-toolkit/logger'
+import { Store } from '@ngxs/store'
+import { LogoutAction } from 'app/store/action/user.action'
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -19,8 +21,9 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService,
+    private store: Store,
     private logger: LoggerService
-  ) {}
+  ) { }
 
   /**
    * 网络异常拦截器
@@ -49,7 +52,7 @@ export class ErrorInterceptor implements HttpInterceptor {
    * 未认证异常处理
    */
   private unauthorizedErrorHandle(err) {
-    this.authService.logout()
+    this.store.dispatch(new LogoutAction())
   }
 
   /**

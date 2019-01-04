@@ -1,5 +1,7 @@
 {
-  "rulesDirectory": ["node_modules/codelyzer"],
+  "rulesDirectory": [
+    "node_modules/codelyzer"
+  ],
   "extends": [
     "tslint:recommended",
     "tslint-config-standard",
@@ -20,7 +22,11 @@
       }
     ],
     "no-console": true,
-    "semicolon": [true, "never"],
-    "no-floating-promises": false
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "no-floating-promises": false,
+    "max-classes-per-file": false
   }
 }

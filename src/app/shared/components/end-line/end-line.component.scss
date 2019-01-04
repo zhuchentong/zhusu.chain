@@ -1,0 +1,11 @@
+.component.end-line {
+  -webkit-transform: scale(0.75, 0.75);
+  color: darkgray;
+  .line {
+    display: inline-block;
+    width: 30%;
+    height: 1px;
+    background-color: darkgray;
+    margin: 0 3px;
+  }
+}

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { User } from 'app/models/user'
+import { User } from 'app/models/user.model'
 import { UserService } from 'app/services/user.service'
+import { Store } from '@ngxs/store'
+import { LoginAction } from 'app/store/action/user.action'
+import { LoggerService } from '@ngx-toolkit/logger'
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,11 @@ export class AuthService {
   public currentUser: Observable<User>
   private currentUserSubject: BehaviorSubject<User>
 
-  constructor(private userService: UserService) {
+  constructor(
+    private logger: LoggerService,
+    private userService: UserService,
+    private store: Store
+  ) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem('currentUser'))
     )
@@ -45,6 +52,7 @@ export class AuthService {
    * @param password
    */
   public login(username: string, password: string) {
+    this.logger.error(123, username)
     return this.userService
       .login({
         username,
@@ -52,11 +60,14 @@ export class AuthService {
       })
       .pipe(
         map(user => {
-          if (user && user.access_token) {
-            user.token = user.access_token
-            localStorage.setItem('currentUser', JSON.stringify(user))
-            this.currentUserSubject.next(user)
-          }
+          this.logger.info(user)
+          // if (user && user.access_token) {
+          //   user.token = user.access_token
+          //   localStorage.setItem('currentUser', JSON.stringify(user))
+          //   this.currentUserSubject.next(user)
+          //   this.logger.log(user)
+          //   this.store.dispatch(new LoginAction(user))
+          // }
           return user
         })
       )
