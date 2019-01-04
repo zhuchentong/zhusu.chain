@@ -1,7 +1,20 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button>取消</ion-button>
-    <ion-title>{{ isloginModel ? '登录' : '注册' }}</ion-title>
-    <ion-button>确定</ion-button>
+    <ion-button slot="start" size="small" (click)="modalController.dismiss()">
+      取消
+    </ion-button>
+    <ion-title text-center>星级</ion-title>
+    <ion-button slot="end" size="small" (click)="onSubmit()"> 确定 </ion-button>
   </ion-toolbar>
 </ion-header>
+
+<ion-content clas="row around-span select-star component" padding-top>
+  <ion-button
+    class="level-button"
+    [color]="level.includes(item.key) ? 'primary' : 'light'"
+    *ngFor="let item of levelList"
+    (click)="onSelectLevel(item.key)"
+  >
+    {{ item.value }}
+  </ion-button>
+</ion-content>

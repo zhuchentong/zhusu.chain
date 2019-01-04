@@ -1,14 +1,9 @@
-import {
-  Component,
-  OnInit,
-  Directive,
-  QueryList,
-  ContentChildren,
-  ElementRef,
-  Renderer2
-} from '@angular/core'
+import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core'
 import { DeviceService } from 'app/utils/decive.service'
-import { ActionSheetController } from '@ionic/angular'
+import { ActionSheetController, ModalController } from '@ionic/angular'
+import { SelectStarComponent } from 'app/shared/components/select-star/select-star.component'
+import { LevelList } from 'app/config/dict.config'
+import { CommonService } from 'app/utils/common.service'
 
 @Component({
   selector: 'app-hotel',
@@ -23,7 +18,7 @@ export class HotelPage implements OnInit {
     }
   }
 
-  private readonly levelList = ['不限', '一星', '二星', '三星', '四星', '五星']
+  private readonly levelList = LevelList
   private recommandList = [
     {
       icon: 'assets/image/user_photo.jpg',
@@ -42,31 +37,47 @@ export class HotelPage implements OnInit {
       label: '钟点房'
     }
   ]
-  private level
+  private level: number[] = []
+  private selectStarModal
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private elementRef: ElementRef,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private modalController: ModalController,
+    private commonService: CommonService
   ) {}
 
   public ngOnInit() {
     return
   }
 
+  private getLevelLabel() {
+    if (
+      this.level.length === 0 ||
+      this.level.length === this.levelList.length - 1
+    ) {
+      return '1~5星级/不限'
+    }
+
+    return this.level
+      .map(x => this.levelList.find(item => item.key === x).value)
+      .join('/')
+  }
+
   private async onSelectLevel() {
-    const buttons = this.levelList.map((item, index) => ({
-      text: item,
-      handler: () => {
-        this.level = index
+    this.commonService.modal(
+      SelectStarComponent,
+      {
+        cssClass: 'top-50'
+      },
+      ({ data }) => {
+        if (data) this.level = data
       }
-    }))
+    )
+  }
 
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: '选择星级',
-      buttons
-    })
-
-    await actionSheet.present()
+  private async onSearch() {
+    return
   }
 
   private ngAfterViewInit() {

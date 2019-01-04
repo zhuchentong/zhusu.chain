@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { HomePage } from './home.page'
 import { SharedModule } from 'app/shared/shared.module'
-import { SearchAddressPage } from '../common/search-address/search-address.page'
 const routes: Routes = [
   {
     path: '',
@@ -13,8 +12,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [HomePage, SearchAddressPage],
-  entryComponents: [HomePage, SearchAddressPage],
+  declarations: [HomePage],
+  entryComponents: [HomePage],
   providers: []
 })
 export class HomePageModule {}

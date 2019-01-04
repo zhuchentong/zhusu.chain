@@ -1,0 +1,12 @@
+.level-button {
+  width: 80px;
+  height: 30px;
+  margin: 5px;
+  &.active {
+    background-color: #aa8800;
+  }
+}
+
+.select-star.component {
+  margin: 10px;
+}

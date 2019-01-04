@@ -31,9 +31,11 @@ import { SelectStarComponent } from './components/select-star/select-star.compon
     EndLineComponent,
     WeekPipe,
     SelectPositionComponent,
-    SelectDateComponent
+    SelectDateComponent,
+    SelectStarComponent
   ],
-  providers: [AuthService, CommonService, DeviceService, Geolocation]
+  providers: [AuthService, CommonService, DeviceService, Geolocation],
+  entryComponents: [SelectStarComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

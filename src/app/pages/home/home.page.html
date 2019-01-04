@@ -9,10 +9,10 @@
     <app-select-date></app-select-date>
     <div
       class="level row middle-span"
-      [ngStyle]="{ color: level >= 0 ? 'black' : 'darkgray' }"
+      [ngStyle]="{ color: level.length > 0 ? 'black' : 'darkgray' }"
       (click)="onSelectLevel()"
     >
-      {{ level >= 0 ? levelList[level] : '1~5星级/不限' }}
+      {{ getLevelLabel() }}
     </div>
     <ion-button class="search-button" expand="block" (click)="onSearch()"
       >搜索</ion-button

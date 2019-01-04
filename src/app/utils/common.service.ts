@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core'
 import { STOEnum, currencyEnum, tokenEnum } from 'app/config/enum.config'
-import { ToastController, AlertController } from '@ionic/angular'
+import {
+  ToastController,
+  AlertController,
+  ModalController
+} from '@ionic/angular'
 import { LoggerService } from '@ngx-toolkit/logger'
 @Injectable({
   providedIn: 'root'
@@ -12,7 +16,8 @@ export class CommonService {
   constructor(
     public toastCtrl: ToastController,
     public atrCtrl: AlertController,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private modalController: ModalController
   ) {}
 
   public async message(message: string, duration: number = 3000) {
@@ -21,6 +26,28 @@ export class CommonService {
       duration
     })
     toast.present()
+  }
+
+  /**
+   * 显示modal
+   * @param component
+   * @param options
+   * @param callback
+   */
+  public async modal(component, options = {}, callback?) {
+    const modal = await this.modalController.create({
+      component,
+      showBackdrop: true,
+      backdropDismiss: true,
+      ...options
+    })
+
+    if (callback) {
+      modal.onDidDismiss().then(callback)
+    }
+
+    modal.present()
+    return modal
   }
 
   public async showPromptAlert(

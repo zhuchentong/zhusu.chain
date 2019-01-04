@@ -1,6 +1,15 @@
-.modal.top-50 {
-  --height:50%;
-  .modal-wrapper {
-    transform: translateY(50%)!important;
+.modal{
+  &.top-50 {
+    --height:50%;
+    .modal-wrapper {
+      transform: translateY(50%)!important;
+    }
+  }
+
+  &.top-75 {
+    --height:25%;
+    .modal-wrapper {
+      transform: translateY(150%)!important;
+    }
   }
 }

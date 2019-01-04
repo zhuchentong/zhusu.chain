@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core'
 import { ActionSheetController, ModalController } from '@ionic/angular'
-import { SearchAddressPage } from '../common/search-address/search-address.page'
+import { CommonService } from 'app/utils/common.service'
+import { SelectStarComponent } from 'app/shared/components/select-star/select-star.component'
+import { LevelList } from 'app/config/dict.config'
 
 @Component({
   selector: 'app-home',
@@ -15,7 +17,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  private readonly levelList = ['不限', '一星', '二星', '三星', '四星', '五星']
+  private readonly levelList = LevelList
   private recommandList = [
     {
       icon: 'assets/image/user_photo.jpg',
@@ -34,43 +36,47 @@ export class HomePage implements OnInit {
       label: '旅行轻奢'
     }
   ]
-  private level
+  private level: number[] = []
+  private selectStarModal
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private elementRef: ElementRef,
     private renderer2: Renderer2,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private commonService: CommonService
   ) {}
 
   public ngOnInit() {
     return
   }
 
+  private getLevelLabel() {
+    if (
+      this.level.length === 0 ||
+      this.level.length === this.levelList.length - 1
+    ) {
+      return '1~5星级/不限'
+    }
+
+    return this.level
+      .map(x => this.levelList.find(item => item.key === x).value)
+      .join('/')
+  }
+
   private async onSelectLevel() {
-    const buttons = this.levelList.map((item, index) => ({
-      text: item,
-      handler: () => {
-        this.level = index
+    this.commonService.modal(
+      SelectStarComponent,
+      {
+        cssClass: 'top-50'
+      },
+      ({ data }) => {
+        if (data) this.level = data
       }
-    }))
-
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: '选择星级',
-      buttons
-    })
-
-    await actionSheet.present()
+    )
   }
 
   private async onSearch() {
-    // Create a modal using MyModalComponent with some initial data
-    // const modal = await this.modalController.create({
-    //   component: SearchAddressPage,
-    //   showBackdrop: true,
-    //   backdropDismiss: true,
-    //   cssClass: 'top-50'
-    // })
-    // modal.present()
+    return
   }
 
   private ngAfterViewInit() {
