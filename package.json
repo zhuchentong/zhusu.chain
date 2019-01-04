@@ -5,8 +5,8 @@
   "homepage": "http://ionicframework.com/",
   "scripts": {
     "dev": "ng serve --open",
-    "dev:android":"ionic cordova run android -lc",
-    "dev:ios":"ionic cordova run ios -lc",
+    "dev:android": "ionic cordova run android -lc",
+    "dev:ios": "ionic cordova run ios -lc",
     "start": "ng serve",
     "build": "ng build",
     "lint": "ng lint",
