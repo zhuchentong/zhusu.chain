@@ -7,6 +7,7 @@
       display-format="M月DD日"
       picker-format="YYYY MM DD"
       [min]="today"
+      [max]="endDate"
       (ionChange)="onDateChange()"
       cancelText="取消"
       doneText="确定"
@@ -22,7 +23,7 @@
       picker-format="YYYY MM DD"
       (ionChange)="onDateChange()"
       cancelText="取消"
-      [min]="today"
+      [min]="startDate||today"
       doneText="确定"
     ></ion-datetime>
   </div>

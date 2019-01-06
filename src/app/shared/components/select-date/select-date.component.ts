@@ -19,11 +19,20 @@ export class SelectDateComponent implements OnInit {
     return
   }
 
+  /**
+   * 计算住宿时间
+   */
   private onDateChange() {
-    if (this.startDate && this.endDate) {
-      this.days = dayjs(this.endDate).diff(dayjs(this.startDate), 'day')
-    } else {
+    if (!this.startDate || !this.endDate) {
       this.days = null
+      return
     }
+
+    if (this.startDate === this.endDate) {
+      this.days = 1
+      return
+    }
+
+    this.days = dayjs(this.endDate).diff(dayjs(this.startDate), 'day')
   }
 }

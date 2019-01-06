@@ -28,9 +28,8 @@ export class SearchAddressPage implements OnInit {
   public async ngOnInit() {
     // 获取位置信息
     const location = this.store.selectSnapshot(state => state.location)
-    const city = location.city ? location.city.name : ''
     this.AmapPlaceSearch.of({
-      city
+      city: location.city
     }).then(placeSearch => {
       this.placeSearch = placeSearch
     })
@@ -38,7 +37,7 @@ export class SearchAddressPage implements OnInit {
 
   /**
    * 搜索地点
-   * @param value 
+   * @param value
    */
   private onSearchChange(value) {
     if (!value) {

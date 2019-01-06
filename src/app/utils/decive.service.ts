@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, isDevMode } from '@angular/core'
 import { Geolocation } from '@ionic-native/geolocation/ngx'
 import { AmapGeocoderService, AmapGeocoderWrapper } from 'ngx-amap'
 import { LoggerService } from '@ngx-toolkit/logger'
@@ -6,6 +6,7 @@ import { CommonService } from './common.service'
 import { Store } from '@ngxs/store'
 import { UpdateLocationAction } from 'app/store/action/location.action'
 import coordtransform from 'coordtransform'
+
 @Injectable()
 export class DeviceService {
   private geoPromise: Promise<AmapGeocoderWrapper>
@@ -51,6 +52,16 @@ export class DeviceService {
               }
             })
         }
+      }
+
+      // 用于测试位置
+      if (isDevMode()) {
+        return update({
+          coords: {
+            latitude: 34.194592654,
+            longitude: 108.8808993124
+          }
+        })
       }
 
       // 获取坐标信息

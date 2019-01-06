@@ -14,7 +14,12 @@
     >
       {{ getLevelLabel() }}
     </div>
-    <ion-button class="search-button" expand="block" (click)="onSearch()">
+    <ion-button
+      class="search-button"
+      expand="block"
+      (click)="onSearch()"
+      [disabled]="!(selectDateComponent?.days > 0)"
+    >
       搜索
     </ion-button>
   </div>

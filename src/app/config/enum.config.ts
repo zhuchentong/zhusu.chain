@@ -12,3 +12,8 @@ export enum tokenEnum {
   ETH = 'ETH',
   JCO = 'JCO'
 }
+
+export enum productEnum {
+  HOME = 'HOMESTAY',
+  HOTEL = 'HOTEL'
+}

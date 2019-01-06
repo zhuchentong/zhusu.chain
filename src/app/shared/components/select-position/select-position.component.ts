@@ -25,7 +25,7 @@ export class SelectPositionComponent implements OnInit {
 
   public ngOnInit() {
     this.location$.subscribe(location => (this.location = location))
-    this.getCurrentPosition()
+    // this.getCurrentPosition()
   }
 
   private async getCurrentPosition() {

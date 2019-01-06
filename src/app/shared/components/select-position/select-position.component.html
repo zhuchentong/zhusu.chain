@@ -1,6 +1,10 @@
 <section class="component select-position row nowarp middle-span">
-  <div class="city" (click)="onSelectCity()">{{ location?.city?.name }}</div>
-  <div class="address col-span" (click)="onSearchAddress()">
+  <div class="city" (click)="onSelectCity()">{{ location?.city }}</div>
+  <div
+    class="address col-span"
+    (click)="onSearchAddress()"
+    [ngClass]="{ wrap: location?.address.length > 12 }"
+  >
     {{ location?.address }}
   </div>
   <div class="split"></div>

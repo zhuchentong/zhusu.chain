@@ -21,13 +21,10 @@ export class CityListPage implements OnInit {
    * 选择城市
    * @param city
    */
-  public onSelectCity({ code, name }) {
+  public onSelectCity(city) {
     this.store.dispatch(
       new UpdateLocationAction({
-        city: {
-          name,
-          code
-        }
+        city
       })
     )
     this.navCtrl.goBack()

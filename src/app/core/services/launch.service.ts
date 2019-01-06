@@ -21,6 +21,7 @@ export class LaunchService {
       this.store.dispatch(new UpdateAction(user))
     })
 
-    this.deviceService.getCurrentPosition()
+    // 初始化地理信息
+    this.deviceService.getCurrentPosition(true)
   }
 }

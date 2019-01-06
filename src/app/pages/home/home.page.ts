@@ -1,8 +1,19 @@
-import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  Renderer2,
+  ViewChild
+} from '@angular/core'
 import { ActionSheetController, ModalController } from '@ionic/angular'
 import { CommonService } from 'app/utils/common.service'
 import { SelectStarComponent } from 'app/shared/components/select-star/select-star.component'
 import { LevelList } from 'app/config/dict.config'
+import { Router } from '@angular/router'
+import { SelectDateComponent } from 'app/shared/components/select-date/select-date.component'
+import { Store } from '@ngxs/store'
+import { HotelPage } from '../hotel/hotel.page'
+import { productEnum } from 'app/config/enum.config'
 
 @Component({
   selector: 'app-home',
@@ -37,13 +48,16 @@ export class HomePage implements OnInit {
     }
   ]
   private level: number[] = []
-  private selectStarModal
+
+  @ViewChild(SelectDateComponent)
+  private selectDateComponent
+
   constructor(
-    private actionSheetCtrl: ActionSheetController,
     private elementRef: ElementRef,
     private renderer2: Renderer2,
-    private modalController: ModalController,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private router: Router,
+    private store: Store
   ) {}
 
   public ngOnInit() {
@@ -75,8 +89,22 @@ export class HomePage implements OnInit {
     )
   }
 
+  /**
+   * 跳转搜索页面
+   */
   private async onSearch() {
-    return
+    const position = this.store.selectSnapshot(state => state.location.position)
+    if (position.latitude && position.longitude) {
+      this.router.navigate([
+        '/product/product-list',
+        {
+          type: productEnum.HOME,
+          level: this.level
+        }
+      ])
+    } else {
+      this.commonService.toast('无法定位当前位置,请重试.')
+    }
   }
 
   private ngAfterViewInit() {

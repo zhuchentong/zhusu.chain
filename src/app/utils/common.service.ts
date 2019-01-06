@@ -28,6 +28,13 @@ export class CommonService {
     toast.present()
   }
 
+  public async toast(message: string, duration: number = 3000) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration
+    })
+    toast.present()
+  }
   /**
    * 显示modal
    * @param component
