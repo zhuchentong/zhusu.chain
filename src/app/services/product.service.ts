@@ -4,6 +4,9 @@ import { productController } from 'app/config/service/product.controller'
 import { User } from 'app/models/user.model'
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
+import { Hotel } from 'app/models/hotel.model'
+import { productEnum } from 'app/config/enum.config'
+import { PageService } from 'app/utils/page.service'
 
 @Injectable()
 export class ProductService {
@@ -12,12 +15,17 @@ export class ProductService {
   /**
    * 获取用户
    */
-  public getProductList(name, level, type): Observable<any> {
+  public getProductList(
+    { name, level, type }: { name?; level?; type: productEnum },
+    { page }: { page?: PageService }
+  ): Observable<Hotel[]> {
     // 获取位置信息
     const location = this.store.selectSnapshot(state => state.location)
 
     return this.net.send({
       service: productController.getProductList,
+      model: Hotel,
+      page,
       params: {
         name,
         type,

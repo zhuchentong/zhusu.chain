@@ -12,6 +12,7 @@ import { WeekPipe } from './pipes/week.pipe'
 import { SelectPositionComponent } from './components/select-position/select-position.component'
 import { SelectDateComponent } from './components/select-date/select-date.component'
 import { SelectStarComponent } from './components/select-star/select-star.component'
+import { PageService } from 'app/utils/page.service'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -34,7 +35,13 @@ import { SelectStarComponent } from './components/select-star/select-star.compon
     SelectDateComponent,
     SelectStarComponent
   ],
-  providers: [AuthService, CommonService, DeviceService, Geolocation],
+  providers: [
+    AuthService,
+    CommonService,
+    DeviceService,
+    Geolocation,
+    PageService
+  ],
   entryComponents: [SelectStarComponent]
 })
 export class SharedModule {

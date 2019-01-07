@@ -5,16 +5,17 @@
     [center]="[116.397428, 39.90923]"
     [zoom]="13"
   ></ngx-amap>
+  <ion-header class="header">
+    <ion-toolbar>
+      <app-back-button slot="start"></app-back-button>
+      <ion-searchbar placeholder="搜索" type="text"> </ion-searchbar>
+      <div slot="end" class="setting-icon row middle-span center-span">
+        <div class="split"></div>
+        <ion-icon name="options" (click)="onOpenSetting"></ion-icon>
+      </div>
+    </ion-toolbar>
+  </ion-header>
   <div class="content">
-    <ion-header>
-      <ion-toolbar>
-        <app-back-button slot="start"></app-back-button>
-        <ion-searchbar placeholder="搜索" type="text"> </ion-searchbar>
-        <div slot="end" class="setting-icon row middle-span center-span">
-          <div class="split"></div>
-          <ion-icon name="options" (click)="onOpenSetting"></ion-icon>
-        </div>
-      </ion-toolbar>
-    </ion-header>
+    
   </div>
 </ion-content>

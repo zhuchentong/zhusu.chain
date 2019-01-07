@@ -22,6 +22,7 @@ import { NgxsModule } from '@ngxs/store'
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin'
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin'
 import { states } from 'app/store'
+import { EmptyInterceptor } from './core/interceptors/empty.interceptor'
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -47,6 +48,7 @@ import { states } from 'app/store'
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: EmptyInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

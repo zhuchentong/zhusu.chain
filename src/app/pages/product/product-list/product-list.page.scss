@@ -2,11 +2,11 @@
   .amap {
     height: 100%;
   }
-  .content {
+  .header {
     position: absolute;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: 56px;
     .setting-icon {
       margin-right: 10px;
       background-color: white;
@@ -24,6 +24,12 @@
         width: 20px;
       }
     }
+  }
+  .content {
+    position: absolute;
+    top: 56px;
+    width: 100%;
+    height: 100%;
   }
 }
 

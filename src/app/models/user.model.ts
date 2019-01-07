@@ -6,6 +6,8 @@ export class User extends Model {
   public id: number
   // 用户名
   public username: string
+  // 显示名称
+  public displayName?: string
   // 密码
   public password: string
   // accessToken

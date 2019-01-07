@@ -6,6 +6,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { LoadingController } from '@ionic/angular'
 import { Model } from 'app/models'
 import { classToPlain, plainToClass } from 'class-transformer'
+import { PageService } from './page.service'
 
 interface IReqestService {
   controller?: string
@@ -19,6 +20,7 @@ interface IRequestOption {
   loading?: boolean | string
   model?: any
   params?: any
+  page?: PageService
 }
 
 @Injectable({
@@ -57,9 +59,11 @@ export class NetService {
       .pipe(
         // 取body数据
         map(response => {
-          return options.model
-            ? plainToClass(options.model, response.body)
+          const body = options.page
+            ? this.getPageData(response.body).list
             : response.body
+
+          return options.model ? plainToClass(options.model, body) : body
         }),
         finalize(() => {
           if (options.loading && this.loading) {
@@ -153,5 +157,22 @@ export class NetService {
     }
     this.loading.message = message
     this.loading.present()
+  }
+
+  private getPageData(body: any) {
+    const data = {
+      count: 0,
+      list: []
+    }
+    Object.entries(body).map(([key, value]: [any, any]) => {
+      if (key.endsWith('List')) {
+        data.list = value
+      }
+
+      if (key.endsWith('Count')) {
+        data.count = value
+      }
+    })
+    return data
   }
 }

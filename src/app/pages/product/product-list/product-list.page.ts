@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { ProductService } from 'app/services/product.service'
 import { ActivatedRoute } from '@angular/router'
 import { LoggerService } from '@ngx-toolkit/logger'
+import { PageService } from 'app/utils/page.service'
+import { Hotel } from 'app/models/hotel.model'
 
 @Component({
   selector: 'app-product-list',
@@ -13,11 +15,12 @@ export class ProductListPage implements OnInit {
   private name
   private level
   private type
-
+  private hotelList = []
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private page: PageService
   ) {}
 
   public ngOnInit() {
@@ -28,8 +31,19 @@ export class ProductListPage implements OnInit {
 
   private getProductList() {
     this.productService
-      .getProductList(this.name, this.level, this.type)
-      .subscribe(data => this.logger.log(data))
+      .getProductList(
+        {
+          name: this.name,
+          level: this.level,
+          type: this.type
+        },
+        {
+          page: this.page
+        }
+      )
+      .subscribe((list: Hotel[]) => {
+        this.hotelList = list
+      })
   }
 
   private onOpenSetting() {
