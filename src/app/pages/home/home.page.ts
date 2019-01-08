@@ -13,7 +13,7 @@ import { Router } from '@angular/router'
 import { SelectDateComponent } from 'app/shared/components/select-date/select-date.component'
 import { Store } from '@ngxs/store'
 import { HotelPage } from '../hotel/hotel.page'
-import { productEnum } from 'app/config/enum.config'
+import { ProductEnum } from 'app/config/enum.config'
 
 @Component({
   selector: 'app-home',
@@ -98,7 +98,7 @@ export class HomePage implements OnInit {
       this.router.navigate([
         '/product/product-list',
         {
-          type: productEnum.HOME,
+          type: ProductEnum.HOME,
           level: this.level
         }
       ])

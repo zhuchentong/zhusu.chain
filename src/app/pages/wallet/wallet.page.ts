@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { CommonService } from 'app/utils/common.service'
 import { EtherService } from 'app/utils/ether.service'
 import { LoadingController } from '@ionic/angular'
-import { tokenEnum } from 'app/config/enum.config'
+import { TokenEnum } from 'app/config/enum.config'
 import { LoggerService } from '@ngx-toolkit/logger'
 
 @Component({
@@ -22,7 +22,6 @@ export class WalletPage implements OnInit {
   private tokenAmount: string
   private gasLimit: string
   private gasPrice: string
-  private tokenEnum: any
   private currentWallet: any = {}
 
   constructor(
@@ -37,7 +36,7 @@ export class WalletPage implements OnInit {
   }
 
   public ngOnInit() {
-    this.tokenEnum = tokenEnum
+    return
   }
 
   private ionViewWillEnter() {
@@ -99,7 +98,7 @@ export class WalletPage implements OnInit {
     this.router.navigate([
       '/wallet/transfer',
       {
-        tokenName: tokenEnum.JCO
+        tokenName: TokenEnum.JCO
       }
     ])
   }

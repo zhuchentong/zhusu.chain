@@ -5,7 +5,7 @@ import { User } from 'app/models/user.model'
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
 import { Hotel } from 'app/models/hotel.model'
-import { productEnum } from 'app/config/enum.config'
+import { ProductEnum } from 'app/config/enum.config'
 import { PageService } from 'app/utils/page.service'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ProductService {
    * 获取用户
    */
   public getProductList(
-    { name, level, type }: { name?; level?; type: productEnum },
+    { name, level, type }: { name?; level?; type: ProductEnum },
     { page }: { page?: PageService }
   ): Observable<Hotel[]> {
     // 获取位置信息

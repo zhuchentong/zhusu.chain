@@ -13,7 +13,7 @@ import { CommonService } from 'app/utils/common.service'
 import { Router } from '@angular/router'
 import { Store } from '@ngxs/store'
 import { SelectDateComponent } from 'app/shared/components/select-date/select-date.component'
-import { productEnum } from 'app/config/enum.config'
+import { ProductEnum } from 'app/config/enum.config'
 
 @Component({
   selector: 'app-hotel',
@@ -99,7 +99,7 @@ export class HotelPage implements OnInit {
       this.router.navigate([
         '/product/product-list',
         {
-          type: productEnum.HOTEL,
+          type: ProductEnum.HOTEL,
           level: this.level
         }
       ])

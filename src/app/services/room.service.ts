@@ -9,9 +9,9 @@ export class RoomService {
   constructor(private net: NetService, private store: Store) {}
 
   /**
-   * 获取用户
+   * 获取房间列表
    */
-  public getOrderList(): Observable<Room[]> {
+  public getRoomList(): Observable<Room[]> {
     return this.net.send({
       service: roomController.getRoomList,
       model: Room,

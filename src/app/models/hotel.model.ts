@@ -1,13 +1,13 @@
 import { Model } from 'app/models'
 import { Expose, Type } from 'class-transformer'
-import { productEnum } from 'app/config/enum.config'
+import { ProductEnum } from 'app/config/enum.config'
 import { User } from './user.model'
 
 export class Hotel extends Model {
   // ID
   public id: number
   // 产品类型
-  public hotelType: productEnum
+  public hotelType: ProductEnum
   // 产品名称
   public name
   // 评论人数
