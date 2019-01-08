@@ -30,6 +30,11 @@
     top: 56px;
     width: 100%;
     height: calc(100% - 56px);
+
+    .v-list {
+      background-color: transparent;
+      padding: 10px;
+    }
   }
 }
 
@@ -44,4 +49,8 @@ ion-searchbar {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
   }
+}
+
+ion-list {
+  --background: transparent;
 }

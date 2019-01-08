@@ -1,4 +1,4 @@
-<ion-header class="header">
+<ion-header class="header" [translucent]="true">
   <ion-toolbar> <app-back-button slot="start"> </app-back-button> </ion-toolbar>
 </ion-header>
 
@@ -11,11 +11,31 @@
     <ion-slide> <h1>Slide 3</h1> </ion-slide>
   </ion-slides>
   <div class="container">
-    <div class="name"></div>
-    <div class="english"></div>
+    <div class="name">{{ product?.name }}</div>
+    <div class="english">{{ product?.englishName }}</div>
+    <div class="address">{{ product?.location }}</div>
     <div class="row nowrap">
-      <div></div>
-      <div></div>
+      <div class="rank-star">
+        <ion-icon
+          name="star"
+          *ngFor="let item of array(product?.totalRanking)"
+        ></ion-icon>
+      </div>
+      <div class="rank-number">{{ product?.totalRanking }}</div>
+    </div>
+    <div class="row between-span">
+      <div class="col-span row">
+        <ng-container *ngFor="let item of product?.tags; let index = index">
+          <div class="tag" *ngIf="index < 2">{{ item }}</div>
+        </ng-container>
+      </div>
+
+      <div class="price" *ngIf="product?.price" class="col-span">
+        <div>每晚</div>
+        <div>
+          <label>{{ product?.price }}</label> <label>起</label>
+        </div>
+      </div>
     </div>
   </div>
 </ion-content>

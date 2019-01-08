@@ -11,11 +11,13 @@ export class RoomService {
   /**
    * 获取房间列表
    */
-  public getRoomList(): Observable<Room[]> {
+  public getRoomList(id): Observable<Room[]> {
     return this.net.send({
       service: roomController.getRoomList,
       model: Room,
-      params: {}
+      params: {
+        hotelId: id
+      }
     })
   }
 }

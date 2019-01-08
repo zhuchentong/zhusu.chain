@@ -3,19 +3,24 @@
   <div class="content col-span">
     <div class="name">{{ product?.name }}</div>
     <div class="english">{{ product?.englishName }}</div>
-    <div class="address"></div>
-    <div>
-      <ng-container class="start">
+    <div class="address">{{ product?.location }}</div>
+    <div class="row nowrap">
+      <div class="star">
         <ion-icon
           name="star"
           *ngFor="let item of array(product?.grand)"
         ></ion-icon>
-      </ng-container>
+      </div>
       <div class="comment">{{ product?.commenterCount }}条评论</div>
     </div>
     <div class="row between-span">
-      <div class="tag"></div>
-      <div class="price">HOME</div>
+      <ng-container *ngFor="let item of product?.tags; let first = first">
+        <div class="tag" *ngIf="first">{{ item }}</div>
+      </ng-container>
+
+      <div class="price" *ngIf="price">
+        <label>HOME</label> <label>{{ price }}</label> <label>起</label>
+      </div>
     </div>
   </div>
 </section>

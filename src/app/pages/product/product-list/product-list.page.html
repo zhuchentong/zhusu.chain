@@ -18,9 +18,10 @@
   <div class="content">
     <div class="v-list" *ngIf="productList && productList.length">
       <ion-list>
-        <ion-item *ngFor="let product of productList">
-          <app-product-item [product]="product"></app-product-item>
-        </ion-item>
+        <app-product-item
+          *ngFor="let product of productList"
+          [product]="product"
+        ></app-product-item>
       </ion-list>
 
       <ion-infinite-scroll

@@ -9,6 +9,7 @@
     "**/*.spec.ts"
   ],
   "paths": {
-    "app/*": ["./app/*"]
+    "app/*": ["./app/*"],
+    "assets/*": ["./assets/*"]
   }
 }

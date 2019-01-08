@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   url: {
-    server: 'http://127.0.0.1:9002'
+    server: 'http://47.110.130.153:9002'
   }
 }
 

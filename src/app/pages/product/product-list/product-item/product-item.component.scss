@@ -1,0 +1,50 @@
+// TODO:style alias
+@import '../../../../../assets/style/helper.scss';
+
+$height: 100px;
+
+:host {
+  width: 100%;
+  height: $height;
+  background-color: transparent;
+}
+
+.component.product-item {
+  background-color: white;
+  border-radius: 5px;
+  padding: 3px;
+  .photo {
+    flex-basis: 80px;
+    width: 80px;
+    height: $height;
+    border-radius: 10px;
+    background-image: url('/assets/image/hotel.jpg');
+  }
+  .content {
+    padding: 0 5px;
+    .name {
+      @include set-font(18px, bold);
+    }
+    .english {
+      @include set-font(12px, bold);
+    }
+    .address {
+      @include set-font(10px, normal, gray);
+    }
+    .comment {
+      @include set-font(8px, normal, gray);
+    }
+    .tag {
+      padding: 4px 10px;
+      border-radius: 10px;
+      border: 1px solid green;
+      @include set-font(10px, normal, green);
+    }
+    .price {
+      @include set-font(12px, normal, orange);
+      .label {
+        margin: 0 2px;
+      }
+    }
+  }
+}
