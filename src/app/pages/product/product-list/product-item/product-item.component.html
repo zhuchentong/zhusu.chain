@@ -5,12 +5,7 @@
     <div class="english">{{ product?.englishName }}</div>
     <div class="address">{{ product?.location }}</div>
     <div class="row nowrap">
-      <div class="star">
-        <ion-icon
-          name="star"
-          *ngFor="let item of array(product?.grand)"
-        ></ion-icon>
-      </div>
+      <app-score-star [star]="product?.grand"></app-score-star>
       <div class="comment">{{ product?.commenterCount }}条评论</div>
     </div>
     <div class="row between-span">

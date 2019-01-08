@@ -1,0 +1,17 @@
+<div class="star">
+  <ion-icon
+    [ngStyle]="{ color: color }"
+    name="star"
+    *ngFor="let item of array(leftCount)"
+  ></ion-icon>
+  <ion-icon
+    [ngStyle]="{ color: color }"
+    name="star-half"
+    *ngIf="hasHalf"
+  ></ion-icon>
+  <ion-icon
+    [ngStyle]="{ color: color }"
+    name="star-outline"
+    *ngFor="let item of array(rightCount)"
+  ></ion-icon>
+</div>

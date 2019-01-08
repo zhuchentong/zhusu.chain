@@ -13,6 +13,7 @@ import { SelectPositionComponent } from './components/select-position/select-pos
 import { SelectDateComponent } from './components/select-date/select-date.component'
 import { SelectStarComponent } from './components/select-star/select-star.component'
 import { PageService } from 'app/utils/page.service'
+import { ScoreStarComponent } from './components/score-star/score-star.component'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -20,7 +21,8 @@ import { PageService } from 'app/utils/page.service'
     SelectPositionComponent,
     SelectDateComponent,
     WeekPipe,
-    SelectStarComponent
+    SelectStarComponent,
+    ScoreStarComponent
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
   exports: [
@@ -33,7 +35,8 @@ import { PageService } from 'app/utils/page.service'
     WeekPipe,
     SelectPositionComponent,
     SelectDateComponent,
-    SelectStarComponent
+    SelectStarComponent,
+    ScoreStarComponent
   ],
   providers: [
     AuthService,

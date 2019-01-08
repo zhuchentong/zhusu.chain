@@ -1,40 +1,75 @@
-<ion-header class="header" [translucent]="true">
-  <ion-toolbar> <app-back-button slot="start"> </app-back-button> </ion-toolbar>
-</ion-header>
-
-<ion-footer class="footer"> </ion-footer>
-
-<ion-content padding>
+<div class="header"></div>
+<div class="fonter"></div>
+<ion-content>
   <ion-slides class="product-image" pager="true" [options]="slideOptions">
-    <ion-slide> <h1>Slide 1</h1> </ion-slide>
-    <ion-slide> <h1>Slide 2</h1> </ion-slide>
-    <ion-slide> <h1>Slide 3</h1> </ion-slide>
+    <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
+    <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
+    <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
   </ion-slides>
-  <div class="container">
-    <div class="name">{{ product?.name }}</div>
-    <div class="english">{{ product?.englishName }}</div>
-    <div class="address">{{ product?.location }}</div>
-    <div class="row nowrap">
-      <div class="rank-star">
-        <ion-icon
-          name="star"
-          *ngFor="let item of array(product?.totalRanking)"
-        ></ion-icon>
+  <!--酒店图片-->
+  <div class="container" padding>
+    <!--酒店基础信息-->
+    <div class="product-info">
+      <div class="name">{{ product?.name }}</div>
+      <div class="english">{{ product?.englishName }}</div>
+      <div class="address">{{ product?.location }}</div>
+      <div class="row nowrap star">
+        <app-score-star [star]="4"></app-score-star>
+        <div class="star-number">4</div>
       </div>
-      <div class="rank-number">{{ product?.totalRanking }}</div>
-    </div>
-    <div class="row between-span">
-      <div class="col-span row">
-        <ng-container *ngFor="let item of product?.tags; let index = index">
-          <div class="tag" *ngIf="index < 2">{{ item }}</div>
+      <div class="row tag-list">
+        <ng-container
+          *ngFor="let item of product?.tags; let index = index; let odd = odd"
+        >
+          <div class="tag" *ngIf="index < 2" [ngClass]="{ odd: odd }">
+            {{ item }}
+          </div>
         </ng-container>
       </div>
-
-      <div class="price" *ngIf="product?.price" class="col-span">
+      <div class="price">
         <div>每晚</div>
-        <div>
-          <label>{{ product?.price }}</label> <label>起</label>
+        <div class="amount"><label>23456.00</label> <label>起</label></div>
+      </div>
+    </div>
+    <!--酒店位置地图-->
+    <div class="product-map">
+      <ngx-amap
+        class="amap"
+        [resizeEnable]="true"
+        [center]="position"
+        [zoom]="13"
+      >
+        <amap-marker
+          [position]="position"
+          [icon]="icon"
+          [label]="label"
+        ></amap-marker>
+      </ngx-amap>
+      <div class="row middle-span between-span navigate">
+        <label>问路卡</label>
+        <div class="split"></div>
+        <ion-icon name="paper-plane"></ion-icon>
+      </div>
+    </div>
+    <!--酒店设施信息-->
+    <div class="product-server">
+      <div class="row nowrap between-span">
+        <div class="star">
+          <label>酒店星级</label>
+          <app-score-star [star]="4" color="#FBDE01"></app-score-star>
         </div>
+        <div class="phone row  middle-span">
+          <ion-icon name="call"></ion-icon>
+          <div class="number">{{ product?.contact }}</div>
+        </div>
+      </div>
+      <div class="service">
+        <div class="row">
+          <div class="service-item row">
+            <ion-icon></ion-icon> <label></label>
+          </div>
+        </div>
+        <div class="all">查看全部设施</div>
       </div>
     </div>
   </div>

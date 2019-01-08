@@ -33,6 +33,7 @@ $height: 100px;
     }
     .comment {
       @include set-font(8px, normal, gray);
+      padding:0 10px;
     }
     .tag {
       padding: 4px 10px;

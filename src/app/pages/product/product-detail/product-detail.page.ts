@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { Select, Store } from '@ngxs/store'
 import { LoggerService } from '@ngx-toolkit/logger'
+import { NgxAmapComponent } from 'ngx-amap'
 
 @Component({
   selector: 'app-product-detail',
@@ -8,7 +9,10 @@ import { LoggerService } from '@ngx-toolkit/logger'
   styleUrls: ['./product-detail.page.scss']
 })
 export class ProductDetailPage implements OnInit {
+  @ViewChild(NgxAmapComponent)
+  private amap
   private product
+  private position
   private array = Array
   // slide配置
   private readonly slideOptions = {
@@ -20,7 +24,12 @@ export class ProductDetailPage implements OnInit {
 
   public ngOnInit() {
     this.product = this.store.selectSnapshot(state => state.product)
+    this.position = [this.product.position.lng, this.product.position.lat]
     this.logger.log(this.product)
+    return
+  }
+
+  private getPosition() {
     return
   }
 }
