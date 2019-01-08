@@ -3,12 +3,12 @@ export enum STOEnum {
   currentCurrency = 'currentCurrency'
 }
 
-export enum currencyEnum {
+export enum CurrencyEnum {
   CNY = '人民币',
   USD = '美元'
 }
 
-export enum tokenEnum {
+export enum TokenEnum {
   ETH = 'ETH',
   JCO = 'JCO'
 }
@@ -16,4 +16,8 @@ export enum tokenEnum {
 export enum productEnum {
   HOME = 'HOMESTAY',
   HOTEL = 'HOTEL'
+}
+
+export enum OrderStateEnum {
+  ALL = '1'
 }

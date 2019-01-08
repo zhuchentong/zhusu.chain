@@ -16,35 +16,45 @@ export class UserPage implements OnInit {
     {
       label: '浏览',
       icon: 'assets/icon/browser.svg',
-      event: 'brower'
+      target: 'user/record'
     },
     {
       label: '收藏',
       icon: 'assets/icon/collect.svg',
-      event: 'collect'
+      target: 'user/collect'
     },
     {
       label: '钱包',
       icon: 'assets/icon/wallet.svg',
-      event: 'wallet'
+      target: 'wallet'
     }
   ]
 
   private readonly userMenus = [
     {
-      label: '浏览',
+      label: '个人信息',
       icon: 'assets/icon/browser.svg',
-      type: 'brower'
+      target: 'user/user-info'
     },
     {
-      label: '收藏',
+      label: '实名认证',
       icon: 'assets/icon/collect.svg',
-      type: 'collet'
+      target: 'user/auth'
     },
     {
-      label: '钱包',
+      label: '系统设置',
       icon: 'assets/icon/wallet.svg',
-      type: 'brower'
+      target: 'user/setting'
+    },
+    {
+      label: '订房记录',
+      icon: 'assets/icon/wallet.svg',
+      target: 'order'
+    },
+    {
+      label: '联系我们',
+      icon: 'assets/icon/wallet.svg',
+      target: 'contact'
     }
   ]
 

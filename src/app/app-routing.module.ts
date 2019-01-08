@@ -15,7 +15,8 @@ const routes: Routes = [
   {
     path: 'product',
     loadChildren: './pages/product/product.module#ProductPageModule'
-  }
+  },
+  { path: 'order-detail', loadChildren: './pages/order/order-detail/order-detail.module#OrderDetailPageModule' }
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

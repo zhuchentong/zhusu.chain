@@ -1,0 +1,12 @@
+.tags {
+  height: 50px;
+  padding: 5px;
+  .tag-item {
+    padding: 2px 5px;
+    border-radius: 10px;
+    background-color: lightgray;
+    &.active {
+      background-color: lightblue;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { STOEnum, currencyEnum, tokenEnum } from 'app/config/enum.config'
+import { STOEnum, CurrencyEnum, TokenEnum } from 'app/config/enum.config'
 import {
   ToastController,
   AlertController,
@@ -183,7 +183,7 @@ export class CommonService {
   }
 
   public setDefaultCurrency() {
-    localStorage.setItem(STOEnum.currentCurrency, currencyEnum.CNY)
+    localStorage.setItem(STOEnum.currentCurrency, CurrencyEnum.CNY)
   }
 
   public getCurrency() {
