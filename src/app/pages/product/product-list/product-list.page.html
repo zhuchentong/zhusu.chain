@@ -11,11 +11,28 @@
       <ion-searchbar placeholder="搜索" type="text"> </ion-searchbar>
       <div slot="end" class="setting-icon row middle-span center-span">
         <div class="split"></div>
-        <ion-icon name="options" (click)="onOpenSetting"></ion-icon>
+        <ion-icon name="options" (click)="(onOpenSetting)"></ion-icon>
       </div>
     </ion-toolbar>
   </ion-header>
   <div class="content">
-    
+    <div class="v-list" *ngIf="productList && productList.length">
+      <ion-list>
+        <ion-item *ngFor="let product of productList">
+          <app-product-item [product]="product"></app-product-item>
+        </ion-item>
+      </ion-list>
+
+      <ion-infinite-scroll
+        threshold="100px"
+        (ionInfinite)="getProductList($event)"
+      >
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="正在加载..."
+        >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
   </div>
 </ion-content>

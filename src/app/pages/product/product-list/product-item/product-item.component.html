@@ -1,0 +1,21 @@
+<section class="component product-item row nowrap">
+  <div class="photo"></div>
+  <div class="content col-span">
+    <div class="name">{{ product?.name }}</div>
+    <div class="english">{{ product?.englishName }}</div>
+    <div class="address"></div>
+    <div>
+      <ng-container class="start">
+        <ion-icon
+          name="star"
+          *ngFor="let item of array(product?.grand)"
+        ></ion-icon>
+      </ng-container>
+      <div class="comment">{{ product?.commenterCount }}条评论</div>
+    </div>
+    <div class="row between-span">
+      <div class="tag"></div>
+      <div class="price">HOME</div>
+    </div>
+  </div>
+</section>

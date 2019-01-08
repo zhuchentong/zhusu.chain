@@ -1,0 +1,18 @@
+.header {
+  position: fixed;
+  top: 0px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0px;
+}
+
+ion-toolbar {
+  --background: transparent;
+}
+
+.container {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
