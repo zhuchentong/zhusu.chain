@@ -12,7 +12,7 @@
       <div
         *ngFor="let city of province.children"
         class="city"
-        (click)="onSelectCity(city)"
+        (click)="onSelectCity(city.name)"
       >
         {{ city.name }}
       </div>
