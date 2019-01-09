@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core'
 import { Select, Store } from '@ngxs/store'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { NgxAmapComponent } from 'ngx-amap'
@@ -16,6 +16,7 @@ export class ProductDetailPage implements OnInit {
   private position
   private array = Array
   private hiddenServer = false
+  private scrollTop = 0
   // slide配置
   private readonly slideOptions = {
     autoplay: {
@@ -46,5 +47,9 @@ export class ProductDetailPage implements OnInit {
     this.roomService.getRoomList(this.product.id).subscribe(rooms => {
       this.logger.log(rooms)
     })
+  }
+
+  private onScroll(event) {
+    this.scrollTop = event.detail.currentY
   }
 }

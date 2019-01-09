@@ -1,5 +1,11 @@
-<div class="header row nowrap between-span">
-  <div><app-back-button></app-back-button></div>
+<div
+  class="header row nowrap between-span middle-span"
+  [ngClass]="{ 'show-title': scrollTop > 200 }"
+>
+  <div class="row nowrap">
+    <app-back-button></app-back-button>
+    <label class="title" *ngIf="scrollTop > 200">{{ product?.name }}</label>
+  </div>
   <div>
     <ion-icon class="collect has-collect" name="heart"></ion-icon>
     <ion-icon class="share" name="share"></ion-icon>
@@ -19,7 +25,7 @@
     <label>写点评</label>
   </div>
 </div>
-<ion-content>
+<ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
   <ion-slides class="product-image" pager="true" [options]="slideOptions">
     <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
     <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
@@ -83,7 +89,7 @@
         </div>
       </div>
       <div class="service">
-        <div class="row around-span">
+        <div class="row">
           <ng-container
             *ngFor="let item of product?.facilities; let index = index"
           >
@@ -105,5 +111,6 @@
         </div>
       </div>
     </div>
+    <div class="product-room"></div>
   </div>
 </ion-content>
