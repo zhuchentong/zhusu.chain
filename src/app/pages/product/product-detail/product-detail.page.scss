@@ -1,6 +1,5 @@
 @import '../../../../assets/style//helper.scss';
 $color: #3bc395;
-
 :host {
   height: 100%;
 }
@@ -9,11 +8,54 @@ $color: #3bc395;
   position: fixed;
   top: 0px;
   height: 50px;
+  width: 100%;
+  z-index: 100;
+  padding: 2px 10px;
+  app-back-button {
+    color: white;
+  }
+  ion-icon {
+    font-size: 28px;
+    height: 29px;
+    margin: 0 7px;
+    color: white;
+  }
+  .collect {
+    &.has-collect {
+      color: rgb(230, 84, 84);
+    }
+  }
+  &>* {
+    text-shadow: 0px 2px 2px #5e5e5e;
+  }
 }
 
 .footer {
   position: fixed;
   bottom: 0px;
+  width: 100%;
+  height: 50px;
+  z-index: 100;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: 0px -2px 5px lightgrey;
+  padding: 5px 10px;
+  .good,
+  .bad {
+    @include set-font(18px, bold, #7e7e7e);
+    .number {
+      @include set-font(10px, normal, #9e9e9e);
+      padding: 0 5px;
+    }
+  }
+  .write {
+    @include set-font(18px, normal, $color);
+    ion-icon {
+      font-size: 24px;
+      height: 24px;
+      margin-right: 5px;
+    }
+  }
 }
 
 .product-image {
@@ -33,6 +75,7 @@ $color: #3bc395;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background-color: white;
+  margin-bottom: 60px;
 }
 
 .product-info {
@@ -124,11 +167,30 @@ $color: #3bc395;
     background-color: #efefef;
     ion-icon {
       height: 28px;
-      font-size: 28PX;
+      font-size: 28px;
       color: $color;
     }
     .number {
-      @include set-font(18px)
+      @include set-font(18px);
+    }
+  }
+  .service {
+    margin: 5px 0;
+    .service-item {
+      padding: 10px 2px;
+      ion-icon {
+        padding-right: 5px;
+        color: $color;
+      }
+      label {
+        @include set-font(14px, normal, #5e5e5e);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .visiable {
+      @include set-font(12px, normal, $color);
     }
   }
 }

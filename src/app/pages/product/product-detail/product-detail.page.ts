@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { Select, Store } from '@ngxs/store'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { NgxAmapComponent } from 'ngx-amap'
+import { RoomService } from 'app/services/room.service'
 
 @Component({
   selector: 'app-product-detail',
@@ -14,22 +15,36 @@ export class ProductDetailPage implements OnInit {
   private product
   private position
   private array = Array
+  private hiddenServer = false
   // slide配置
   private readonly slideOptions = {
     autoplay: {
       delay: 5000
     }
   }
-  constructor(private logger: LoggerService, private store: Store) {}
+  constructor(
+    private roomService: RoomService,
+    private logger: LoggerService,
+    private store: Store
+  ) {}
 
   public ngOnInit() {
+    // 获取酒店信息
     this.product = this.store.selectSnapshot(state => state.product)
     this.position = [this.product.position.lng, this.product.position.lat]
+    this.hiddenServer = this.product.facilities.length > 3
+    // 获取房间信息
+    this.getRoomList()
     this.logger.log(this.product)
     return
   }
 
-  private getPosition() {
-    return
+  /**
+   * 获取房间列表
+   */
+  public getRoomList() {
+    this.roomService.getRoomList(this.product.id).subscribe(rooms => {
+      this.logger.log(rooms)
+    })
   }
 }

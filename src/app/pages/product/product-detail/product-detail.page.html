@@ -1,5 +1,24 @@
-<div class="header"></div>
-<div class="fonter"></div>
+<div class="header row nowrap between-span">
+  <div><app-back-button></app-back-button></div>
+  <div>
+    <ion-icon class="collect has-collect" name="heart"></ion-icon>
+    <ion-icon class="share" name="share"></ion-icon>
+  </div>
+</div>
+<div class="footer row middle-span nowrap">
+  <div class="good col-span-4 row nowrap middle-span">
+    <label>好评</label>
+    <label class="number">{{ product?.commenterCount }}条</label>
+  </div>
+  <div class="bad col-span-4 row nowrap middle-span">
+    <label>差评</label>
+    <label class="number">{{ product?.commenterCount }}条</label>
+  </div>
+  <div class="write col-span-4 row nowrap middle-span center-span">
+    <ion-icon name="clipboard"></ion-icon>
+    <label>写点评</label>
+  </div>
+</div>
 <ion-content>
   <ion-slides class="product-image" pager="true" [options]="slideOptions">
     <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
@@ -64,12 +83,26 @@
         </div>
       </div>
       <div class="service">
-        <div class="row">
-          <div class="service-item row">
-            <ion-icon></ion-icon> <label></label>
-          </div>
+        <div class="row around-span">
+          <ng-container
+            *ngFor="let item of product?.facilities; let index = index"
+          >
+            <div
+              *ngIf="!hiddenServer || index < 3"
+              class="service-item row nowrap middle-span col-span-4"
+            >
+              <ion-icon name="beer"></ion-icon>
+              <label>{{ item }}</label>
+            </div>
+          </ng-container>
         </div>
-        <div class="all">查看全部设施</div>
+        <div
+          class="visiable"
+          *ngIf="hiddenServer"
+          (click)="hiddenServer = false"
+        >
+          查看全部设施
+        </div>
       </div>
     </div>
   </div>
