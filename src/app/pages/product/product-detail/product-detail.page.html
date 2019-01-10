@@ -111,6 +111,25 @@
         </div>
       </div>
     </div>
-    <div class="product-room"></div>
+    <div class="product-room">
+      <div class="select-date"></div>
+      <div class="room-list">
+        <div
+          class="room-item row"
+          *ngFor="let room of roomList"
+          (click)="onOrderRoom(room)"
+        >
+          <!--TODO:应为房间图片-->
+          <img class="room-image" src="assets/image/hotel.jpg" />
+          <div class="col-span col arround-span room-info">
+            <div class="name">{{ room.name }}</div>
+            <div class="price">{{ room.price.toFixed(2) }}</div>
+          </div>
+          <div class="row middle-span">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </ion-content>

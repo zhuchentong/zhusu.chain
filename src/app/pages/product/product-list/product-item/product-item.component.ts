@@ -3,8 +3,9 @@ import { Hotel } from 'app/models/hotel.model'
 import { Router } from '@angular/router'
 import { RoomService } from 'app/services/room.service'
 import { LoggerService } from '@ngx-toolkit/logger'
-import { UpdateProductAction } from 'app/store/action/product.action'
+import { UpdateHotelAction } from 'app/store/action/product.action'
 import { Store } from '@ngxs/store'
+import { PageService } from 'app/utils/page.service'
 
 @Component({
   selector: 'app-product-item',
@@ -22,28 +23,33 @@ export class ProductItemComponent implements OnInit {
   constructor(
     private roomService: RoomService,
     private logger: LoggerService,
+    private page: PageService,
     private store: Store,
     private router: Router
   ) {}
 
+  public ngOnInit() {
+    this.getRoomList()
+  }
+
   @HostListener('click')
   public onClick() {
     // 更新当前product
-    this.store.dispatch(new UpdateProductAction(this.product))
+    this.product.updateStore(this.store)
     // 跳转产品详情
-    this.router.navigate(['product/product-detail', { product: this.product }])
-  }
-
-  public ngOnInit() {
-    this.getRoomList()
+    this.router.navigate(['product/product-detail'])
   }
 
   /**
    * 获取房间价格
    */
   public getRoomList() {
-    this.roomService.getRoomList(this.product.id).subscribe(rooms => {
-      this.logger.log(rooms)
-    })
+    this.roomService
+      .getRoomList(this.product.id, {
+        page: this.page
+      })
+      .subscribe(rooms => {
+        this.logger.log(rooms)
+      })
   }
 }

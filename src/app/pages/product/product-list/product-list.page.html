@@ -35,7 +35,10 @@
         </ion-infinite-scroll-content>
       </ion-infinite-scroll>
     </div>
-    <div class="empty-list row middle-span center-span">
+    <div
+      *ngIf="productList && productList.length === 0"
+      class="empty-list row middle-span center-span"
+    >
       <label>没有找到符合条件的房间</label>
     </div>
   </div>
