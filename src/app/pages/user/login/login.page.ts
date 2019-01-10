@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { UserService } from 'app/services/user.service'
 import { AuthService } from 'app/utils/auth.service'
 import { NavController, LoadingController } from '@ionic/angular'
@@ -33,7 +33,7 @@ export class LoginPage implements OnInit {
   private timer: any // 定时器取消
   private counter = 30
   private sending = false
-
+  private redirect
   constructor(
     public navCtrl: NavController,
     public formBuilder: FormBuilder,
@@ -42,11 +42,14 @@ export class LoginPage implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private logger: LoggerService,
     private store: Store
-  ) { }
+  ) {}
 
   public ngOnInit() {
+    // 获取待跳转页面
+    this.redirect = this.route.snapshot.paramMap.get('redirect')
     this.initLogin()
   }
 
@@ -85,6 +88,11 @@ export class LoginPage implements OnInit {
       this.userService.login(this.loginForm.value).subscribe(
         user => {
           this.store.dispatch(new LoginAction(user))
+          // 如果存在待跳转页面直接跳转
+          if (this.redirect) {
+            this.router.navigate([this.redirect])
+            return
+          }
 
           if (this.commonService.isFirstLogin()) {
             this.commonService.setDefaultCurrency()
@@ -139,7 +147,7 @@ export class LoginPage implements OnInit {
   /**
    * 用户注册
    */
-  private async  register() {
+  private async register() {
     // 检测手机号
     // if (!this.commonService.checkPhoneNo(this.loginForm.value.username)) {
     //   return
@@ -155,7 +163,9 @@ export class LoginPage implements OnInit {
 
     // 验证注册码
     if (
-      sessionStorage.getItem('smscode') === this.registerForm.value.registercode || true
+      sessionStorage.getItem('smscode') ===
+        this.registerForm.value.registercode ||
+      true
     ) {
       this.loading.present()
       this.userService

@@ -6,7 +6,10 @@ import {
 } from 'ngx-amap'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { Store } from '@ngxs/store'
-import { UpdateLocationAction } from 'app/store/action/location.action'
+import {
+  UpdateAddressAction,
+  UpdatePositionAction
+} from 'app/store/action/location.action'
 import { NavController } from '@ionic/angular'
 
 @Component({
@@ -57,15 +60,8 @@ export class SearchAddressPage implements OnInit {
    * @param item
    */
   private onSelectAddress(item) {
-    this.store.dispatch(
-      new UpdateLocationAction({
-        address: item.name,
-        position: {
-          latitude: item.location.latitude,
-          longitude: item.location.longitude
-        }
-      })
-    )
+    this.store.dispatch(new UpdateAddressAction(item.name))
+    this.store.dispatch(new UpdatePositionAction(item.location))
     this.navCtrl.goBack()
   }
 }

@@ -4,7 +4,11 @@ import { AmapGeocoderService, AmapGeocoderWrapper } from 'ngx-amap'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { CommonService } from './common.service'
 import { Store } from '@ngxs/store'
-import { UpdateLocationAction } from 'app/store/action/location.action'
+import {
+  UpdateCityAction,
+  UpdateAddressAction,
+  UpdatePositionAction
+} from 'app/store/action/location.action'
 import coordtransform from 'coordtransform'
 
 @Injectable()
@@ -34,6 +38,7 @@ export class DeviceService {
           coords.longitude,
           coords.latitude
         )
+        // 更新当前坐标
         this.updateCurrentPosition(coords)
 
         // 反向定位城市信息
@@ -43,12 +48,10 @@ export class DeviceService {
             .then(({ status, result }) => {
               if (status === 'complete' && result.info === 'OK') {
                 const { formattedAddress, addressComponent } = result.regeocode
-                this.store.dispatch(
-                  new UpdateLocationAction({
-                    city: addressComponent.city,
-                    address: formattedAddress
-                  })
-                )
+                // 更新城市
+                this.store.dispatch(new UpdateCityAction(addressComponent.city))
+                // 更新地址
+                this.store.dispatch(new UpdateAddressAction(formattedAddress))
               }
             })
         }
@@ -81,13 +84,6 @@ export class DeviceService {
 
   private updateCurrentPosition(coords) {
     if (!coords) return
-    this.store.dispatch(
-      new UpdateLocationAction({
-        position: {
-          latitude: coords.latitude,
-          longitude: coords.longitude
-        }
-      })
-    )
+    this.store.dispatch(new UpdatePositionAction(coords))
   }
 }

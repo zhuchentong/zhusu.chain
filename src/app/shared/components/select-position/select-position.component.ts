@@ -17,22 +17,12 @@ export class SelectPositionComponent implements OnInit {
   @Select()
   private location$: Observable<LocationState>
 
-  constructor(
-    private deviceService: DeviceService,
-    private store: Store,
-    private router: Router
-  ) {}
+  constructor(private deviceService: DeviceService, private router: Router) {}
 
   public ngOnInit() {
-    this.location$.subscribe(location => (this.location = location))
-    // this.getCurrentPosition()
-  }
-
-  private async getCurrentPosition() {
-    const coords = await this.deviceService.getCurrentPosition()
-    // if (coords) {
-    //   this.position.coords = coords
-    // }
+    this.location$.subscribe(location => {
+      this.location = location
+    })
   }
 
   /**
@@ -53,6 +43,6 @@ export class SelectPositionComponent implements OnInit {
    * 更新定位
    */
   private onLocation() {
-    this.deviceService.getCurrentPosition()
+    this.deviceService.getCurrentPosition(true)
   }
 }

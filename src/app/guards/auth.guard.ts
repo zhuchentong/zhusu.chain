@@ -23,9 +23,10 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    let result = true
-    if (!this.checkUser()) {
-      result = false
+    // 检测用户是否已经登录
+    const result = this.checkUser()
+    // 如果未登录则跳转登录页面，登录完成后恢复
+    if (!result) {
       this.router.navigate(['user/login', { redirect: state.url }])
     }
     return result
@@ -34,8 +35,8 @@ export class AuthGuard implements CanActivate {
   /**
    * 检查用户状态
    */
-  private checkUser() {
+  private checkUser(): boolean {
     const user = this.store.selectSnapshot(state => state.user) as User
-    return user && user.id && user.accessToken
+    return user && user.accessToken && user.accessToken.length > 0
   }
 }

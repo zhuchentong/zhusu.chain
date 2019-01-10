@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { cityConfig } from 'app/config/city.config'
 import { Store } from '@ngxs/store'
-import { UpdateLocationAction } from 'app/store/action/location.action'
+import { UpdateCityAction } from 'app/store/action/location.action'
 import { NavController } from '@ionic/angular'
 @Component({
   selector: 'app-city-list',
@@ -22,11 +22,7 @@ export class CityListPage implements OnInit {
    * @param city
    */
   public onSelectCity(city) {
-    this.store.dispatch(
-      new UpdateLocationAction({
-        city
-      })
-    )
+    this.store.dispatch(new UpdateCityAction(city))
     this.navCtrl.goBack()
   }
 }

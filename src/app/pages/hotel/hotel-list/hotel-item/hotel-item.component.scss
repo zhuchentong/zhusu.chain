@@ -45,7 +45,7 @@ $height: 100px;
     }
     .price {
       @include set-font(12px, normal, orange);
-      .label {
+      label {
         margin: 0 2px;
       }
     }

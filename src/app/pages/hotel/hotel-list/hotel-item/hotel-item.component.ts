@@ -49,7 +49,10 @@ export class HotelItemComponent implements OnInit {
         page: this.page
       })
       .subscribe(rooms => {
-        this.logger.log(rooms)
+        this.price =
+          rooms.length > 0
+            ? rooms.map(x => x.price).reduce((x, y) => x + y) / rooms.length
+            : -1
       })
   }
 }

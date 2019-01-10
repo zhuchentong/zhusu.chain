@@ -13,7 +13,7 @@
         <div class="tag" *ngIf="first">{{ item }}</div>
       </ng-container>
 
-      <div class="price" *ngIf="price">
+      <div class="price" *ngIf="price && price > 0">
         <label>HOME</label> <label>{{ price }}</label> <label>起</label>
       </div>
     </div>
