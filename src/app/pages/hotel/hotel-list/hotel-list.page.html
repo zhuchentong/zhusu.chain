@@ -1,4 +1,4 @@
-<ion-content class="page product-list">
+<ion-content class="page hotel-list">
   <ngx-amap
     class="amap"
     [resizeEnable]="true"
@@ -16,17 +16,17 @@
     </ion-toolbar>
   </ion-header>
   <div class="content">
-    <div class="v-list" *ngIf="productList && productList.length">
+    <div class="v-list" *ngIf="hotelList && hotelList.length">
       <ion-list>
-        <app-product-item
-          *ngFor="let product of productList"
-          [product]="product"
-        ></app-product-item>
+        <app-hotel-item
+          *ngFor="let hotel of hotelList"
+          [hotel]="hotel"
+        ></app-hotel-item>
       </ion-list>
 
       <ion-infinite-scroll
         threshold="100px"
-        (ionInfinite)="getProductList($event)"
+        (ionInfinite)="getHotelList($event)"
       >
         <ion-infinite-scroll-content
           loadingSpinner="bubbles"
@@ -36,7 +36,7 @@
       </ion-infinite-scroll>
     </div>
     <div
-      *ngIf="productList && productList.length === 0"
+      *ngIf="hotelList && hotelList.length === 0"
       class="empty-list row middle-span center-span"
     >
       <label>没有找到符合条件的房间</label>

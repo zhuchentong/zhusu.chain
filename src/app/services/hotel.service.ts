@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core'
 import { NetService } from 'app/utils/net.service'
-import { productController } from 'app/config/service/product.controller'
+import { hotelController } from 'app/config/service/hotel.controller'
 import { User } from 'app/models/user.model'
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
-import { Hotel } from 'app/models/hotel.model'
-import { ProductEnum } from 'app/config/enum.config'
+import { HotelEnum } from 'app/config/enum.config'
 import { PageService } from 'app/utils/page.service'
+import { Hotel } from 'app/models/hotel.model'
 
 @Injectable()
-export class ProductService {
+export class HotelService {
   constructor(private net: NetService, private store: Store) {}
 
   /**
    * 获取用户
    */
-  public getProductList(
-    { name, level, type }: { name?; level?; type: ProductEnum },
+  public getHotelList(
+    { name, level, type }: { name?; level?; type: HotelEnum },
     { page }: { page?: PageService }
   ): Observable<Hotel[]> {
     // 获取位置信息
     const location = this.store.selectSnapshot(state => state.location)
 
     return this.net.send({
-      service: productController.getProductList,
+      service: hotelController.getHotelList,
       model: Hotel,
       page,
       params: {
@@ -34,6 +34,17 @@ export class ProductService {
         lat: location.position.latitude,
         lng: location.position.longitude
       }
+    })
+  }
+
+  /**
+   * 获取产品信息
+   */
+  public getHotel(id): Observable<Hotel> {
+    return this.net.send({
+      service: hotelController.getHotel,
+      model: Hotel,
+      append: [id]
     })
   }
 }

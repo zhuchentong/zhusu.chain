@@ -4,8 +4,6 @@ import { Routes, RouterModule } from '@angular/router'
 const routes: Routes = [
   // tabs模块
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
-  // home模块
-  { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
   // hotel模块
   { path: 'hotel', loadChildren: './pages/hotel/hotel.module#HotelPageModule' },
   // order模块
@@ -18,12 +16,7 @@ const routes: Routes = [
     loadChildren: './pages/wallet/wallet.module#WalletPageModule'
   },
   // 公共模块
-  { path: 'common', loadChildren: './pages/common/common.module#CommonModule' },
-  // 产品模块
-  {
-    path: 'product',
-    loadChildren: './pages/product/product.module#ProductPageModule'
-  }
+  { path: 'common', loadChildren: './pages/common/common.module#CommonModule' }
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

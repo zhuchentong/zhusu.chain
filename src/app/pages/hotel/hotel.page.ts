@@ -13,7 +13,7 @@ import { CommonService } from 'app/utils/common.service'
 import { Router } from '@angular/router'
 import { Store } from '@ngxs/store'
 import { SelectDateComponent } from 'app/shared/components/select-date/select-date.component'
-import { ProductEnum } from 'app/config/enum.config'
+import { HotelEnum } from 'app/config/enum.config'
 
 @Component({
   selector: 'app-hotel',
@@ -97,9 +97,9 @@ export class HotelPage implements OnInit {
     const position = this.store.selectSnapshot(state => state.location.position)
     if (position.latitude && position.longitude) {
       this.router.navigate([
-        '/product/product-list',
+        '/hotel/hotel-list',
         {
-          type: ProductEnum.HOTEL,
+          type: HotelEnum.HOTEL,
           level: this.level
         }
       ])

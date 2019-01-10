@@ -13,7 +13,7 @@ export enum TokenEnum {
   JCO = 'JCO'
 }
 
-export enum ProductEnum {
+export enum HotelEnum {
   HOME = 'HOMESTAY',
   HOTEL = 'HOTEL'
 }

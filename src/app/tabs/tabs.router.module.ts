@@ -13,10 +13,6 @@ const routes: Routes = [
         loadChildren: '../pages/hotel/hotel.module#HotelPageModule'
       },
       {
-        path: 'home',
-        loadChildren: '../pages/home/home.module#HomePageModule'
-      },
-      {
         path: 'order',
         loadChildren: '../pages/order/order.module#OrderPageModule'
       },

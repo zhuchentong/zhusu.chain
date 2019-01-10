@@ -69,7 +69,7 @@ $color: #3bc395;
   }
 }
 
-.product-image {
+.hotel-image {
   top: 0;
   height: 250px;
   img {
@@ -89,7 +89,7 @@ $color: #3bc395;
   margin-bottom: 60px;
 }
 
-.product-info {
+.hotel-info {
   position: relative;
   &>*:not(.name) {
     margin-bottom: 3px;
@@ -141,7 +141,7 @@ $color: #3bc395;
   }
 }
 
-.product-map {
+.hotel-map {
   position: relative;
   margin: 3px 0;
   height: 120px;
@@ -166,7 +166,7 @@ $color: #3bc395;
   }
 }
 
-.product-server {
+.hotel-server {
   margin: 3px 0;
   .star {
     label {
@@ -206,7 +206,7 @@ $color: #3bc395;
   }
 }
 
-.product-room {
+.hotel-room {
   .room-list {
     .room-item {
       border-radius: 10px;

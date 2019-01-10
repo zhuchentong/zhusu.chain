@@ -5,5 +5,12 @@ export const orderController = {
   getOrderList: {
     controller: 'orders',
     method: 'GET'
+  },
+  /**
+   * 获取订单信息
+   */
+  getOrder: {
+    controller: 'orders',
+    method: 'GET'
   }
 }

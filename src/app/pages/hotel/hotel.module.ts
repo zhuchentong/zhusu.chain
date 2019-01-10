@@ -1,23 +1,15 @@
 import { NgModule } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { FormsModule } from '@angular/forms'
-import { Routes, RouterModule } from '@angular/router'
-
-import { IonicModule } from '@ionic/angular'
-
-import { HotelPage } from './hotel.page'
+import { RouterModule } from '@angular/router'
 import { SharedModule } from 'app/shared/shared.module'
-
-const routes: Routes = [
-  {
-    path: '',
-    component: HotelPage
-  }
-]
+import { hotelRoutes, hotelPages } from './hotel.routes'
+import { NgxAmapModule } from 'ngx-amap'
+import { HotelItemComponent } from './hotel-list/hotel-item/hotel-item.component'
+import { HotelService } from 'app/services/hotel.service'
+import { RoomService } from 'app/services/room.service'
 
 @NgModule({
-  imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [HotelPage],
-  providers: []
+  imports: [SharedModule, RouterModule.forChild(hotelRoutes), NgxAmapModule],
+  declarations: [...hotelPages, HotelItemComponent],
+  providers: [HotelService, RoomService]
 })
 export class HotelPageModule {}

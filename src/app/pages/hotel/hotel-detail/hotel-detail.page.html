@@ -4,7 +4,7 @@
 >
   <div class="row nowrap">
     <app-back-button></app-back-button>
-    <label class="title" *ngIf="scrollTop > 200">{{ product?.name }}</label>
+    <label class="title" *ngIf="scrollTop > 200">{{ hotel?.name }}</label>
   </div>
   <div>
     <ion-icon class="collect has-collect" name="heart"></ion-icon>
@@ -14,11 +14,11 @@
 <div class="footer row middle-span nowrap">
   <div class="good col-span-4 row nowrap middle-span">
     <label>好评</label>
-    <label class="number">{{ product?.commenterCount }}条</label>
+    <label class="number">{{ hotel?.commenterCount }}条</label>
   </div>
   <div class="bad col-span-4 row nowrap middle-span">
     <label>差评</label>
-    <label class="number">{{ product?.commenterCount }}条</label>
+    <label class="number">{{ hotel?.commenterCount }}条</label>
   </div>
   <div class="write col-span-4 row nowrap middle-span center-span">
     <ion-icon name="clipboard"></ion-icon>
@@ -26,7 +26,7 @@
   </div>
 </div>
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <ion-slides class="product-image" pager="true" [options]="slideOptions">
+  <ion-slides class="hotel-image" pager="true" [options]="slideOptions">
     <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
     <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
     <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
@@ -34,17 +34,17 @@
   <!--酒店图片-->
   <div class="container" padding>
     <!--酒店基础信息-->
-    <div class="product-info">
-      <div class="name">{{ product?.name }}</div>
-      <div class="english">{{ product?.englishName }}</div>
-      <div class="address">{{ product?.location }}</div>
+    <div class="hotel-info">
+      <div class="name">{{ hotel?.name }}</div>
+      <div class="english">{{ hotel?.englishName }}</div>
+      <div class="address">{{ hotel?.location }}</div>
       <div class="row nowrap star">
         <app-score-star [star]="4"></app-score-star>
         <div class="star-number">4</div>
       </div>
       <div class="row tag-list">
         <ng-container
-          *ngFor="let item of product?.tags; let index = index; let odd = odd"
+          *ngFor="let item of hotel?.tags; let index = index; let odd = odd"
         >
           <div class="tag" *ngIf="index < 2" [ngClass]="{ odd: odd }">
             {{ item }}
@@ -57,7 +57,7 @@
       </div>
     </div>
     <!--酒店位置地图-->
-    <div class="product-map">
+    <div class="hotel-map">
       <ngx-amap
         class="amap"
         [resizeEnable]="true"
@@ -77,7 +77,7 @@
       </div>
     </div>
     <!--酒店设施信息-->
-    <div class="product-server">
+    <div class="hotel-server">
       <div class="row nowrap between-span">
         <div class="star">
           <label>酒店星级</label>
@@ -85,13 +85,13 @@
         </div>
         <div class="phone row  middle-span">
           <ion-icon name="call"></ion-icon>
-          <div class="number">{{ product?.contact }}</div>
+          <div class="number">{{ hotel?.contact }}</div>
         </div>
       </div>
       <div class="service">
         <div class="row">
           <ng-container
-            *ngFor="let item of product?.facilities; let index = index"
+            *ngFor="let item of hotel?.facilities; let index = index"
           >
             <div
               *ngIf="!hiddenServer || index < 3"
@@ -111,7 +111,7 @@
         </div>
       </div>
     </div>
-    <div class="product-room">
+    <div class="hotel-room">
       <div class="select-date"></div>
       <div class="room-list">
         <div

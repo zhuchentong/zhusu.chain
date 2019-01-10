@@ -1,25 +1,29 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core'
-import { Select, Store } from '@ngxs/store'
+import { Store } from '@ngxs/store'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { NgxAmapComponent } from 'ngx-amap'
 import { RoomService } from 'app/services/room.service'
 import { Room } from 'app/models/room.model'
 import { PageService } from 'app/utils/page.service'
-import { Router } from '@angular/router'
-import { UpdateRoomAction } from 'app/store/action/product.action'
-import { Product } from 'app/models/product.model'
+import { ActivatedRoute, Router } from '@angular/router'
+import {
+  UpdateRoomAction,
+  UpdateHotelAction
+} from 'app/store/action/hotel.action'
+import { Hotel } from 'app/models/hotel.model'
+import { HotelService } from 'app/services/hotel.service'
 
 @Component({
-  selector: 'app-product-detail',
-  templateUrl: './product-detail.page.html',
-  styleUrls: ['./product-detail.page.scss']
+  selector: 'app-hotel-detail',
+  templateUrl: './hotel-detail.page.html',
+  styleUrls: ['./hotel-detail.page.scss']
 })
-export class ProductDetailPage implements OnInit {
+export class HotelDetailPage implements OnInit {
   // 高德地图组件
   @ViewChild(NgxAmapComponent)
   private amap
   // 酒店信息
-  private product
+  private hotel
   // 房间列表
   private roomList: Room[] = []
   // 酒店位置
@@ -36,33 +40,45 @@ export class ProductDetailPage implements OnInit {
   }
 
   constructor(
+    private hotelService: HotelService,
     private roomService: RoomService,
     private logger: LoggerService,
     private router: Router,
+    private route: ActivatedRoute,
     private page: PageService,
     private store: Store
   ) {}
 
   public ngOnInit() {
-    // 获取酒店信息
-    this.product = this.store.selectSnapshot(
-      state => state.product.current
-    ) as Product
-    this.position = [this.product.position.lng, this.product.position.lat]
-    this.hiddenServer = this.product.facilities.length > 3
-    // 获取房间信息
-    this.getRoomList()
-    this.logger.log(this.product)
-    return
+    // 对应酒店ID
+    const id = this.route.snapshot.paramMap.get('id')
+
+    if (id) {
+      // 获取酒店信息
+      this.getHotel(id)
+      // 获取房间列表
+      this.getRoomList(id)
+    }
   }
 
+  /**
+   * 获取酒店信息
+   * @param id
+   */
+  public getHotel(id) {
+    this.hotelService.getHotel(id).subscribe(hotel => {
+      this.hotel = hotel
+      this.position = [this.hotel.position.lng, this.hotel.position.lat]
+      this.hiddenServer = this.hotel.facilities.length > 3
+    })
+  }
   /**
    * 获取房间列表
    * TODO:不应该分页
    */
-  public getRoomList() {
+  public getRoomList(id) {
     this.roomService
-      .getRoomList(this.product.id, {
+      .getRoomList(id, {
         page: this.page
       })
       .subscribe(rooms => {
@@ -83,13 +99,10 @@ export class ProductDetailPage implements OnInit {
    * 预订房间
    */
   private onOrderRoom(room) {
+    // 保存待预订的酒店信息
+    this.store.dispatch(new UpdateHotelAction(this.hotel))
     // 保存待预订的房间信息
     this.store.dispatch(new UpdateRoomAction(room))
-    this.router.navigate([
-      'product/product-order',
-      {
-        id: 1
-      }
-    ])
+    this.router.navigate(['hotel/hotel-order'])
   }
 }

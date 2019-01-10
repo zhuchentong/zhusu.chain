@@ -3,18 +3,18 @@ import { Hotel } from 'app/models/hotel.model'
 import { Router } from '@angular/router'
 import { RoomService } from 'app/services/room.service'
 import { LoggerService } from '@ngx-toolkit/logger'
-import { UpdateHotelAction } from 'app/store/action/product.action'
+import { UpdateHotelAction } from 'app/store/action/hotel.action'
 import { Store } from '@ngxs/store'
 import { PageService } from 'app/utils/page.service'
 
 @Component({
-  selector: 'app-product-item',
-  templateUrl: './product-item.component.html',
-  styleUrls: ['./product-item.component.scss']
+  selector: 'app-hotel-item',
+  templateUrl: './hotel-item.component.html',
+  styleUrls: ['./hotel-item.component.scss']
 })
-export class ProductItemComponent implements OnInit {
+export class HotelItemComponent implements OnInit {
   @Input()
-  public product: Hotel
+  public hotel: Hotel
   // 当前酒店的最低价格
   private price
   // 用于辅助生成数组的Array类型
@@ -34,10 +34,10 @@ export class ProductItemComponent implements OnInit {
 
   @HostListener('click')
   public onClick() {
-    // 更新当前product
-    this.product.updateStore(this.store)
+    // 更新当前hotel
+    this.hotel.updateStore(this.store)
     // 跳转产品详情
-    this.router.navigate(['product/product-detail'])
+    this.router.navigate(['hotel/hotel-detail', { id: this.hotel.id }])
   }
 
   /**
@@ -45,7 +45,7 @@ export class ProductItemComponent implements OnInit {
    */
   public getRoomList() {
     this.roomService
-      .getRoomList(this.product.id, {
+      .getRoomList(this.hotel.id, {
         page: this.page
       })
       .subscribe(rooms => {

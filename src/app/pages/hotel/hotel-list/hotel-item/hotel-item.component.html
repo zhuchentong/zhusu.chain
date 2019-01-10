@@ -1,0 +1,21 @@
+<section class="component hotel-item row nowrap">
+  <div class="photo"></div>
+  <div class="content col-span">
+    <div class="name">{{ hotel?.name }}</div>
+    <div class="english">{{ hotel?.englishName }}</div>
+    <div class="address">{{ hotel?.location }}</div>
+    <div class="row nowrap">
+      <app-score-star [star]="hotel?.grand"></app-score-star>
+      <div class="comment">{{ hotel?.commenterCount }}条评论</div>
+    </div>
+    <div class="row between-span">
+      <ng-container *ngFor="let item of hotel?.tags; let first = first">
+        <div class="tag" *ngIf="first">{{ item }}</div>
+      </ng-container>
+
+      <div class="price" *ngIf="price">
+        <label>HOME</label> <label>{{ price }}</label> <label>起</label>
+      </div>
+    </div>
+  </div>
+</section>

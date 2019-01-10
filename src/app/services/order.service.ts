@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core'
 import { NetService } from 'app/utils/net.service'
-import { productController } from 'app/config/service/product.controller'
-import { User } from 'app/models/user.model'
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
 import { orderController } from 'app/config/service/order.controller'
@@ -18,6 +16,18 @@ export class OrderService {
       service: orderController.getOrderList,
       model: Order,
       params: {}
+    })
+  }
+
+  /**
+   * 获取订单
+   */
+  public getOrder(id): Observable<Order[]> {
+    return this.net.send({
+      service: orderController.getOrderList,
+      model: Order,
+      params: {},
+      append: [id]
     })
   }
 }
