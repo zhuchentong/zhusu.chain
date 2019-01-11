@@ -6,21 +6,15 @@ import { Routes, RouterModule } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 
 import { OrderPage } from './order.page'
-
-const routes: Routes = [
-  {
-    path: '',
-    component: OrderPage
-  }
-]
+import { orderRoutes, orderPages } from './order.routes'
+import { OrderStateEnum } from 'app/config/enum.config'
+import { OrderService } from 'app/services/order.service'
+import { SharedModule } from 'app/shared/shared.module'
+import { NgxAmapModule } from 'ngx-amap'
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [OrderPage]
+  imports: [SharedModule, RouterModule.forChild(orderRoutes), NgxAmapModule],
+  declarations: [...orderPages],
+  providers: [OrderService]
 })
 export class OrderPageModule {}

@@ -2,12 +2,71 @@
   <div class="row nowrap tags around-span">
     <div
       *ngFor="let item of orderStateList"
-      class="tag-item"
-      (click)="onSelectState(item.value)"
+      class="tag-item row middle-span center-span"
+      (click)="onChangeStatus(item.value)"
       [ngClass]="{ active: currentState === item.value }"
     >
       {{ item.label }}
     </div>
   </div>
-  <ion-list> <ion-item (click)="onOpenDetail()"> </ion-item> </ion-list>
+  <div *ngIf="orderList && orderList.length">
+    <ion-list class="order-list">
+      <div
+        *ngFor="let order of orderList"
+        class="order-item"
+        (click)="onOpenDetail(order.id)"
+      >
+        <div class="order-header row between-span" padding>
+          <div class="hotel">{{ order.room.hotel.name }}</div>
+          <div class="status">{{ getOrderState(order.status) }}</div>
+        </div>
+        <div class="order-content row nowrap">
+          <img class="room-image" src="assets/image/hotel.jpg" />
+          <div class="col-span">
+            <div class="start-date">
+              {{ commonService.dateFormat(order.beginDate, 'YYYY年MM月DD日') }}
+            </div>
+            <div class="end-date">
+              {{ commonService.dateFormat(order.endDate, 'YYYY年MM月DD日') }}
+            </div>
+            <div class="room">{{ order.room.name }}</div>
+            <div class="row nowrap bottom-span">
+              <div class="user col-span">{{ order.user.displayName }}</div>
+              <div class="count col-span">
+                {{ order?.attributes?.roomCount }}间
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order-amount row end-span bottom-span">
+          <div class="days">共{{ order.days }}晚</div>
+          <div class="amount">实付款 HOME {{ order.price }}</div>
+        </div>
+        <div class="order-footer row end-span">
+          <ng-container [ngSwitch]="order.status">
+            <div class="order-button" *ngSwitchCase="orderStateEnum.CREATED">
+              支付
+            </div>
+            <div class="order-button" *ngSwitchCase="orderStateEnum.CHECKOUT">
+              评价
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ion-list>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="getOrderList($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="正在加载..."
+      >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+  <div
+    *ngIf="orderList && orderList.length === 0"
+    class="empty-list row middle-span center-span"
+  >
+    <label>这里没有符合条件的订单</label>
+  </div>
 </ion-content>

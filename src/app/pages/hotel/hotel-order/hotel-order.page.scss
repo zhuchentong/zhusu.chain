@@ -1,10 +1,13 @@
+@import '../../../../assets/style//helper.scss';
+
 ion-card {
   .title {
-    font-size: 18px;
+    font-size: 16px;
   }
   .subtitle {
-    font-size: 12px;
+    font-size: 10px;
     color: darkgray;
+    transform: scale(0.8);
   }
 }
 
@@ -12,6 +15,18 @@ ion-footer {
   .footer {
     height: 50px;
     box-shadow: -1px 0px 2px lightgrey;
+    .price {
+      padding: 0 10px;
+      color: orange;
+      .sign {
+        font-size: 12px;
+        transform: scale(0.8);
+      }
+      .amount {
+        padding: 0 10px;
+        font-size: 20px;
+      }
+    }
     .submit {
       height: 100%;
       line-height: 50px;
@@ -19,9 +34,59 @@ ion-footer {
       font-size: 20px;
       text-align: center;
       color: white;
-      background: darkcyan;
+      // background: darkcyan;
       margin: auto;
+      --border-radius: 0;
+      --background: darkcyan;
     }
   }
   box-shadow: -2px 2px 2px gray;
+}
+.order-content {
+  ion-item {
+    font-size: 12px;
+  }
+}
+
+.base-info {
+  .room {
+    padding-bottom: 5px;
+    .name {
+      @include set-font(12px, bold);
+    }
+  }
+}
+.order-info {
+}
+.payment-info {
+  .flow-item {
+    .item-header {
+      background-color: darkcyan;
+      padding: 5px;
+      border-radius: 5px;
+      @include set-font(10px, normal);
+      width: 100px;
+      text-align: center;
+      transform: scale(0.8);
+    }
+    .item-content {
+      text-align: center;
+      @include set-font(8px, normal, darkgray);
+      transform: scale(0.8);
+      padding: 10px 0;
+      white-space: nowrap;
+    }
+  }
+}
+
+.tip-info {
+  padding: 0 25px;
+  margin-bottom: 10px;
+  & > * {
+    padding: 2px;
+    @include set-font(12px, normal, gray);
+  }
+  .header {
+    @include set-font(12px, bold);
+  }
 }

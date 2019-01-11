@@ -19,5 +19,16 @@ export enum HotelEnum {
 }
 
 export enum OrderStateEnum {
-  ALL = '1'
+  // 未支付
+  CREATED = 'CREATED',
+  // 已支付
+  PAID = 'PAID',
+  // 待入住
+  CONFIRMED = 'CONFIRMED',
+  // 已入住
+  CHECKIN = 'CHECKIN',
+  // 已结束
+  CHECKOUT = 'CHECKOUT',
+  // 已取消
+  CANCELED = 'CANCELED'
 }

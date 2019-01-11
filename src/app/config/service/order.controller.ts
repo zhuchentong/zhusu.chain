@@ -12,5 +12,12 @@ export const orderController = {
   getOrder: {
     controller: 'orders',
     method: 'GET'
+  },
+  /**
+   * 添加订单
+   */
+  addOrder: {
+    controller: 'orders',
+    method: 'POST'
   }
 }

@@ -16,5 +16,5 @@ export class Room extends Model {
   public attributes: any
   // 酒店信息
   @Type(() => Hotel)
-  public hotel
+  public hotel: Hotel
 }

@@ -1,9 +1,32 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>order-detail</ion-title>
-  </ion-toolbar>
+  <ion-toolbar> <ion-title>order-detail</ion-title> </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
+  <div class="order-info">
+    <ion-item>
+      <ion-label>入住人</ion-label>
+      <div>{{ order?.user.displayName }}</div>
+    </ion-item>
+    <ion-item>
+      <ion-label>入住时间</ion-label>
+      <div>{{ order?.beginDate }}</div>
+    </ion-item>
+    <ion-item>
+      <ion-label>离店时间</ion-label>
+      <div>{{ order?.endDate }}</div>
+    </ion-item>
+    <ion-item>
+      <ion-label>房间类型</ion-label>
+      <div>{{ order?.room.name }}</div>
+    </ion-item>
+    <ion-item>
+      <ion-label>订单编号</ion-label>
+      <div>{{ order?.id }}</div>
+    </ion-item>
+    <div class="row helper">
+      <div class="col-span-4">联系酒店</div>
+      <div class="col-span-4">联系我们</div>
+    </div>
+  </div>
 </ion-content>

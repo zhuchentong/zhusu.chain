@@ -3,7 +3,11 @@ import { Expose } from 'class-transformer'
 
 export class User extends Model {
   // 用户ID
-  public id: number
+  // self接口返回为id
+  // login接口返回为userId
+  public get id() {
+    return this._id || this._userId
+  }
   // 用户名
   public username: string
   // 显示名称
@@ -16,4 +20,10 @@ export class User extends Model {
   // rsfreshToken
   @Expose({ name: 'refresh_token' })
   public refreshToken?: string
+  // 用户ID
+  @Expose({ name: 'id' })
+  private _id: number
+
+  @Expose({ name: 'userId' })
+  private _userId: number
 }

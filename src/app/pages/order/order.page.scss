@@ -1,12 +1,60 @@
 .tags {
-  height: 50px;
-  padding: 5px;
+  padding: 10px 0;
+
   .tag-item {
-    padding: 2px 5px;
+    padding: 5px 10px;
     border-radius: 10px;
-    background-color: lightgray;
+    min-width: 70px;
+    background-color: #e5e5e5;
+    transform: scale(0.8);
     &.active {
-      background-color: lightblue;
+      background-color: lightgray;
     }
   }
+}
+
+.order-list {
+  background-color: #e5e5e5;
+  .order-item {
+    background-color: white;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    .order-header {
+      padding: 5px;
+    }
+    .order-content {
+      text-align: right;
+      .room-image {
+        height: 100px;
+        padding: 0 5px;
+        flex-basis: 140px;
+        width: 140px;
+      }
+    }
+    .order-amount {
+      & > * {
+        padding-left: 10px;
+      }
+    }
+    .order-footer {
+      .order-button {
+        height: 30px;
+        width: 70px;
+        background: white;
+        border: 1px solid gray;
+        color: gray;
+        line-height: 20px;
+        padding: 5px 0;
+        border-radius: 15px;
+        font-size: 10px;
+        transform: scale(0.8);
+        text-align: center;
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: #e5e5e5;
 }
