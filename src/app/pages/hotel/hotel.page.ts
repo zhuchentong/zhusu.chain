@@ -5,7 +5,6 @@ import {
   Renderer2,
   ViewChild
 } from '@angular/core'
-import { DeviceService } from 'app/utils/decive.service'
 import { ActionSheetController, ModalController } from '@ionic/angular'
 import { SelectStarComponent } from 'app/shared/components/select-star/select-star.component'
 import { LevelList } from 'app/config/dict.config'
@@ -14,6 +13,7 @@ import { Router } from '@angular/router'
 import { Store } from '@ngxs/store'
 import { SelectDateComponent } from 'app/shared/components/select-date/select-date.component'
 import { HotelEnum } from 'app/config/enum.config'
+import { UpdateDateAction } from 'app/store/action/hotel.action'
 
 @Component({
   selector: 'app-hotel',
@@ -49,7 +49,7 @@ export class HotelPage implements OnInit {
   ]
   private level: number[] = []
   @ViewChild(SelectDateComponent)
-  private selectDateComponent
+  private selectDateComponent: SelectDateComponent
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -94,8 +94,13 @@ export class HotelPage implements OnInit {
    * 跳转搜索页面
    */
   private async onSearch() {
+    const dateRange = this.selectDateComponent.getDateRange()
+    // 获取位置信息
     const position = this.store.selectSnapshot(state => state.location.position)
+    // 当位置正确是进行搜索
     if (position.latitude && position.longitude) {
+      // 保存预订时间
+      this.store.dispatch(new UpdateDateAction(dateRange))
       this.router.navigate([
         '/hotel/hotel-list',
         {

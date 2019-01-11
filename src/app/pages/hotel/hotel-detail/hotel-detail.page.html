@@ -51,9 +51,11 @@
           </div>
         </ng-container>
       </div>
-      <div class="price">
+      <div class="price" *ngIf="price && price > 0">
         <div>每晚</div>
-        <div class="amount"><label>23456.00</label> <label>起</label></div>
+        <div class="amount">
+          <label>{{ price.toFixed(2) }}</label> <label>起</label>
+        </div>
       </div>
     </div>
     <!--酒店位置地图-->

@@ -6,6 +6,8 @@ import {
   ModalController
 } from '@ionic/angular'
 import { LoggerService } from '@ngx-toolkit/logger'
+import * as dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +20,17 @@ export class CommonService {
     public atrCtrl: AlertController,
     private logger: LoggerService,
     private modalController: ModalController
-  ) {}
+  ) {
+    dayjs.extend(relativeTime)
+  }
+
+  public dateFormat(date, format = 'YYYY-MM-DD') {
+    return dayjs(date).format(format)
+  }
+
+  public dateParse(date) {
+    return dayjs(date)
+  }
 
   public async message(message: string, duration: number = 3000) {
     const toast = await this.toastCtrl.create({

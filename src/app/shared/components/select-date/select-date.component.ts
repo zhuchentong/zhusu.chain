@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import * as dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import { CommonService } from 'app/utils/common.service'
 @Component({
   selector: 'app-select-date',
   templateUrl: './select-date.component.html',
@@ -10,13 +9,26 @@ export class SelectDateComponent implements OnInit {
   private startDate
   private endDate
   private days: number
+  private today
 
-  private readonly today = dayjs(new Date()).format('YYYY-MM-DD')
-  // constructor() {}
+  constructor(private commonService: CommonService) {
+    this.today = this.commonService.dateFormat(Date.now())
+  }
 
   public ngOnInit() {
-    dayjs.extend(relativeTime)
-    return
+    this.startDate = this.today
+    this.endDate = this.commonService
+      .dateParse(Date.now())
+      .add(1, 'day')
+      .format('YYYY-MM-DD')
+    this.onDateChange()
+  }
+
+  public getDateRange() {
+    return {
+      start: this.startDate,
+      end: this.endDate
+    }
   }
 
   /**
@@ -33,6 +45,9 @@ export class SelectDateComponent implements OnInit {
       return
     }
 
-    this.days = dayjs(this.endDate).diff(dayjs(this.startDate), 'day')
+    // 计算日期差
+    this.days = this.commonService
+      .dateParse(this.endDate)
+      .diff(this.commonService.dateParse(this.startDate), 'day')
   }
 }

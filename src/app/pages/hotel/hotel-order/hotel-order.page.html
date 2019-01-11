@@ -1,9 +1,176 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>order</ion-title>
+    <app-back-button></app-back-button>
+    <ion-title> {{ hotel?.name }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-footer>
+  <div class="footer row nowrap middle-span">
+    <div class="row price col-span">
+      <div class="sign">HOME</div>
+      <div class="price">234568.00</div>
+    </div>
+    <div class="submit">提交支付</div>
+  </div>
+</ion-footer>
 
+<ion-content>
+  <ion-card class="base-info">
+    <ion-card-content>
+      <div class="room row middle-span">
+        <div class="name">{{ room?.name }}</div>
+      </div>
+      <div class="date row between-span">
+        <div>{{ dateRange?.start.format('YY月MM日') }}</div>
+        <div>{{ dateRange?.start | week: 'today' }}</div>
+        <div>-</div>
+        <div>{{ dateRange?.end.format('YY月MM日') }}</div>
+        <div>{{ dateRange?.end | week: 'today' }}</div>
+        <div>住{{ dateRange.days }}天</div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="order-info">
+    <ion-card-header>
+      <ion-card-title class="title">入住信息</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="orderForm">
+        <ion-item>
+          <ion-label>间数</ion-label>
+          <ion-select formControlName="count" placeholder="选择间数">
+            <ion-select-option
+              cancelText="取消"
+              okText="确定"
+              *ngFor="let item of array(room.total); let index = index"
+              [value]="index + 1"
+              >{{ index + 1 }}间</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>入住人</ion-label>
+          <ion-input
+            text-right
+            type="text"
+            formControlName="name"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>手机号</ion-label>
+          <ion-input
+            text-right
+            type="text"
+            formControlName="phone"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>到店时间</ion-label>
+          <ion-input type="text" formControlName="time"></ion-input>
+          <ion-select formControlName="time">
+            <ion-select-option
+              cancelText="取消"
+              okText="确定"
+              *ngFor="let item of arriveTime"
+              [value]="item"
+              >{{ item }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="payment-info">
+    <ion-card-header>
+      <ion-card-title class="title row nowrap bottom-span between-span">
+        <div>HOME CHAIN/住宿链</div>
+        <div class="subtitle">免押金 免查房 免排队</div>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content> </ion-card-content>
+  </ion-card>
+
+  <ion-card class="server-info">
+    <ion-card-header>
+      <ion-card-title class="title"> <div>更多服务</div> </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content> </ion-card-content>
+  </ion-card>
+  <!-- 
+  <div class="order-info">
+    <form [formGroup]="orderForm">
+      <ion-item>
+        <ion-label color="primary" position="floating">间数</ion-label>
+        <ion-input type="text" formControlName="username" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="floating">入住人</ion-label>
+        <ion-input type="text" formControlName="name" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="floating">手机号</ion-label>
+        <ion-input type="text" formControlName="phone" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="floating">电子邮箱</ion-label>
+        <ion-input type="text" formControlName="email" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" position="floating">到店时间</ion-label>
+        <ion-input type="text" formControlName="time" required></ion-input>
+      </ion-item>
+    </form>
+  </div> -->
+
+  <div class="tip-info">
+    <div class="title">
+      <div>HOME CHAIN/住宿链</div>
+      <div>免押金 免查房 免排队</div>
+    </div>
+    <div class="flow">
+      <div class="row">
+        <div class="flow-item">
+          <div>免除手续费</div>
+          <div>
+            <div>所有交易</div>
+            <div>全部0手续费</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div>到店享三免</div>
+          <div>
+            <div>办理入住免押金</div>
+            <div>退房免查房免排队</div>
+          </div>
+        </div>
+        <div class="flow-item">
+          <div>支付更快捷</div>
+          <div>
+            <div>电子货币支付</div>
+            <div>交易便捷安全</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="payment">
+      <form [formGroup]="paymentForm">
+        <ion-item>
+          <ion-label color="primary" position="floating">支付渠道</ion-label>
+          <ion-input type="text" formControlName="payment" required></ion-input>
+        </ion-item>
+      </form>
+    </div> -->
+  </div>
+  <ion-card class="server-info"> </ion-card>
+  <ion-footer>
+    <ion-toolbar> <div class="price"></div> </ion-toolbar>
+  </ion-footer>
 </ion-content>

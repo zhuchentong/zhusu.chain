@@ -2,7 +2,7 @@ import { Routes } from '@angular/router'
 import { HotelListPage } from './hotel-list/hotel-list.page'
 import { HotelDetailPage } from './hotel-detail/hotel-detail.page'
 import { HotelOrderPage } from './hotel-order/hotel-order.page'
-import { AuthGuard } from 'app/guards/auth.guard'
+import { AuthGuard } from 'app/core/guards/auth.guard'
 import { HotelPage } from './hotel.page'
 
 export const hotelRoutes: Routes = [

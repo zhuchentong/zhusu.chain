@@ -32,6 +32,8 @@ export class HotelDetailPage implements OnInit {
   private hiddenServer = false
   // 内容区域距顶部高度(影响header样式)
   private scrollTop = 0
+  // 最低价格
+  private price
   // slide配置
   private readonly slideOptions = {
     autoplay: {
@@ -84,6 +86,10 @@ export class HotelDetailPage implements OnInit {
       .subscribe(rooms => {
         //  TODO:照片呢？
         this.roomList = rooms
+        this.price =
+          rooms.length > 0
+            ? rooms.map(x => x.price).reduce((x, y) => x + y) / rooms.length
+            : -1
       })
   }
 
