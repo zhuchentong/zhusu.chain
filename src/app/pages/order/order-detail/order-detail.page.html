@@ -93,7 +93,7 @@
   <div class="order-footer row between-span nowrap" [ngSwitch]="order.status">
     <ng-container *ngSwitchCase="orderStatus.CREATED">
       <div class="content ">
-        <div></div>
+        <div>距离支付结束还有 </div>
         <div>{{ order.room.hotel.location }}</div>
       </div>
       <div class="submit-button">支付</div>
