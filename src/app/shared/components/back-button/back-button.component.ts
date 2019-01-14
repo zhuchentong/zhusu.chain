@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { NavController } from '@ionic/angular'
 
 @Component({
@@ -7,6 +7,9 @@ import { NavController } from '@ionic/angular'
   styleUrls: ['./back-button.component.scss']
 })
 export class BackButtonComponent implements OnInit {
+  @Input()
+  public color = 'white'
+
   constructor(private navCtrl: NavController) {}
 
   public ngOnInit() {

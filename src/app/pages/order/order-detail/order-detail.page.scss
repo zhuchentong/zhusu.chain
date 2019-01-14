@@ -1,0 +1,68 @@
+@import '../../../../assets/style/helper.scss';
+
+:host,
+ion-content {
+  background-color: #e5e5e5;
+  --background: #e5e5e5;
+}
+
+.order-header {
+  background-color: #5c2626;
+  color: white;
+  height: 150px;
+  ion-card {
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 0 0;
+    color: white;
+    font-weight: bold;
+    ion-card-title {
+      color: white;
+    }
+  }
+}
+
+.order-info {
+  margin: 10px 0;
+  ion-label {
+    color: gray;
+  }
+  .helper {
+    ion-icon[name='home'] {
+      color: green;
+      padding: 5px;
+    }
+    ion-icon[name='person'] {
+      color: orange;
+      padding: 5px;
+    }
+  }
+}
+
+.order-question {
+  margin: 5px 10px;
+  .title {
+    @include set-font(16px, bold, gray);
+    margin-bottom: 5px;
+  }
+  .question-item {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+    @include set-font(14px, bold, black);
+  }
+}
+
+.order-footer {
+  height: 50px;
+  background-color: white;
+  .submit-button {
+    height: 50px;
+    width: 100px;
+    line-height: 50px;
+    text-align: center;
+    background-color: rgb(96, 155, 96);
+    color: white;
+  }
+}

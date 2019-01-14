@@ -1,20 +1,69 @@
-<ion-header>
-  <ion-toolbar> <ion-title>order-detail</ion-title> </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
-  <div class="order-info">
+<ion-content>
+  <div class="order-header">
+    <div class="header row between-span">
+      <app-back-button></app-back-button>
+      <ion-icon name="share"></ion-icon>
+    </div>
+    <div class="tips">
+      <ng-container [ngSwitch]="order?.status">
+        <!--待付款-->
+        <ion-card *ngSwitchCase="orderStatus.CREATED">
+          <ion-card-header>
+            <ion-card-title class="title">待付款</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            已成功预订，房间已为您预留，订单需要在30分钟内进行支付，如果为按时支付订单会自动关闭。
+          </ion-card-content>
+        </ion-card>
+        <ion-card *ngSwitchCase="orderStatus.PAID">
+          <ion-card-header>
+            <ion-card-title class="title">待确认</ion-card-title>
+          </ion-card-header>
+          <ion-card-content> 待确认 </ion-card-content>
+        </ion-card>
+        <ion-card *ngSwitchCase="orderStatus.CONFIRMED">
+          <ion-card-header>
+            <ion-card-title class="title">待入住</ion-card-title>
+          </ion-card-header>
+          <ion-card-content> 待入住 </ion-card-content>
+        </ion-card>
+        <ion-card *ngSwitchCase="orderStatus.CHECKIN">
+          <ion-card-header>
+            <ion-card-title class="title">已入住</ion-card-title>
+          </ion-card-header>
+          <ion-card-content> 已入住 </ion-card-content>
+        </ion-card>
+        <ion-card *ngSwitchCase="orderStatus.CHECKOUT">
+          <ion-card-header>
+            <ion-card-title class="title">已完成</ion-card-title>
+          </ion-card-header>
+          <ion-card-content> 已完成 </ion-card-content>
+        </ion-card>
+        <ion-card *ngSwitchCase="orderStatus.CANCELED">
+          <ion-card-header>
+            <ion-card-title class="title">已取消</ion-card-title>
+          </ion-card-header>
+          <ion-card-content> 已取消 </ion-card-content>
+        </ion-card>
+      </ng-container>
+    </div>
+  </div>
+  <div class="order-info" *ngIf="order">
     <ion-item>
       <ion-label>入住人</ion-label>
       <div>{{ order?.user.displayName }}</div>
     </ion-item>
     <ion-item>
       <ion-label>入住时间</ion-label>
-      <div>{{ order?.beginDate }}</div>
+      <div>
+        {{ commonService.dateFormat(order?.beginDate, 'YYYY-MM-DD hh:ss') }}
+      </div>
     </ion-item>
     <ion-item>
       <ion-label>离店时间</ion-label>
-      <div>{{ order?.endDate }}</div>
+      <div>
+        {{ commonService.dateFormat(order?.endDate, 'YYYY-MM-DD hh:ss') }}
+      </div>
     </ion-item>
     <ion-item>
       <ion-label>房间类型</ion-label>
@@ -24,9 +73,30 @@
       <ion-label>订单编号</ion-label>
       <div>{{ order?.id }}</div>
     </ion-item>
-    <div class="row helper">
+    <ion-item class="helper">
+      <ion-icon name="home"></ion-icon>
       <div class="col-span-4">联系酒店</div>
+      <ion-icon name="person"></ion-icon>
       <div class="col-span-4">联系我们</div>
+    </ion-item>
+  </div>
+  <div class="order-question">
+    <div class="title">快速解决入住问题</div>
+    <div class="row">
+      <div class="question-item">我想取消订单</div>
+      <div class="question-item">我想修改订单</div>
     </div>
   </div>
 </ion-content>
+
+<ion-footer *ngIf="order">
+  <div class="order-footer row between-span nowrap" [ngSwitch]="order.status">
+    <ng-container *ngSwitchCase="orderStatus.CREATED">
+      <div class="content ">
+        <div></div>
+        <div>{{ order.room.hotel.location }}</div>
+      </div>
+      <div class="submit-button">支付</div>
+    </ng-container>
+  </div>
+</ion-footer>

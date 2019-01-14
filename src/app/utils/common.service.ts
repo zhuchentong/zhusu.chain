@@ -8,6 +8,7 @@ import {
 import { LoggerService } from '@ngx-toolkit/logger'
 import * as dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { Observable } from 'rxjs'
 @Injectable({
   providedIn: 'root'
 })
@@ -46,6 +47,52 @@ export class CommonService {
       duration
     })
     toast.present()
+  }
+
+  /**
+   * 返回基于Observable的Timeout
+   * @param time
+   */
+  public setTimeoutObservable(time = 3000) {
+    return Observable.create(observer => {
+      setTimeout(observer.next, time)
+    })
+  }
+
+  /**
+   * 返回基于Observable的Interval
+   * @param time
+   */
+  public setInterval(time = 1000) {
+    return Observable.create(observer => {
+      setInterval(observer.next, time)
+    })
+  }
+
+  /**
+   * 返回基于Observable的倒计时
+   * @param time
+   * @param step
+   */
+  public setCountdown(time = 10000, step = 1000) {
+    let interval
+    // 剩余时间
+    let leftTime = time
+    return Observable.create(observer => {
+      observer.next(leftTime)
+      interval = setInterval(() => {
+        // 剩余时间
+        leftTime = leftTime - step
+
+        // 剩余时间小于0时停止
+        if (leftTime <= 0) {
+          observer.complete(leftTime)
+          clearInterval(interval)
+        } else {
+          observer.next(leftTime)
+        }
+      }, step)
+    }) as Observable<number>
   }
   /**
    * 显示modal

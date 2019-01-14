@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { OrderService } from 'app/services/order.service'
 import { ActivatedRoute } from '@angular/router'
+import { OrderStateEnum } from 'app/config/enum.config'
+import { CommonService } from 'app/utils/common.service'
 
 @Component({
   selector: 'app-order-detail',
@@ -10,8 +12,9 @@ import { ActivatedRoute } from '@angular/router'
 export class OrderDetailPage implements OnInit {
   // 订单信息
   private order
-
+  private orderStatus = OrderStateEnum
   constructor(
+    private commonService: CommonService,
     private orderService: OrderService,
     private route: ActivatedRoute
   ) {}
@@ -28,6 +31,12 @@ export class OrderDetailPage implements OnInit {
   public getOrder(id) {
     this.orderService.getOrder(id).subscribe(order => {
       this.order = order
+      this.startCountdown()
     })
+  }
+
+  public startCountdown() {
+    // this.commonService.dateParse(this.order.)
+    // this.commonService.setCountdown(10000).subscribe(data => console.log(data))
   }
 }
