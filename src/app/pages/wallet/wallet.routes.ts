@@ -6,7 +6,8 @@ import { TransferPage } from './transfer/transfer.page'
 export const walletRoutes: Routes = [
   {
     path: '',
-    component: WalletPage
+    component: WalletPage,
+    pathMatch: 'full'
   },
   {
     path: 'wallet-info',

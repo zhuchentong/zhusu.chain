@@ -36,6 +36,7 @@ export class WalletPage implements OnInit {
   }
 
   public ngOnInit() {
+    // console.log(this.etherService)
     return
   }
 

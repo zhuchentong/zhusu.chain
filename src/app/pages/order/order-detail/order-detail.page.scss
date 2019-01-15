@@ -9,7 +9,14 @@ ion-content {
 .order-header {
   background-color: #5c2626;
   color: white;
-  height: 150px;
+  height: 200px;
+  .header {
+    ion-icon[name='share'] {
+      height: 24px;
+      font-size: 24px;
+      margin: 10px 10px 0 0;
+    }
+  }
   ion-card {
     margin: 0;
     padding: 0;

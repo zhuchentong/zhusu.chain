@@ -21,6 +21,7 @@ export class HotelOrderPage implements OnInit {
   private paymentMethod = 'HOME'
   private readonly array = Array
   private arriveTime = []
+  private user: User
   constructor(
     private orderService: OrderService,
     private commonService: CommonService,
@@ -30,6 +31,7 @@ export class HotelOrderPage implements OnInit {
   ) {}
 
   public ngOnInit() {
+    this.user = this.store.selectSnapshot(state => state.user)
     // 初始化表单
     this.initFormGroup()
     // 获取待预订房间酒店信息
@@ -54,8 +56,8 @@ export class HotelOrderPage implements OnInit {
   private initFormGroup() {
     this.orderForm = this.formBuilder.group({
       count: [1, Validators.required],
-      name: ['', Validators.required],
-      phone: ['', Validators.required],
+      name: [this.user.displayName, Validators.required],
+      phone: [this.user.username, Validators.required], // username即手机号
       time: ['']
     })
   }

@@ -16,17 +16,17 @@ export class UserPage implements OnInit {
     {
       label: '浏览',
       icon: 'assets/icon/browser.svg',
-      target: 'user/record'
+      target: '/user/record'
     },
     {
       label: '收藏',
       icon: 'assets/icon/collect.svg',
-      target: 'user/collect'
+      target: '/user/collect'
     },
     {
       label: '钱包',
       icon: 'assets/icon/wallet.svg',
-      target: 'wallet'
+      target: '/wallet'
     }
   ]
 

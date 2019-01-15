@@ -4,7 +4,8 @@ export const contractConfig = {
   // 合约abi
   contractAbi,
   // 合约地址
-  contractAddress: '0x345ca3e014aaf5dca488057592ee47305d9b3e10',
+  // 0xe4eb565621c284fc9df052254a8b754bf1d8dc4c
+  contractAddress: '0xdf1Ec4Bd0D836c44b2870a282f07Abb4bDDe3631',
   // RPC地址
   RPC_URL: "http://localhost:9545'"
 }

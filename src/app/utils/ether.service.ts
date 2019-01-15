@@ -14,6 +14,7 @@ export class EtherService {
   private userGas = 30000 // 单位gas
   private gaslimit: 250000
   private provider: Provider
+  private contractInstance
 
   constructor(
     private commonService: CommonService,
@@ -21,7 +22,40 @@ export class EtherService {
   ) {
     // v4中自动确定网络
     // this.provider = new ethers.providers.JsonRpcProvider(contractConfig.RPC_URL,network);
-    this.provider = new ethers.providers.JsonRpcProvider(contractConfig.RPC_URL)
+    this.provider = new ethers.providers.JsonRpcProvider(
+      'https://ropsten.infura.io/v3/9fbf52171b784b9799df429ffbe5eea2'
+    )
+    // 实例化合约
+    this.contractInstance = new ethers.Contract(
+      contractConfig.contractAddress,
+      contractConfig.contractAbi,
+      this.provider
+    )
+  }
+
+  /**
+   * 使用钱包签名合约
+   * @param wallet
+   */
+  public signWithWallet(wallet) {
+    this.contractInstance = this.contractInstance.connect(wallet)
+  }
+
+  /**
+   * 执行合约事务
+   * @param tran
+   */
+  public async transaction(tran) {
+    const tx = await tran
+    this.logger.log(tx.hash)
+    await tx.wait()
+  }
+
+  /**
+   * 获取实例化合约
+   */
+  public getContract() {
+    return this.contractInstance
   }
 
   /**
