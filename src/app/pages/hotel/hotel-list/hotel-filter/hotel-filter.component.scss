@@ -1,0 +1,25 @@
+:host {
+  height: calc(100% - 94px);
+  width: 100%;
+  top: 0;
+}
+
+.filter-content {
+  margin: 5px;
+  .filter-item {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #e5e5e5;
+    margin: 5px;
+    &.active {
+      background-color: #11665b;
+      color: white;
+    }
+  }
+}
+
+ion-card {
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 0;
+}

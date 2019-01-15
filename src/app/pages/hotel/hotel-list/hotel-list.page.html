@@ -1,17 +1,23 @@
-<ion-content class="page hotel-list">
+<ion-content class="page hotel-list" #content id="content">
   <ngx-amap
     class="amap"
     [resizeEnable]="true"
     [center]="[116.397428, 39.90923]"
     [zoom]="13"
   ></ngx-amap>
-  <ion-header class="header">
-    <ion-toolbar>
-      <app-back-button slot="start"></app-back-button>
-      <ion-searchbar placeholder="搜索" type="text"> </ion-searchbar>
+  <ion-header class="header" mode="ios">
+    <ion-toolbar mode="ios">
+      <app-back-button slot="start" color="black"></app-back-button>
+      <ion-searchbar
+        class="no-right-radius"
+        mode="ios"
+        placeholder="搜索"
+        type="text"
+      >
+      </ion-searchbar>
       <div slot="end" class="setting-icon row middle-span center-span">
         <div class="split"></div>
-        <ion-icon name="options" (click)="(onOpenSetting)"></ion-icon>
+        <ion-icon name="options" (click)="onOpenFilter()"></ion-icon>
       </div>
     </ion-toolbar>
   </ion-header>
@@ -43,3 +49,23 @@
     </div>
   </div>
 </ion-content>
+
+<ion-menu
+  side="end"
+  menuId="filter"
+  type="overlay"
+  [swipeGesture]="false"
+  contentId="content"
+>
+  <ion-header>
+    <ion-toolbar> <ion-title>筛选</ion-title> </ion-toolbar>
+  </ion-header>
+  <ion-content class="filter">
+    <app-hotel-filter [filter]="filter | clone: 'deep'"></app-hotel-filter>
+
+    <div class="footer row center-span">
+      <div class="col-span-6 reset" (click)="onResetFilter()">重置</div>
+      <div class="col-span-6 submit" (click)="onSumbitFilter()">确定</div>
+    </div>
+  </ion-content>
+</ion-menu>

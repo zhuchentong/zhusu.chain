@@ -14,6 +14,7 @@ import { SelectDateComponent } from './components/select-date/select-date.compon
 import { SelectStarComponent } from './components/select-star/select-star.component'
 import { PageService } from 'app/utils/page.service'
 import { ScoreStarComponent } from './components/score-star/score-star.component'
+import { ClonePipe } from './pipes/clone.pipe'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -21,6 +22,7 @@ import { ScoreStarComponent } from './components/score-star/score-star.component
     SelectPositionComponent,
     SelectDateComponent,
     WeekPipe,
+    ClonePipe,
     SelectStarComponent,
     ScoreStarComponent
   ],
@@ -33,6 +35,7 @@ import { ScoreStarComponent } from './components/score-star/score-star.component
     BackButtonComponent,
     EndLineComponent,
     WeekPipe,
+    ClonePipe,
     SelectPositionComponent,
     SelectDateComponent,
     SelectStarComponent,

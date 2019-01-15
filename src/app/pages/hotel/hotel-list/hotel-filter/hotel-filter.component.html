@@ -1,0 +1,13 @@
+<ion-card class="filter-content">
+  <ion-card-title> 星级 </ion-card-title>
+  <ion-card-content class="row">
+    <div
+      class="filter-item"
+      *ngFor="let item of levelList"
+      [ngClass]="{ active: filter.level.includes(item.key) }"
+      (click)="onCheckFilterItem(filter.level, item.key)"
+    >
+      {{ item.value }}
+    </div>
+  </ion-card-content>
+</ion-card>
