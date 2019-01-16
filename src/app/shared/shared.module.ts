@@ -15,6 +15,9 @@ import { SelectStarComponent } from './components/select-star/select-star.compon
 import { PageService } from 'app/utils/page.service'
 import { ScoreStarComponent } from './components/score-star/score-star.component'
 import { ClonePipe } from './pipes/clone.pipe'
+import { NgPipesModule } from 'ngx-pipes'
+import { StringPipe } from './pipes/string.pipe'
+
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -23,10 +26,17 @@ import { ClonePipe } from './pipes/clone.pipe'
     SelectDateComponent,
     WeekPipe,
     ClonePipe,
+    StringPipe,
     SelectStarComponent,
     ScoreStarComponent
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule,
+    NgPipesModule
+  ],
   exports: [
     CommonModule,
     FormsModule,
@@ -36,10 +46,12 @@ import { ClonePipe } from './pipes/clone.pipe'
     EndLineComponent,
     WeekPipe,
     ClonePipe,
+    StringPipe,
     SelectPositionComponent,
     SelectDateComponent,
     SelectStarComponent,
-    ScoreStarComponent
+    ScoreStarComponent,
+    NgPipesModule
   ],
   providers: [
     AuthService,

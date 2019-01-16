@@ -35,7 +35,7 @@ export class OrderService {
   /**
    * 获取订单
    */
-  public getOrder(id): Observable<Order[]> {
+  public getOrder(id): Observable<Order> {
     return this.net.send({
       service: orderController.getOrderList,
       model: Order,

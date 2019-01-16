@@ -1,8 +1,8 @@
-export const hotelController = {
+export const orderExecutionController = {
   /**
    * 获取酒店列表
    */
-  getOrderrExecutions: {
+  getOrderExecutions: {
     controller: 'orderExecutions',
     method: 'GET'
   }

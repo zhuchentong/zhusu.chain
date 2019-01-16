@@ -7,7 +7,7 @@ import {
 } from '@angular/router'
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
-import { User } from 'app/models/user.model'
+import { UserState } from 'app/store/state/user.state'
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
    * 检查用户状态
    */
   private checkUser(): boolean {
-    const user = this.store.selectSnapshot(state => state.user) as User
+    const user = this.store.selectSnapshot(UserState.user)
     return user && user.accessToken && user.accessToken.length > 0
   }
 }

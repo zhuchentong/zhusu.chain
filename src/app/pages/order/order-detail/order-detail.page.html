@@ -15,6 +15,13 @@
             已成功预订，房间已为您预留，订单需要在30分钟内进行支付，如果为按时支付订单会自动关闭。
           </ion-card-content>
         </ion-card>
+        <!--支付超时-->
+        <ion-card *ngSwitchCase="orderStatus.CLOSE">
+          <ion-card-header>
+            <ion-card-title class="title">已关闭</ion-card-title>
+          </ion-card-header>
+          <ion-card-content> 订单已关闭，请您重新进行预订。 </ion-card-content>
+        </ion-card>
         <ion-card *ngSwitchCase="orderStatus.PAID">
           <ion-card-header>
             <ion-card-title class="title">待确认</ion-card-title>
@@ -93,7 +100,14 @@
   <div class="order-footer row between-span nowrap" [ngSwitch]="order.status">
     <ng-container *ngSwitchCase="orderStatus.CREATED">
       <div class="content ">
-        <div>距离支付结束还有</div>
+        <div class="row">
+          <div>距离支付结束还有</div>
+          <div *ngIf="order.payTime">
+            {{ order?.payTime / (1000 * 60) | floor | string | lpad: 2:'0' }}:{{
+              (order?.payTime / 1000) % 60 | string | lpad: 2:'0'
+            }}
+          </div>
+        </div>
         <div>{{ order.room.hotel.location }}</div>
       </div>
       <div class="submit-button">支付</div>

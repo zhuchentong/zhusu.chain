@@ -22,13 +22,23 @@ export class CommonService {
     private logger: LoggerService,
     private modalController: ModalController
   ) {
+    // 添加dayjs扩展
     dayjs.extend(relativeTime)
   }
 
+  /**
+   * 格式化日期
+   * @param date
+   * @param format
+   */
   public dateFormat(date, format = 'YYYY-MM-DD') {
     return dayjs(date).format(format)
   }
 
+  /**
+   * 将日期转换为dayjs
+   * @param date
+   */
   public dateParse(date) {
     return dayjs(date)
   }
@@ -63,9 +73,16 @@ export class CommonService {
    * 返回基于Observable的Interval
    * @param time
    */
-  public setInterval(time = 1000) {
+  public setIntervalObservable(time = 1000) {
+    let interval
     return Observable.create(observer => {
-      setInterval(observer.next, time)
+      interval = setInterval(
+        observer.next(() => {
+          clearInterval(interval)
+          observer.complete()
+        }),
+        time
+      )
     })
   }
 
@@ -79,7 +96,6 @@ export class CommonService {
     // 剩余时间
     let leftTime = time
     return Observable.create(observer => {
-      observer.next(leftTime)
       interval = setInterval(() => {
         // 剩余时间
         leftTime = leftTime - step
@@ -92,8 +108,13 @@ export class CommonService {
           observer.next(leftTime)
         }
       }, step)
+      // 返回剩余时间
+      observer.next(leftTime, () => {
+        clearInterval(interval)
+      })
     }) as Observable<number>
   }
+
   /**
    * 显示modal
    * @param component

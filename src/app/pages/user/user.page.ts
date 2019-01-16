@@ -79,7 +79,7 @@ export class UserPage implements OnInit {
 
   public ngOnInit() {
     // 获取当前用户信息
-    const currentUser = this.store.selectSnapshot<User>(state => state.user)
+    const currentUser = this.store.selectSnapshot<User>(UserState.user)
     // 更新当前用户信息
     this.user$.subscribe(user => (this.currentUser = user))
   }

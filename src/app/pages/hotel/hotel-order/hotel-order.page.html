@@ -27,10 +27,10 @@
         <div class="name">{{ room?.name }}</div>
       </div>
       <div class="date row between-span">
-        <div>{{ dateRange?.start.format('YY月MM日') }}</div>
+        <div>{{ dateRange?.start.format('MM月DD日') }}</div>
         <div>{{ dateRange?.start | week: 'today' }}</div>
         <div>-</div>
-        <div>{{ dateRange?.end.format('YY月MM日') }}</div>
+        <div>{{ dateRange?.end.format('MM月DD日') }}</div>
         <div>{{ dateRange?.end | week: 'today' }}</div>
         <div>住{{ dateRange.days }}天</div>
       </div>

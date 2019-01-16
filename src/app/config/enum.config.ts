@@ -21,6 +21,8 @@ export enum HotelEnum {
 export enum OrderStateEnum {
   // 未支付
   CREATED = 'CREATED',
+  // 支付超时
+  CLOSE = 'CLOSE',
   // 已支付
   PAID = 'PAID',
   // 待入住

@@ -3,6 +3,8 @@ import { OrderService } from 'app/services/order.service'
 import { ActivatedRoute } from '@angular/router'
 import { OrderStateEnum } from 'app/config/enum.config'
 import { CommonService } from 'app/utils/common.service'
+import { OrderExecutionService } from 'app/services/order-execution.service'
+import { Order } from 'app/models/order.model'
 
 @Component({
   selector: 'app-order-detail',
@@ -13,9 +15,11 @@ export class OrderDetailPage implements OnInit {
   // 订单信息
   private order
   private orderStatus = OrderStateEnum
+  private math = Math
   constructor(
     private commonService: CommonService,
     private orderService: OrderService,
+    private orderExecutionService: OrderExecutionService,
     private route: ActivatedRoute
   ) {}
 
@@ -29,14 +33,56 @@ export class OrderDetailPage implements OnInit {
    * @param id
    */
   public getOrder(id) {
-    this.orderService.getOrder(id).subscribe(order => {
+    this.orderService.getOrder(id).subscribe((order: Order) => {
       this.order = order
-      this.startCountdown()
+
+      if (this.order.status === OrderStateEnum.CREATED) {
+        this.orderExecutionService
+          .getOrderExecution(id)
+          .subscribe(({ orderExecutionCount, orderExecutionList }) => {
+            if (!orderExecutionList) {
+              return
+            }
+
+            const [orderExecution] = orderExecutionList
+            this.order.payTime = this.getPayTime(orderExecution)
+            if (this.order.payTime) {
+              this.startCountdown()
+            } else {
+              this.order.status = OrderStateEnum.CLOSE
+            }
+          })
+      }
     })
   }
 
+  /**
+   * 开始支付倒计时
+   */
   public startCountdown() {
-    // this.commonService.dateParse(this.order.)
-    // this.commonService.setCountdown(10000).subscribe(data => console.log(data))
+    this.commonService.setCountdown(this.order.payTime * 1000).subscribe(
+      time => {
+        this.order.payTime = time
+      },
+      () => {
+        this.order.payTime = 0
+        this.order.status = OrderStateEnum.CLOSE
+      }
+    )
+  }
+
+  /**
+   * 获取剩余支付时间
+   * @param execution
+   */
+  private getPayTime(execution) {
+    if (!execution || !execution.dateCreated) {
+      return
+    }
+
+    const diff = this.commonService
+      .dateParse(Date.now())
+      .diff(this.commonService.dateParse(execution.dateCreated), 'second')
+    return diff < 30 * 60 ? diff : 0
   }
 }

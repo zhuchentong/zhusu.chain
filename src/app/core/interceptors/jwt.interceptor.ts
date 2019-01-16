@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
 import { User } from 'app/models/user.model'
+import { UserState } from 'app/store/state/user.state'
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -17,7 +18,7 @@ export class JwtInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const currentUser = this.store.selectSnapshot<User>(state => state.user)
+    const currentUser = this.store.selectSnapshot<User>(UserState.user)
     if (currentUser && currentUser.accessToken) {
       request = request.clone({
         setHeaders: {

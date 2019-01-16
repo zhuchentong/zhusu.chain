@@ -7,6 +7,7 @@ import { Room } from 'app/models/room.model'
 import { OrderService } from 'app/services/order.service'
 import { User } from 'app/models/user.model'
 import { Router } from '@angular/router'
+import { UserState } from 'app/store/state/user.state'
 
 @Component({
   selector: 'app-hotel-order',
@@ -31,7 +32,7 @@ export class HotelOrderPage implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.user = this.store.selectSnapshot(state => state.user)
+    this.user = this.store.selectSnapshot(UserState.user)
     // 初始化表单
     this.initFormGroup()
     // 获取待预订房间酒店信息
@@ -86,8 +87,11 @@ export class HotelOrderPage implements OnInit {
     return (this.room.price * this.orderForm.value.count).toFixed(2)
   }
 
+  /**
+   * 提交订单
+   */
   private onSubmitOrder() {
-    const user = this.store.selectSnapshot(state => state.user) as User
+    const user = this.store.selectSnapshot(UserState.user)
     this.orderService
       .addOrder({
         user: user.id,
