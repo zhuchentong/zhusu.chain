@@ -96,7 +96,7 @@
   </div>
 </ion-content>
 
-<ion-footer *ngIf="order">
+<ion-footer *ngIf="order && order.status === orderStatus.CREATED">
   <div class="order-footer row between-span nowrap" [ngSwitch]="order.status">
     <ng-container *ngSwitchCase="orderStatus.CREATED">
       <div class="content ">

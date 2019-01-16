@@ -1,0 +1,70 @@
+.header {
+  position: absolute;
+  margin: 10px;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  height: 200px;
+  img {
+    width: 100px;
+    height: auto;
+    &.left {
+      margin-right: -7px;
+      transform: rotate(30deg);
+      -webkit-animation: left-circle 3s infinite linear;
+      @keyframes left-circle {
+        0% {
+          transform: rotate(390deg);
+        }
+        100% {
+          transform: rotate(30deg);
+        }
+      }
+    }
+    &.right {
+      margin-left: -7px;
+      -webkit-animation: right-circle 3s infinite linear;
+      @keyframes right-circle {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+}
+
+.content {
+  .send-sms-code {
+    --background: #00629f;
+    margin-top: 30px;
+  }
+  .submit {
+    margin: 20px 0;
+  }
+  .footer {
+    a {
+      color: #00629f;
+      text-decoration: none;
+    }
+  }
+}
+
+ion-button {
+  --background: black;
+}
+
+ion-content {
+  --background: #1bd4c6;
+}
+
+ion-label {
+  --color: #00629f;
+}
+ion-item {
+  --background: transparent;
+}

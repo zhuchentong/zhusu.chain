@@ -1,33 +1,51 @@
-<ion-header>
-  <ion-toolbar>
-    <app-back-button color="black" slot="start"></app-back-button>
-    <ion-title>{{ isloginModel ? '登录' : '注册' }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<!-- 
+<div class="header">
+  <app-back-button color="black" slot="start"></app-back-button>
+</div>
 <ion-content padding>
-  <ion-grid>
+  <div class="logo row middle-span center-span">
+    <img src="assets/image/login_icon.png" />
+  </div>
+  <ion-grid class="content">
     <ion-row justify-content-center align-items-center>
       <ion-col>
         <form [formGroup]="loginForm" (submit)="onSubmit()">
           <ion-item>
             <ion-label color="primary" position="floating">用户名</ion-label>
-            <ion-input type="text" formControlName="username" required></ion-input>
+            <ion-input
+              type="text"
+              formControlName="username"
+              required
+            ></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label color="primary" position="floating">密码</ion-label>
-            <ion-input type="password" type="text" formControlName="password" required></ion-input>
+            <ion-label icon="password" color="primary" position="floating"
+              >密码</ion-label
+            >
+            <ion-input
+              type="password"
+              formControlName="password"
+              required
+            ></ion-input>
           </ion-item>
-          <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!loginForm.valid">登录</ion-button>
-          <a routerLink="/user/register">还没有账户?</a>
+          <ion-button
+            class="submit"
+            expand="block"
+            type="submit"
+            [disabled]="!loginForm.valid"
+            (click)="(onLogin)"
+            >登录</ion-button
+          >
+          <div class="footer row between-span">
+            <a routerLink="/user/register">还没有账户?</a>
+            <a routerLink="/user/forget-password">忘记密码</a>
+          </div>
         </form>
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content> -->
+</ion-content>
 
-<ion-content class="cont_background">
+<!-- <ion-content class="cont_background">
   <div class="miandiv">
     <div class="divbox">
       <img class="imageclass" src="assets/image/logo.png" />
@@ -110,4 +128,4 @@
       </div>
     </div>
   </div>
-</ion-content>
+</ion-content> -->

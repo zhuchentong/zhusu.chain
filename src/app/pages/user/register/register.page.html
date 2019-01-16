@@ -1,30 +1,54 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/user"></ion-back-button>
-    </ion-buttons>
-    <ion-title>注册</ion-title>
-  </ion-toolbar>
-</ion-header>
-
+<div class="header">
+  <app-back-button color="black" slot="start"></app-back-button>
+</div>
 <ion-content padding>
-  <ion-grid>
+  <div class="logo row middle-span center-span nowrap">
+    <img class="left" src="assets/image/register_icon.png" />
+    <img class="right" src="assets/image/register_icon.png" />
+  </div>
+  <ion-grid class="content">
     <ion-row justify-content-center align-items-center>
       <ion-col>
         <form [formGroup]="registerForm" (submit)="onSubmit()">
           <ion-item>
             <ion-label color="primary" position="floating">用户名</ion-label>
-            <ion-input type="text" formControlName="username" required></ion-input>
+            <ion-input
+              type="text"
+              formControlName="username"
+              required
+            ></ion-input>
           </ion-item>
           <ion-item>
             <ion-label color="primary" position="floating">新密码</ion-label>
-            <ion-input type="password" type="text" formControlName="password" required></ion-input>
+            <ion-input
+              type="password"
+              type="text"
+              formControlName="password"
+              required
+            ></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label color="primary" position="floating">确认密码</ion-label>
-            <ion-input type="password" type="text" formControlName="repassword" required></ion-input>
+            <ion-label color="primary" position="floating">验证码</ion-label>
+            <ion-input type="text" formControlName="code" required></ion-input>
+            <ion-button
+              slot="end"
+              class="send-sms-code"
+              (click)="onSendVerifyCode()"
+              [disabled]="
+                sendTime !== 0 || !registerForm.controls.username.valid
+              "
+              >发送验证码{{
+                sendTime === 0 ? '' : '(' + sendTime + 's)'
+              }}</ion-button
+            >
           </ion-item>
-          <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!registerForm.valid">注册</ion-button>
+          <ion-button
+            class="submit"
+            expand="block"
+            type="submit"
+            [disabled]="!registerForm.valid"
+            >注册</ion-button
+          >
         </form>
       </ion-col>
     </ion-row>
