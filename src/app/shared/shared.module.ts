@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
 import { BackButtonComponent } from './components/back-button/back-button.component'
-import { AuthService } from 'app/utils/auth.service'
 import { CommonService } from 'app/utils/common.service'
 import { Geolocation } from '@ionic-native/geolocation/ngx'
 import { EndLineComponent } from './components/end-line/end-line.component'
@@ -54,7 +53,6 @@ import { StringPipe } from './pipes/string.pipe'
     NgPipesModule
   ],
   providers: [
-    AuthService,
     CommonService,
     DeviceService,
     Geolocation,

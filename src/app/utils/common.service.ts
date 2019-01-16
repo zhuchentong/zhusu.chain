@@ -187,25 +187,6 @@ export class CommonService {
     alert.present()
   }
 
-  public checkPassword(password: string) {
-    let result = false
-    if (password === undefined) {
-      this.message('密码不能位空！')
-    } else if (password.length < 6) {
-      this.message('密码不能位空！')
-    } else {
-      result = true
-    }
-    return result
-    // else{
-    //   //校验规则 只允许输入8-16位数字、字母
-    //   var reg = /^[A-Za-z0-9]{6,16}$/;
-    //   if(reg.test(password)){
-    //     return true;
-    //   }
-    // }
-  }
-
   /**
    * 检测手机号
    * @param phoneNo 手机号码
@@ -219,18 +200,6 @@ export class CommonService {
     }
 
     return result
-  }
-
-  /**
-   * 判空处理
-   * @param obj
-   */
-  public isEmpty(obj: any) {
-    if (obj == null || typeof obj === 'string') {
-      return true
-    } else {
-      return false
-    }
   }
 
   /**
@@ -356,16 +325,6 @@ export class CommonService {
     const wallet = this.parseWalletJson(address)
     wallet.name = name
     localStorage.setItem(address, JSON.stringify(wallet))
-  }
-
-  /**
-   * 设置token
-   * @param accessToken
-   * @param refreshToken
-   */
-  public setToken(accessToken: string, refreshToken: string) {
-    sessionStorage.setItem('access_token', accessToken)
-    sessionStorage.setItem('refresh_token', refreshToken)
   }
 
   public getCurrentUser(): any {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { AuthService } from 'app/utils/auth.service'
 import { UserService } from 'app/services/user.service'
 import { Store } from '@ngxs/store'
 import { UpdateAction } from 'app/store/action/user.action'

@@ -7,16 +7,20 @@
 
 .logo {
   height: 200px;
-  -webkit-animation: circle 3s infinite linear;
-  @keyframes circle {
-    0% {
-      transform: rotate(360deg);
-    }
-    100% {
-      transform: rotate(0deg);
+  img {
+    height: 150px;
+    animation: circle 3s infinite linear;
+    @keyframes circle {
+      0% {
+        transform: rotate(360deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
     }
   }
 }
+
 .content {
   .submit {
     margin: 20px 0;
@@ -40,9 +44,11 @@ ion-content {
 ion-label {
   --color: #00629f;
 }
+
 ion-item {
   --background: transparent;
 }
+
 // .miandiv{
 //   width: 234px;
 //   height: 542px;
@@ -76,7 +82,6 @@ ion-item {
 // .sub_button_select{
 //   border-bottom:0.2rem solid #51d3cc;
 //   position:relative;
-
 // }
 // .abtn_login{
 //   font-size: 18px;
@@ -126,7 +131,6 @@ ion-item {
 //   width: 229px;
 //   height: 26px;
 //   border: solid  #51d3cc 1px;
-
 // }
 // .text-input {
 //   margin:4px 8px 11px 0;

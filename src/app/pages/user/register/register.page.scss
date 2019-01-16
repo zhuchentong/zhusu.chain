@@ -8,8 +8,7 @@
 .logo {
   height: 200px;
   img {
-    width: 100px;
-    height: auto;
+    height: 100px;
     &.left {
       margin-right: -7px;
       transform: rotate(30deg);
@@ -65,6 +64,7 @@ ion-content {
 ion-label {
   --color: #00629f;
 }
+
 ion-item {
   --background: transparent;
 }

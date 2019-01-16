@@ -22,14 +22,18 @@
             <ion-label color="primary" position="floating">新密码</ion-label>
             <ion-input
               type="password"
-              type="text"
               formControlName="password"
               required
             ></ion-input>
           </ion-item>
           <ion-item>
             <ion-label color="primary" position="floating">验证码</ion-label>
-            <ion-input type="text" formControlName="code" required></ion-input>
+            <ion-input
+              min="4"
+              type="text"
+              formControlName="code"
+              required
+            ></ion-input>
             <ion-button
               slot="end"
               class="send-sms-code"
@@ -45,8 +49,8 @@
           <ion-button
             class="submit"
             expand="block"
-            type="submit"
             [disabled]="!registerForm.valid"
+            (click)="onRegister()"
             >注册</ion-button
           >
         </form>

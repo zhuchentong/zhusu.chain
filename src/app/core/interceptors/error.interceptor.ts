@@ -7,7 +7,6 @@ import {
 } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { AuthService } from 'app/utils/auth.service'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { Store } from '@ngxs/store'
 import { LogoutAction } from 'app/store/action/user.action'
@@ -20,7 +19,6 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   constructor(
-    private authService: AuthService,
     private store: Store,
     private logger: LoggerService
   ) { }

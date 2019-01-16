@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService } from 'app/utils/auth.service'
 import { UserState } from 'app/store/state/user.state'
 import { Select, Store } from '@ngxs/store'
 import { Observable } from 'rxjs'
@@ -72,7 +71,6 @@ export class UserPage implements OnInit {
   private user$: Observable<User>
 
   constructor(
-    private authService: AuthService,
     private logger: LoggerService,
     private store: Store
   ) {}

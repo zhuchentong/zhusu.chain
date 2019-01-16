@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from 'app/services/user.service'
 import { CommonService } from 'app/utils/common.service'
@@ -22,79 +22,68 @@ export class RegisterPage implements OnInit {
 
   public ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      username: ['', [ValidateService.phoneValidate]],
+      username: ['', ValidateService.phoneValidate],
       password: ['', Validators.required],
-      code: ['', Validators.required]
+      code: ['', [Validators.required, Validators.min(4)]]
     })
   }
 
-  private onSubmit() {
-    this.userService.getUserList().subscribe()
-  }
-
+  /**
+   * 发送短信验证码
+   */
   private onSendVerifyCode() {
-    this.startCountdown()
-    // // 检测手机号码
-    // if (!this.commonService.checkPhoneNo(this.registerForm.value.username)) {
-    //   return
-    // }
+    // 检测手机号码
+    if (!this.registerForm.controls.username.valid) {
+      return
+    }
 
-    // this.userService
-    //   .sendSmsCode(this.registerForm.value.username)
-    //   .subscribe((res: any) => {
-    //     // 本地保留验证码，注册时需验证是否一致
-    //     // this.sending = true
-    //     sessionStorage.setItem('smscode', res.smsCode)
-    //     this.commonService.message('已发送验证码，请查收。' + res.smsCode, 5000)
-    //     // this.caltimer()
-    //   })
+    this.userService.sendSmsCode(this.registerForm.value.username).subscribe(
+      ({ smsCode }) => {
+        // 本地保留验证码，注册时需验证是否一致
+        this.startCountdown()
+        sessionStorage.setItem('smscode', smsCode)
+        this.commonService.message('已发送验证码，请查收。', 5000)
+      },
+      () => {
+        this.commonService.message('验证码发送失败', 5000)
+      }
+    )
   }
 
   /**
    * 用户注册
    */
-  private async register() {
-    // 检测手机号
-    // if (!this.commonService.checkPhoneNo(this.loginForm.value.username)) {
-    //   return
-    // }
-    // // 检测密码
-    // if (!this.commonService.checkPassword(this.registerForm.value.password)) {
-    //   return
-    // }
-
-    // this.loading = await this.loadingCtrl.create({
-    //   message: this.commonService.content
-    // })
-
+  private async onRegister() {
     // 验证注册码
-    if (
-      sessionStorage.getItem('smscode') ===
-        this.registerForm.value.registercode ||
-      true
-    ) {
-      // this.loading.present()
-      this.userService
-        .register({
-          username: this.registerForm.value.username,
-          password: this.registerForm.value.password,
-          displayName: this.registerForm.value.username
-        })
-        .subscribe(
-          (res: any) => {
-            // this.loading.dismiss()
-            // this.changeModel(0)
-            // this.initLogin()
-            sessionStorage.removeItem('smscode')
-          },
-          () => {
-            // this.loading.dismiss()
-            this.commonService.message('验证码错误，请核查！', 3000)
-          }
-        )
-    } else {
+    const smscode = sessionStorage.getItem('smscode')
+    // TODO:用于测试
+    if (!smscode === this.registerForm.value.registercode) {
       this.commonService.message('验证码错误，请核查！', 3000)
+      return
     }
+
+    if (!this.registerForm.valid) {
+      return
+    }
+
+    this.userService
+      .register({
+        username: this.registerForm.value.username,
+        password: this.registerForm.value.password,
+        displayName: this.registerForm.value.username
+      })
+      .subscribe(
+        (res: any) => {
+          sessionStorage.removeItem('smscode')
+          this.commonService.message('注册成功', 3000)
+          this.router.navigate(['/user/login'], {
+            replaceUrl: true
+          })
+        },
+        () => {
+          this.commonService.message('注册失败', 3000)
+        }
+      )
   }
 
   /**
