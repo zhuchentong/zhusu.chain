@@ -1,0 +1,38 @@
+.wallet-list {
+  .wallet-item {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    box-shadow: 2px 2px 2px gray;
+
+    .name {
+      margin: 5px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .address {
+      margin: 5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .wallet-button {
+      a {
+        margin: 10px;
+      }
+    }
+  }
+}
+
+ion-menu {
+  --width: 50%;
+}
+
+.empty {
+  text-align: center;
+  padding-top: 30%;
+  img {
+    width: 50%;
+  }
+}

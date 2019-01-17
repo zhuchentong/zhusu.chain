@@ -3,7 +3,8 @@ import { STOEnum, CurrencyEnum, TokenEnum } from 'app/config/enum.config'
 import {
   ToastController,
   AlertController,
-  ModalController
+  ModalController,
+  LoadingController
 } from '@ionic/angular'
 import { LoggerService } from '@ngx-toolkit/logger'
 import * as dayjs from 'dayjs'
@@ -20,7 +21,8 @@ export class CommonService {
     public toastCtrl: ToastController,
     public atrCtrl: AlertController,
     private logger: LoggerService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private loadingController: LoadingController
   ) {
     // 添加dayjs扩展
     dayjs.extend(relativeTime)
@@ -59,6 +61,12 @@ export class CommonService {
     toast.present()
   }
 
+  public async loading(message) {
+    const loading = await this.loadingController.create()
+    loading.message = message
+    loading.present()
+    return loading
+  }
   /**
    * 返回基于Observable的Timeout
    * @param time

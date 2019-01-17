@@ -24,7 +24,7 @@ export class RegisterPage implements OnInit {
     this.registerForm = this.formBuilder.group({
       username: ['', ValidateService.phoneValidate],
       password: ['', Validators.required],
-      code: ['', [Validators.required, Validators.min(4)]]
+      code: ['', [Validators.required, Validators.minLength(4)]]
     })
   }
 

@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core'
 import { CommonService } from 'app/utils/common.service'
-import { ethers, Wallet } from 'ethers'
+import { ethers } from 'ethers'
 import { contractConfig } from 'app/config/contract.config'
 import { Provider } from 'ethers/providers'
 import { LoggerService } from '@ngx-toolkit/logger'
-// const network = ethers.getDefaultProvider('ropsten')
+import { IToken } from 'app/config/interface.config'
+import { Store } from '@ngxs/store'
+import { AddWalletAction } from 'app/store/action/wallet.action'
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +20,11 @@ export class EtherService {
 
   constructor(
     private commonService: CommonService,
+    private store: Store,
     private logger: LoggerService
   ) {
     // v4中自动确定网络
-    // this.provider = new ethers.providers.JsonRpcProvider(contractConfig.RPC_URL,network);
-    this.provider = new ethers.providers.JsonRpcProvider(
-      'https://ropsten.infura.io/v3/9fbf52171b784b9799df429ffbe5eea2'
-    )
+    this.provider = new ethers.providers.JsonRpcProvider(contractConfig.network)
     // 实例化合约
     this.contractInstance = new ethers.Contract(
       contractConfig.contractAddress,
@@ -62,27 +62,21 @@ export class EtherService {
    * 创建钱包
    * @param password
    */
-  public createWallet(password: string) {
+  public async createWallet(password: string) {
+    // 序列化密码
     password = this.normalizePassword(password)
-
-    return new Promise((resolve, reject) => {
-      const wallet = ethers.Wallet.createRandom()
-      wallet.encrypt(password).then(
-        function(json: any) {
-          // wallet.provider = provider;
-          this.commonService.insertLocalStorage(
-            wallet.address,
-            json,
-            '我的钱包' +
-              (localStorage.length > 1 ? localStorage.length - 1 : '')
-          )
-          resolve(wallet.mnemonic)
-        },
-        (err: any) => {
-          this.logger.error(reject(err))
-        }
-      )
-    })
+    // 创建钱包
+    const wallet = ethers.Wallet.createRandom()
+    try {
+      const encrypt = await wallet.encrypt(password)
+      return {
+        wallet,
+        encrypt
+      }
+    } catch (ex) {
+      this.logger.error(ex)
+      throw Error('创建失败')
+    }
   }
 
   /**
@@ -184,18 +178,10 @@ export class EtherService {
    * 获取钱包余额
    * @param address
    */
-  public getEtherBalance(address: string) {
+  public async getEtherBalance(address: string) {
     const provider = new ethers.providers.EtherscanProvider()
-    return new Promise((resolve, reject) => {
-      provider.getBalance(address).then(
-        (res: any) => {
-          resolve(res)
-        },
-        (err: any) => {
-          this.logger.error(reject(err))
-        }
-      )
-    })
+    const balance = provider.getBalance(address)
+    return balance
   }
 
   /**
@@ -231,9 +217,7 @@ export class EtherService {
     return {
       price,
       balance,
-      amount: parseFloat((balance * price).toString())
-        .toFixed(2)
-        .toString()
+      amount: balance * price
     }
 
     // return new Promise((resolve, reject) => {
@@ -278,34 +262,19 @@ export class EtherService {
    * 获取代币信息
    * @param address
    */
-  public getJcoInfo(address: string) {
-    // 实例化合约
-    const contract = new ethers.Contract(
-      contractConfig.contractAddress,
-      contractConfig.contractAbi,
-      this.provider
-    )
+  public async getJcoInfo(address: string): Promise<IToken> {
     const price = this.jcoPrice
-    return new Promise((resolve, reject) => {
-      contract.symbol().then(
-        (token: any) => {
-          contract.balanceOf(address).then((balance: any) => {
-            const data = {
-              balance,
-              price,
-              name: token,
-              amount: balance.mul(price * 100).div(100)
-            }
-            this.logger.log('getJcoInfo!!!!')
-            this.logger.log(data)
-            resolve(data)
-          })
-        },
-        (err: any) => {
-          this.logger.error(err)
-        }
-      )
-    })
+    const [token, balance] = await Promise.all([
+      this.contractInstance.symbol(), // 获取Token名称
+      this.contractInstance.balanceOf(address) // 获取Token余额
+    ])
+
+    return {
+      balance,
+      price,
+      name: token,
+      amount: balance.mul(price * 100).div(100)
+    }
   }
 
   /**
@@ -551,7 +520,6 @@ export class EtherService {
    * @param password
    */
   private normalizePassword(password: string): string {
-    // return ethers.utils.toUtf8Bytes(password.normalize('NFKC'));
     return ethers.utils.toUtf8Bytes(password.normalize('NFKC')).toString()
   }
 
@@ -559,10 +527,10 @@ export class EtherService {
    *
    * @param password
    */
-  private async getUserWallet(password): Promise<Wallet> {
+  private async getUserWallet(password): Promise<ethers.Wallet> {
     // 获取用户本地存储的钱包json
     const json = this.commonService.getCurrentWalletJson()
-    const wallet = await Wallet.fromEncryptedJson(json, password)
+    const wallet = await ethers.Wallet.fromEncryptedJson(json, password)
     return wallet.connect(this.provider)
   }
 }

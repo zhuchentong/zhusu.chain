@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button icon-only icon="menu" (click)="menuController.open('menu')">
+        <ion-icon name="menu"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>切换钱包</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content no-padding #content id="content">
+  <ion-list class="wallet-list">
+    <div
+      *ngFor="let wallet of walletList"
+      [ngClass]="{ current: wallet.address === currentWallet.address }"
+      class="wallet-item"
+    >
+      <div class="name">{{ wallet.name }}</div>
+      <div class="address" [title]="wallet.address">{{ wallet.address }}</div>
+      <div class="wallet-button row end-span">
+        <a>选择钱包</a> <a>修改名称</a> <a>删除钱包</a>
+      </div>
+    </div>
+  </ion-list>
+  <div class="empty" *ngIf="walletList.length === 0">
+    <img src="assets/image/empty.png" />
+    <p>没有钱包，快单击左上角菜单添加吧!</p>
+  </div>
+</ion-content>
+
+<ion-menu
+  side="start"
+  menuId="menu"
+  type="overlay"
+  [swipeGesture]="false"
+  contentId="content"
+>
+  <ion-content>
+    <ion-content>
+      <ion-list>
+        <ion-item routerLink="/wallet/wallet-create"> 创建钱包 </ion-item>
+        <ion-item> 导入私钥 </ion-item>
+        <ion-item> 导入助记词 </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-content>
+</ion-menu>

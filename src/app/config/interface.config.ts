@@ -9,3 +9,10 @@ export interface IDateRange {
   start: string
   end: string
 }
+
+export interface IToken {
+  name?: string
+  balance
+  amount
+  price
+}

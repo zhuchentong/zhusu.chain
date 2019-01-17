@@ -1,4 +1,4 @@
-import { Wallet } from 'ethers'
+import { Wallet } from 'app/models/wallet.model'
 
 /**
  * 添加钱包

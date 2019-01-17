@@ -16,7 +16,7 @@ import { ScoreStarComponent } from './components/score-star/score-star.component
 import { ClonePipe } from './pipes/clone.pipe'
 import { NgPipesModule } from 'ngx-pipes'
 import { StringPipe } from './pipes/string.pipe'
-
+import { ClipboardModule } from 'ngx-clipboard'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -34,7 +34,8 @@ import { StringPipe } from './pipes/string.pipe'
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    NgPipesModule
+    NgPipesModule,
+    ClipboardModule
   ],
   exports: [
     CommonModule,
@@ -50,14 +51,10 @@ import { StringPipe } from './pipes/string.pipe'
     SelectDateComponent,
     SelectStarComponent,
     ScoreStarComponent,
-    NgPipesModule
+    NgPipesModule,
+    ClipboardModule
   ],
-  providers: [
-    CommonService,
-    DeviceService,
-    Geolocation,
-    PageService
-  ],
+  providers: [CommonService, DeviceService, Geolocation, PageService],
   entryComponents: [SelectStarComponent]
 })
 export class SharedModule {

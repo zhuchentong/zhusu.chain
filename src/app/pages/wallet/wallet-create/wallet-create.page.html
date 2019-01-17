@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar> <ion-title>创建钱包</ion-title> </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid class="content">
+    <ion-row justify-content-center align-items-center>
+      <ion-col>
+        <form [formGroup]="createForm">
+          <ion-item>
+            <ion-label icon="password" color="primary" position="floating"
+              >交易密码</ion-label
+            >
+            <ion-input
+              type="password"
+              formControlName="password"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label icon="password" color="primary" position="floating"
+              >确认密码</ion-label
+            >
+            <ion-input
+              type="password"
+              formControlName="repassword"
+              required
+            ></ion-input>
+          </ion-item>
+          <div class="contract row middle-span">
+            <ion-checkbox formControlName="confirm"></ion-checkbox>
+            <span>我已经仔细阅读并同意《服务与隐私条款》</span>
+          </div>
+          <ion-button
+            expand="block"
+            [disabled]="!createForm.valid"
+            (click)="onCreate()"
+            >创建</ion-button
+          >
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

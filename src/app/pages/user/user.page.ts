@@ -4,6 +4,7 @@ import { Select, Store } from '@ngxs/store'
 import { Observable } from 'rxjs'
 import { User } from 'app/models/user.model'
 import { LoggerService } from '@ngx-toolkit/logger'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-user',
@@ -58,11 +59,11 @@ export class UserPage implements OnInit {
   ]
 
   private readonly buttonHandlerMapping = {
-    wallet: this.openWallet
+    wallet: this.navigate
   }
 
   private readonly menuHandlerMapping = {
-    wallet: this.openWallet
+    wallet: this.navigate
   }
 
   private currentUser
@@ -72,6 +73,7 @@ export class UserPage implements OnInit {
 
   constructor(
     private logger: LoggerService,
+    private router: Router,
     private store: Store
   ) {}
 
@@ -88,7 +90,7 @@ export class UserPage implements OnInit {
    */
   private onOpenButton(event) {
     const handler = this.buttonHandlerMapping[event]
-    handler && handler()
+    handler && handler(event)
   }
 
   /**
@@ -103,7 +105,8 @@ export class UserPage implements OnInit {
   /**
    * 打开钱包
    */
-  private openWallet() {
+  private navigate(url) {
+    this.router.navigate([url])
     // TODO:用户有钱包则打开钱包
     // TODO:用户无钱包则创建钱包
   }

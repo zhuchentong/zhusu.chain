@@ -1,9 +1,70 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>transfer</ion-title>
+<ion-header no-border>
+  <ion-toolbar> 
+    <ion-title>转账</ion-title> 
   </ion-toolbar>
 </ion-header>
+<ion-content padding class="cont_background">
+  <div class="transfer-miandiv">
+    <div>
+      <div><p class="font-style-page">收款地址</p></div>
+      <ion-input
+        type="text"
+        class="input-style"
+        [(ngModel)]="toAddress"
+      ></ion-input>
+    </div>
 
-<ion-content padding>
-
+    <div class="pay-wallet-style">
+      <p class="font-style-page-pay">付款钱包</p>
+      <ion-input
+        type="text"
+        class="input-style"
+        readonly="true"
+        style="margin-bottom: 5px;"
+        [(ngModel)]="fromAddress"
+      ></ion-input>
+    </div>
+    <div class="transfer-money-style">
+      <div class="transfer-remain-style">
+        <span>{{ tokenName }}</span>
+        <span class="transfer-current">当前余额：123</span>
+      </div>
+      <div>
+        <ion-input
+          type="number"
+          placeholder="输入整数"
+          (keyup)="calAmount()"
+          [(ngModel)]="sendCount"
+        ></ion-input>
+      </div>
+    </div>
+    <div class="transfer-money-style">
+      <ion-input
+        type="text"
+        placeholder="备注"
+        [(ngModel)]="remark"
+      ></ion-input>
+    </div>
+    <div class="append-gas">
+      <div style="width: 100%">
+        <ion-label>进度（注：转账进度不同，费用不同）</ion-label>
+        <ion-range
+          [(ngModel)]="gasPrice"
+          (ionBlur)="calGas()"
+          min="1"
+          pin="true"
+          max="100"
+          style="width: 100%"
+        >
+          <ion-icon range-left small>慢</ion-icon>
+          <ion-icon range-right small>快</ion-icon>
+        </ion-range>
+      </div>
+    </div>
+    <div class="transfer-login-div">
+      <button ion-button class="transfer-login-class" (click)="send()">
+        确认
+      </button>
+    </div>
+  </div>
 </ion-content>

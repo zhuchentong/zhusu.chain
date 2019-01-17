@@ -6,6 +6,9 @@ export const environment = {
   production: false,
   url: {
     server: 'http://47.110.130.153:9002'
+  },
+  contract: {
+    network: 'https://ropsten.infura.io/v3/9fbf52171b784b9799df429ffbe5eea2'
   }
 }
 

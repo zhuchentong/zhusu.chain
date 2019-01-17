@@ -6,6 +6,8 @@ import {
   UpdateWalletAction,
   SetCurrentWalletAction
 } from '../action/wallet.action'
+import { plainToClass } from 'class-transformer'
+import { Wallet } from 'app/models/wallet.model'
 
 @State({
   name: 'wallet',
@@ -21,9 +23,9 @@ export class WalletState extends ExtendState {
    */
   @Selector()
   public static getCurrentWallet(state) {
-    if (!state.current) {
+    if (state.current) {
       const wallet = state.walletList.find(x => x.address === state.current)
-      return wallet
+      return plainToClass(Wallet, wallet)
     } else {
       return null
     }
@@ -35,7 +37,7 @@ export class WalletState extends ExtendState {
    */
   @Selector()
   public static getWalletList(state) {
-    return state.walletList
+    return plainToClass(Wallet, state.walletList) || []
   }
 
   /**
