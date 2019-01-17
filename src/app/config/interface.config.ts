@@ -16,3 +16,11 @@ export interface IToken {
   amount
   price
 }
+
+export interface ITransferParams {
+  address
+  amount
+  password
+  remark
+  gasPrice?
+}

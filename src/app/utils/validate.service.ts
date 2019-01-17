@@ -13,4 +13,13 @@ export class ValidateService {
           validateMobile: { valid: false }
         }
   }
+
+  public static addressValidate(control: FormControl) {
+    const ADDRESS_REGEXP = /^[0-9A-Fa-f]{40}$/
+    return ADDRESS_REGEXP.test(control.value)
+      ? null
+      : {
+          validateAddress: { valid: false }
+        }
+  }
 }

@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <app-back-button slot="start"></app-back-button>
+    <ion-buttons slot="end">
       <ion-button icon-only icon="menu" (click)="menuController.open('menu')">
         <ion-icon name="menu"></ion-icon>
       </ion-button>
@@ -29,7 +30,7 @@
 </ion-content>
 
 <ion-menu
-  side="start"
+  side="end"
   menuId="menu"
   type="overlay"
   [swipeGesture]="false"

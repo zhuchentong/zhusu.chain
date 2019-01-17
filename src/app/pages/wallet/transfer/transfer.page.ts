@@ -5,40 +5,50 @@ import { Wallet } from 'app/models/wallet.model'
 import { ActivatedRoute } from '@angular/router'
 import { TokenEnum } from 'app/config/enum.config'
 import { EtherService } from 'app/utils/ether.service'
-
+import { FormBuilder, Validators, FormGroup } from '@angular/forms'
+import { IToken, ITransferParams } from 'app/config/interface.config'
+import { ValidateService } from 'app/utils/validate.service'
 @Component({
   selector: 'app-transfer',
   templateUrl: './transfer.page.html',
   styleUrls: ['./transfer.page.scss']
 })
 export class TransferPage implements OnInit {
-  private toAddress: string
-  private fromAddress: string
-  private balance: string
-  private sendCount: string
-  private address: string
-  private password: string
-  private remark: string
-  private tokenName: string
-  private price: string
-  private sendAmount: string
-  private gasPrice: any
-  private gas: string
-  private gasAmount: string
-  private ethBalance: string
+  // private toAddress: string
+  // private fromAddress: string
+  // private balance: string
+  // private sendCount: string
+  // private address: string
+  // private password: string
+  // private remark: string
+  // private tokenName: string
+  // private price: string
+  // private sendAmount: string
+  // private gasPrice: any
+  // private gas: string
+  // private gasAmount: string
+  // private ethBalance: string
 
   //
   private transferInstance: Transfer
   private currentWallet: Wallet
   private token: TokenEnum
-
+  private transferForm: FormGroup
+  private tokenInfo: IToken
   constructor(
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private store: Store,
     private etherService: EtherService
   ) {}
 
   public ngOnInit() {
+    // 初始化表单
+    this.transferForm = this.formBuilder.group({
+      toAddress: ['', ValidateService.addressValidate],
+      amount: [0, Validators.min(0)],
+      gasPrice: [0]
+    })
     // 获取token类型
     this.token = this.route.snapshot.paramMap.get('token') as TokenEnum
     // 获取当前钱包
@@ -51,6 +61,28 @@ export class TransferPage implements OnInit {
       this.currentWallet.address,
       this.etherService
     )
+    // 获取token信息
+    this.getTokenInfo()
+  }
+
+  /**
+   *  获取当前币种信息
+   */
+  private async getTokenInfo() {
+    this.tokenInfo = await this.transferInstance.getBalance()
+  }
+
+  /**
+   * 发送交易
+   */
+  private onTransfer() {
+    this.transferInstance.sendTransfer({
+      address: this.transferForm.value.address,
+      amount: this.transferForm.value.amount,
+      password: '123123',
+      gasPrice: this.transferForm.value.gasPrice,
+      remark: ''
+    })
   }
 
   private initData() {
@@ -188,17 +220,21 @@ abstract class Transfer {
         return new TransferETH(address, etherService)
       case TokenEnum.JCO:
         return new TransferToken(address, etherService)
+      default:
+        return new TransferETH(address, etherService)
     }
   }
 
-  public address
+  protected address
+  protected etherService: EtherService
 
-  constructor(address) {
+  constructor(address, etherService) {
     this.address = address
+    this.etherService = etherService
   }
 
-  public abstract getBalance()
-  public abstract sendTransfer()
+  public abstract getBalance(): Promise<IToken>
+  public abstract sendTransfer(params: ITransferParams)
 }
 
 /**
@@ -206,16 +242,28 @@ abstract class Transfer {
  */
 class TransferETH extends Transfer {
   constructor(address, etherService) {
-    super(address)
+    super(address, etherService)
     this.getBalance()
   }
 
   public getBalance() {
-    return
+    return this.etherService.getEthInfo(this.address)
   }
 
-  public sendTransfer() {
-    return
+  public sendTransfer({
+    address,
+    amount,
+    password,
+    gasPrice,
+    remark
+  }: ITransferParams) {
+    return this.etherService.sendTransaction(
+      address,
+      amount,
+      password,
+      gasPrice,
+      remark
+    )
   }
 }
 
@@ -224,14 +272,17 @@ class TransferETH extends Transfer {
  */
 class TransferToken extends Transfer {
   constructor(address, etherService) {
-    super(address)
+    super(address, etherService)
   }
 
+  /**
+   * 获取TOKEN金额
+   */
   public getBalance() {
-    return
+    return this.etherService.getJcoInfo(this.address)
   }
 
-  public sendTransfer() {
-    return
+  public sendTransfer({ address, amount, password, remark }: ITransferParams) {
+    return this.etherService.sendETH(address, amount, password, remark)
   }
 }

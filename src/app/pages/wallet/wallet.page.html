@@ -3,7 +3,7 @@
     <app-back-button color="black" slot="start"></app-back-button>
     <ion-title text-center> {{ wallet?.name }} </ion-title>
     <ion-buttons slot="end">
-      <ion-button icon-only routerLink="wallet/change-wallet">
+      <ion-button icon-only routerLink="/wallet/change-wallet">
         <ion-icon name="repeat"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,20 +16,23 @@
     routerLink="wallet/wallet-info"
   >
     <img src="assets/image/logo.png" />
-    <div class="address" (click)="onCopyAddress()">
-      {{ wallet?.address }}
-    </div>
+    <div class="address" (click)="onCopyAddress()">{{ wallet?.address }}</div>
   </div>
   <div class="wallet-operation row around-span">
     <div>
       <ion-button outline routerLink="/wallet/receive"> 收款 </ion-button>
-      <ion-button outline routerLink="/wallet/transfer"> 转账 </ion-button>
+      <ion-button outline [routerLink]="['/wallet/transfer', { token: 'JCO' }]">
+        转账
+      </ion-button>
     </div>
   </div>
   <ion-card padding class="wallet-amount">
     <ion-card-content>
       <ion-grid>
-        <ion-row (click)="sendToken('JCO')" class="token-item">
+        <ion-row
+          class="token-item"
+          [routerLink]="['/wallet/transfer', { token: 'JCO' }]"
+        >
           <ion-col col-4>
             <img class="token-image" src="assets/image/logo.png" />
             <ion-label class="token-name">JCO</ion-label>
@@ -39,7 +42,10 @@
           </ion-col>
           <ion-col col-2 text-left> 个 </ion-col>
         </ion-row>
-        <ion-row (click)="sendToken('ETH')" class="token-item">
+        <ion-row
+          class="token-item"
+          [routerLink]="['/wallet/transfer', { token: 'ETH' }]"
+        >
           <ion-col col-4>
             <img class="token-image" src="assets/image/logo.png" />
             <ion-label class="token-name">ETH</ion-label>

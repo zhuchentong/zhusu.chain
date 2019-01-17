@@ -1,10 +1,64 @@
 <ion-header no-border>
-  <ion-toolbar> 
-    <ion-title>转账</ion-title> 
+  <ion-toolbar>
+    <app-back-button slot="start"></app-back-button>
+    <ion-title>1{{ token }}1转账</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content padding class="cont_background">
-  <div class="transfer-miandiv">
+<ion-content padding>
+  <form [formGroup]="transferForm">
+    <ion-item>
+      <ion-label color="primary" position="floating">付款钱包</ion-label>
+      <ion-textarea
+        type="text"
+        [value]="currentWallet?.address"
+        text-right
+        readonly
+        required
+      ></ion-textarea>
+    </ion-item>
+    <div class="balance tip row between-span" text-right>
+      <div>{{ currentWallet?.name }}</div>
+      <div>钱包余额: {{ tokenInfo?.balance.toString() }}</div>
+    </div>
+    <ion-item>
+      <ion-label color="primary" position="floating">收款地址</ion-label>
+      <ion-textarea
+        type="text"
+        formControlName="toAddress"
+        text-right
+        required
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" position="floating">转账金额</ion-label>
+      <ion-input
+        type="number"
+        formControlName="amount"
+        text-right
+        required
+      ></ion-input>
+    </ion-item>
+    <div class="gas-price">
+      <ion-text class="label" color="primary" position="floating"
+        >进度</ion-text
+      >
+      <ion-range formControlName="gasPrice" min="1" pin="true" max="100">
+        <ion-label slot="start">慢</ion-label>
+        <ion-label slot="end">快</ion-label>
+      </ion-range>
+    </div>
+    <div class="tip" text-right>转账进度不同，费用不同</div>
+
+    <ion-button
+      class="submit"
+      expand="block"
+      [disabled]="!transferForm.valid"
+      (click)="onTransfer()"
+      >确定</ion-button
+    >
+  </form>
+  <!-- <div class="transfer-miandiv">
     <div>
       <div><p class="font-style-page">收款地址</p></div>
       <ion-input
@@ -66,5 +120,5 @@
         确认
       </button>
     </div>
-  </div>
+  </div> -->
 </ion-content>

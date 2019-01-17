@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import {
   NavController,
-  NavParams,
   MenuController,
   LoadingController
 } from '@ionic/angular'
