@@ -1,0 +1,7 @@
+.contract {
+  margin: 30px 0;
+  font-size: 12px;
+  & > * {
+    margin: 0 5px;
+  }
+}

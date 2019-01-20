@@ -3,7 +3,7 @@
     <app-back-button color="black" slot="start"></app-back-button>
     <ion-title text-center> {{ wallet?.name }} </ion-title>
     <ion-buttons slot="end">
-      <ion-button icon-only routerLink="/wallet/change-wallet">
+      <ion-button icon-only (click)="onChangeWallet()">
         <ion-icon name="repeat"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -33,14 +33,14 @@
           class="token-item"
           [routerLink]="['/wallet/transfer', { token: 'JCO' }]"
         >
-          <ion-col col-4>
+          <ion-col col->
             <img class="token-image" src="assets/image/logo.png" />
             <ion-label class="token-name">JCO</ion-label>
           </ion-col>
-          <ion-col col-6 text-right>
+          <ion-col col-7 text-right class="token-balance">
             {{ walletOfToken?.balance.toString() }}
           </ion-col>
-          <ion-col col-2 text-left> 个 </ion-col>
+          <ion-col col-1 text-left> 个 </ion-col>
         </ion-row>
         <ion-row
           class="token-item"
@@ -50,10 +50,10 @@
             <img class="token-image" src="assets/image/logo.png" />
             <ion-label class="token-name">ETH</ion-label>
           </ion-col>
-          <ion-col col-6 text-right>
+          <ion-col col-7 text-right class="token-balance">
             {{ walletOfETH?.balance.toFixed(2) }}
           </ion-col>
-          <ion-col col-2 text-left> ETH </ion-col>
+          <ion-col col-1 text-left> ETH </ion-col>
         </ion-row>
       </ion-grid>
     </ion-card-content>

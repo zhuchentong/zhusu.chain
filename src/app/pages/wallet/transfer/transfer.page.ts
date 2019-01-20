@@ -45,7 +45,7 @@ export class TransferPage implements OnInit {
   public ngOnInit() {
     // 初始化表单
     this.transferForm = this.formBuilder.group({
-      toAddress: ['', ValidateService.addressValidate],
+      address: [''],
       amount: [0, Validators.min(0)],
       gasPrice: [0]
     })
@@ -76,43 +76,18 @@ export class TransferPage implements OnInit {
    * 发送交易
    */
   private onTransfer() {
-    this.transferInstance.sendTransfer({
+    // 验证参数
+    if (!this.transferForm.valid) {
+      return
+    }
+
+    this.transferInstance.sendTransfer(this.currentWallet, {
       address: this.transferForm.value.address,
       amount: this.transferForm.value.amount,
-      password: '123123',
-      gasPrice: this.transferForm.value.gasPrice,
-      remark: ''
+      password: this.transferForm.value.password
+      // gasPrice: this.transferForm.value.gasPrice,
+      // remark: ''
     })
-  }
-
-  private initData() {
-    // let loading = this.loadingCtrl.create({
-    //   content: this.utilProvider.content
-    // })
-    // this.sendAmount = '0.00'
-    // this.gasPrice = '1'
-    // loading.present()
-    // this.fromAddress = this.utilProvider.getCurrentWallet().address
-    // this.etherService.getEthInfo(this.fromAddress).then((eth: any) => {
-    //   if (this.tokenName == this.utilProvider.tokenType.JCO) {
-    //     this.etherService.getJcoInfo(this.fromAddress).then(
-    //       (jco: any) => {
-    //         this.balance = jco.balance
-    //         this.price = jco.price
-    //       },
-    //       err => {
-    //         this.utilProvider.message('加载失败！', 3000)
-    //         console.log(err)
-    //         loading.dismiss()
-    //       }
-    //     )
-    //   } else {
-    //     this.price = eth.price
-    //     this.ethBalance = this.balance = eth.balance
-    //   }
-    //   this.calGas()
-    //   loading.dismiss()
-    // })
   }
 
   // calAmount() {
@@ -234,7 +209,7 @@ abstract class Transfer {
   }
 
   public abstract getBalance(): Promise<IToken>
-  public abstract sendTransfer(params: ITransferParams)
+  public abstract sendTransfer(wallet, params: ITransferParams)
 }
 
 /**
@@ -250,20 +225,11 @@ class TransferETH extends Transfer {
     return this.etherService.getEthInfo(this.address)
   }
 
-  public sendTransfer({
-    address,
-    amount,
-    password,
-    gasPrice,
-    remark
-  }: ITransferParams) {
-    return this.etherService.sendTransaction(
-      address,
-      amount,
-      password,
-      gasPrice,
-      remark
-    )
+  public sendTransfer(
+    wallet,
+    { address, amount, password, remark }: ITransferParams
+  ) {
+    return this.etherService.sendETH(address, amount, password, remark)
   }
 }
 
@@ -282,7 +248,17 @@ class TransferToken extends Transfer {
     return this.etherService.getJcoInfo(this.address)
   }
 
-  public sendTransfer({ address, amount, password, remark }: ITransferParams) {
-    return this.etherService.sendETH(address, amount, password, remark)
+  public sendTransfer(
+    wallet,
+    { address, amount, password, gasPrice, remark }: ITransferParams
+  ) {
+    return this.etherService.sendTransaction(
+      wallet,
+      address,
+      amount,
+      password
+      // gasPrice,
+      // remark
+    )
   }
 }

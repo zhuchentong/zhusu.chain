@@ -43,9 +43,7 @@ export class WalletPage implements OnInit {
       this.getWalletAmount()
     } else {
       //  TODO:跳转到创建钱包
-      this.router.navigate(['/wallet/wallet-change'], {
-        replaceUrl: true
-      })
+      this.onChangeWallet()
     }
   }
 
@@ -66,5 +64,11 @@ export class WalletPage implements OnInit {
   private onCopyAddress() {
     this.clipboardService.copyFromContent(this.wallet.address)
     this.commonService.toast('地址已复制到粘贴板')
+  }
+
+  private onChangeWallet() {
+    this.router.navigate(['/wallet/wallet-change'], {
+      replaceUrl: true
+    })
   }
 }

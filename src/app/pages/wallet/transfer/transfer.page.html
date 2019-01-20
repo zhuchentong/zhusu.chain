@@ -1,7 +1,7 @@
 <ion-header no-border>
   <ion-toolbar>
-    <app-back-button slot="start"></app-back-button>
-    <ion-title>1{{ token }}1转账</ion-title>
+    <app-back-button color="black" slot="start"></app-back-button>
+    <ion-title>{{ token }}转账</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
@@ -24,7 +24,7 @@
       <ion-label color="primary" position="floating">收款地址</ion-label>
       <ion-textarea
         type="text"
-        formControlName="toAddress"
+        formControlName="address"
         text-right
         required
       ></ion-textarea>
@@ -39,7 +39,7 @@
         required
       ></ion-input>
     </ion-item>
-    <div class="gas-price">
+    <!-- <div class="gas-price">
       <ion-text class="label" color="primary" position="floating"
         >进度</ion-text
       >
@@ -48,7 +48,7 @@
         <ion-label slot="end">快</ion-label>
       </ion-range>
     </div>
-    <div class="tip" text-right>转账进度不同，费用不同</div>
+    <div class="tip" text-right>转账进度不同，费用不同</div> -->
 
     <ion-button
       class="submit"

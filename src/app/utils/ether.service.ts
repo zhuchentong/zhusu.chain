@@ -7,6 +7,7 @@ import { LoggerService } from '@ngx-toolkit/logger'
 import { IToken } from 'app/config/interface.config'
 import { Store } from '@ngxs/store'
 import { AddWalletAction } from 'app/store/action/wallet.action'
+import { Wallet } from 'app/models/wallet.model'
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +38,8 @@ export class EtherService {
    * 使用钱包签名合约
    * @param wallet
    */
-  public signWithWallet(wallet) {
-    this.contractInstance = this.contractInstance.connect(wallet)
+  public signWithWallet(wallet: ethers.Wallet): ethers.Contract {
+    return this.contractInstance.connect(wallet.connect(this.provider))
   }
 
   /**
@@ -110,25 +111,21 @@ export class EtherService {
    * @param mnemonic
    * @param password
    */
-  public importMnemonic(mnemonic: string, password: string) {
-    return new Promise((resolve, reject) => {
-      const wallet = ethers.Wallet.fromMnemonic(mnemonic)
-      // wallet.provider = provider;
-      wallet.encrypt(password).then(
-        function(json: any) {
-          this.commonService.insertLocalStorage(
-            wallet.address,
-            json,
-            '我的钱包' +
-              (localStorage.length > 1 ? localStorage.length - 1 : '')
-          )
-          resolve(wallet.address)
-        },
-        (err: any) => {
-          this.logger.error(reject(err))
-        }
-      )
-    })
+  public async importMnemonic(mnemonic: string, password: string) {
+    // 序列化密码
+    password = this.normalizePassword(password)
+    // 创建钱包
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic)
+    try {
+      const encrypt = await wallet.encrypt(password)
+      return {
+        wallet,
+        encrypt
+      }
+    } catch (ex) {
+      this.logger.error(ex)
+      throw Error('创建失败')
+    }
   }
 
   /**
@@ -206,11 +203,11 @@ export class EtherService {
    * @param address
    */
   public async getEthInfo(address: string) {
-    const provider = new ethers.providers.EtherscanProvider()
+    const mainProvider = new ethers.providers.EtherscanProvider()
     // 获取余额
-    const balanceOfWei = await provider.getBalance(address)
+    const balanceOfWei = await this.provider.getBalance(address)
     const balance = Number(ethers.utils.formatEther(balanceOfWei))
-    const price = await provider.getEtherPrice()
+    const price = await mainProvider.getEtherPrice()
     // bigNumber 不能和小数进行计算，所以要先将汇率变成整数
     // const rate = Math.round(price * 100);
     // const result = balanceOfWei.mul(rate).div(100);
@@ -376,46 +373,61 @@ export class EtherService {
    * @param remark
    */
   public async sendTransaction(
+    wallet: Wallet,
     toAddress: string,
     amount: string,
-    password: string,
-    gasPrice: string,
-    remark: string
+    password: string
+    // gasPrice: string,
+    // remark: string
   ) {
-    const json = this.commonService.getCurrentWalletJson()
-    const count = ethers.utils.bigNumberify(amount)
-    return new Promise((resolve, reject) => {
-      // ethers.Wallet.fromEncryptedWallet(json, password).then((wallet: any) => {
-      ethers.Wallet.fromEncryptedJson(json, password).then(
-        async wallet => {
-          wallet = wallet.connect(this.provider)
-          let signature = '0x'
-          if (typeof remark === 'string') {
-            signature = await wallet.signMessage(remark)
-          }
-          const tx = this.getTransaction(gasPrice, toAddress, amount, signature)
-          const contract = new ethers.Contract(
-            contractConfig.contractAddress,
-            contractConfig.contractAbi,
-            wallet
-          )
-          contract.balanceOf(wallet.address).then(
-            (balance: any) => {
-              // 余额与gas的数量是否需要大于转账数量？
-              if (balance.gt(count)) {
-                resolve(contract.transfer(toAddress, count, tx))
-              }
-            },
-            (err: any) => {
-              reject(err)
-            }
-          )
-        },
-        (err: any) => {
-          reject(err)
-        }
+    try {
+      this.logger.log(wallet, password, toAddress)
+      const ehterWallet = await ethers.Wallet.fromEncryptedJson(
+        wallet.data,
+        this.normalizePassword('123123123')
       )
-    })
+      this.logger.log(ehterWallet)
+      const contract = this.signWithWallet(ehterWallet)
+      const count = ethers.utils.bigNumberify(amount)
+      return await contract.transfer(toAddress, count)
+     
+    } catch (ex) {
+      this.logger.log(ex)
+    }
+
+    // const count = ethers.utils.bigNumberify(amount)
+    // return new Promise((resolve, reject) => {
+    //   // ethers.Wallet.fromEncryptedWallet(json, password).then((wallet: any) => {
+    //  .then(
+    //     async wallet => {
+    //       wallet = wallet.connect(this.provider)
+    //       let signature = '0x'
+    //       if (typeof remark === 'string') {
+    //         signature = await wallet.signMessage(remark)
+    //       }
+    //       const tx = this.getTransaction(gasPrice, toAddress, amount, signature)
+    //       const contract = new ethers.Contract(
+    //         contractConfig.contractAddress,
+    //         contractConfig.contractAbi,
+    //         wallet
+    //       )
+    //       contract.balanceOf(wallet.address).then(
+    //         (balance: any) => {
+    //           // 余额与gas的数量是否需要大于转账数量？
+    //           if (balance.gt(count)) {
+    //             resolve(contract.transfer(toAddress, count, tx))
+    //           }
+    //         },
+    //         (err: any) => {
+    //           reject(err)
+    //         }
+    //       )
+    //     },
+    //     (err: any) => {
+    //       reject(err)
+    //     }
+    //   )
+    // })
   }
 
   /**

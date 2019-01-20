@@ -1,0 +1,49 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <app-back-button color="black" slot="start"></app-back-button>
+    <ion-title>导入助记词</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form [formGroup]="importForm">
+    <ion-item>
+      <ion-label color="primary" position="floating">助记词</ion-label>
+      <ion-textarea
+        rows="8"
+        type="text"
+        formControlName="mnemonic"
+        required
+      ></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label icon="password" color="primary" position="floating"
+        >交易密码</ion-label
+      >
+      <ion-input
+        type="password"
+        formControlName="password"
+        required
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label icon="password" color="primary" position="floating"
+        >确认密码</ion-label
+      >
+      <ion-input
+        type="password"
+        formControlName="repassword"
+        required
+      ></ion-input>
+    </ion-item>
+    <div class="contract row middle-span">
+      <ion-checkbox formControlName="confirm"></ion-checkbox>
+      <span>我已经仔细阅读并同意《服务与隐私条款》</span>
+    </div>
+    <ion-button
+      expand="block"
+      [disabled]="!importForm.valid"
+      (click)="onImport()"
+      >导入</ion-button
+    >
+  </form>
+</ion-content>

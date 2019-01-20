@@ -21,6 +21,6 @@ export interface ITransferParams {
   address
   amount
   password
-  remark
+  remark?
   gasPrice?
 }

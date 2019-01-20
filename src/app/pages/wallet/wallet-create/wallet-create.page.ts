@@ -79,7 +79,7 @@ export class WalletCreatePage implements OnInit {
   private createWalletName() {
     let walletName = '我的钱包'
     if (this.walletList.length > 0) {
-      walletName += this.walletList.length - 1
+      walletName += this.walletList.length
     }
     return walletName
   }

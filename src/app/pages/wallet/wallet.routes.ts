@@ -4,6 +4,7 @@ import { WalletInfoPage } from './wallet-info/wallet-info.page'
 import { TransferPage } from './transfer/transfer.page'
 import { WalletChangePage } from './wallet-change/wallet-change.page'
 import { WalletCreatePage } from './wallet-create/wallet-create.page'
+import { WalletImportPage } from './wallet-import/wallet-import.page'
 
 export const walletRoutes: Routes = [
   {
@@ -24,6 +25,10 @@ export const walletRoutes: Routes = [
     component: WalletCreatePage
   },
   {
+    path: 'wallet-import',
+    component: WalletImportPage
+  },
+  {
     path: 'transfer',
     component: TransferPage
   }
@@ -33,6 +38,7 @@ export const walletPages = [
   WalletPage,
   WalletInfoPage,
   WalletChangePage,
-  TransferPage,
-  WalletCreatePage
+  WalletImportPage,
+  WalletCreatePage,
+  TransferPage
 ]

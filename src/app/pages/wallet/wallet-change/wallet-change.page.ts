@@ -9,7 +9,7 @@ import { Wallet } from 'app/models/wallet.model'
 import { Store } from '@ngxs/store'
 import { WalletState } from 'app/store/state/wallet.state'
 import { SetCurrentWalletAction } from 'app/store/action/wallet.action'
-
+import { Location } from '@angular/common'
 @Component({
   selector: 'app-wallet-change',
   templateUrl: './wallet-change.page.html',
@@ -26,6 +26,7 @@ export class WalletChangePage implements OnInit {
     public etherService: EtherService,
     public loadingCtrl: LoadingController,
     private store: Store,
+    private location: Location,
     private menuController: MenuController // public utilProvider: UtilProvider
   ) {}
 
@@ -53,6 +54,7 @@ export class WalletChangePage implements OnInit {
     this.store.dispatch(new SetCurrentWalletAction(wallet.address))
     // 更新当前钱包
     this.currentWallet = wallet
+    this.location.back()
   }
 
   private updateInfo(address: string, selected: boolean) {
