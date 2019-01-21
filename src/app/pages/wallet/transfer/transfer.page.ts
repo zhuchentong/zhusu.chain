@@ -87,8 +87,7 @@ export class TransferPage implements OnInit {
           this.commonService.toast('转账成功')
           this.location.back()
         },
-        (ex) => {
-          console.log(ex)
+        ex => {
           this.commonService.toast('转账失败')
         }
       )
