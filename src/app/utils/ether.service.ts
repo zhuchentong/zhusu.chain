@@ -172,33 +172,6 @@ export class EtherService {
   }
 
   /**
-   * 获取钱包余额
-   * @param address
-   */
-  public async getEtherBalance(address: string) {
-    const provider = new ethers.providers.EtherscanProvider()
-    const balance = provider.getBalance(address)
-    return balance
-  }
-
-  /**
-   * 获取ETH对应的美元金额
-   */
-  public getEtherPrice() {
-    const provider = new ethers.providers.EtherscanProvider()
-    return new Promise((resolve, reject) => {
-      provider.getEtherPrice().then(
-        (res: any) => {
-          resolve(res)
-        },
-        (err: any) => {
-          this.logger.error(reject(err))
-        }
-      )
-    })
-  }
-
-  /**
    * 获取账户相关ETH信息
    * @param address
    */
@@ -207,35 +180,14 @@ export class EtherService {
     // 获取余额
     const balanceOfWei = await this.provider.getBalance(address)
     const balance = Number(ethers.utils.formatEther(balanceOfWei))
+    // 获取主网ETH价格
     const price = await mainProvider.getEtherPrice()
     // bigNumber 不能和小数进行计算，所以要先将汇率变成整数
-    // const rate = Math.round(price * 100);
-    // const result = balanceOfWei.mul(rate).div(100);
     return {
       price,
       balance,
       amount: balance * price
     }
-
-    // return new Promise((resolve, reject) => {
-
-    //   provider.getBalance(address).then((balance: any) => {
-    //     let count = Number(ethers.utils.formatEther(balance))
-    //     provider1.getEtherPrice().then((price: any) => {
-    //       // bigNumber 不能和小数进行计算，所以要先将汇率变成整数
-    //       const rate = Math.round(price * 100);
-    //       const result = balance.mul(rate).div(100);
-    //       let data = {
-    //         price: price,
-    //         balance: count,
-    //         amount: parseFloat((count * price).toString()).toFixed(2).toString()
-    //       }
-    //       resolve(data);
-    //     })
-    //   }).catch((res: any) => {
-    //     reject(res);
-    //   });
-    // });
   }
 
   /**
@@ -243,23 +195,14 @@ export class EtherService {
    */
   public getGasPrice() {
     const provider = new ethers.providers.EtherscanProvider()
-    return new Promise((resolve, reject) => {
-      provider.getGasPrice().then(
-        (res: any) => {
-          resolve(res)
-        },
-        (err: any) => {
-          this.logger.error(reject(err))
-        }
-      )
-    })
+    return provider.getGasPrice()
   }
 
   /**
    * 获取代币信息
    * @param address
    */
-  public async getJcoInfo(address: string): Promise<IToken> {
+  public async getTokenInfo(address: string): Promise<IToken> {
     const price = this.jcoPrice
     const [token, balance] = await Promise.all([
       this.contractInstance.symbol(), // 获取Token名称
@@ -274,28 +217,28 @@ export class EtherService {
     }
   }
 
-  /**
-   * 获取交易参数
-   * @param gasPrice
-   * @param toAddress
-   * @param value
-   * @param data
-   */
-  public getTransaction(
-    gasPrice: string,
-    toAddress: string,
-    value: string,
-    data: any
-  ) {
-    const transaction = {
-      gasLimit: this.gaslimit,
-      gasPrice: ethers.utils.bigNumberify(gasPrice)
-      // to: toAddress,
-      // data: "0x",
-      // value: ethers.utils.parseEther(value)
-    }
-    return transaction
-  }
+  // /**
+  //  * 获取交易参数
+  //  * @param gasPrice
+  //  * @param toAddress
+  //  * @param value
+  //  * @param data
+  //  */
+  // public getTransaction(
+  //   gasPrice: string,
+  //   toAddress: string,
+  //   value: string,
+  //   data: any
+  // ) {
+  //   const transaction = {
+  //     gasLimit: this.gaslimit,
+  //     gasPrice: ethers.utils.bigNumberify(gasPrice)
+  //     // to: toAddress,
+  //     // data: "0x",
+  //     // value: ethers.utils.parseEther(value)
+  //   }
+  //   return transaction
+  // }
 
   /**
    * 预估需要的Gas
@@ -364,8 +307,16 @@ export class EtherService {
     })
   }
 
+  public async sign(wallet) {
+    const ehterWallet = await ethers.Wallet.fromEncryptedJson(
+      wallet,
+      this.normalizePassword('123123123')
+    )
+  }
+
   /**
    * 发送交易
+   * TODO: 待重写
    * @param toAddress
    * @param amount
    * @param password
@@ -384,50 +335,15 @@ export class EtherService {
       this.logger.log(wallet, password, toAddress)
       const ehterWallet = await ethers.Wallet.fromEncryptedJson(
         wallet.data,
-        this.normalizePassword('123123123')
+        this.normalizePassword(password)
       )
       this.logger.log(ehterWallet)
       const contract = this.signWithWallet(ehterWallet)
       const count = ethers.utils.bigNumberify(amount)
       return await contract.transfer(toAddress, count)
-     
     } catch (ex) {
       this.logger.log(ex)
     }
-
-    // const count = ethers.utils.bigNumberify(amount)
-    // return new Promise((resolve, reject) => {
-    //   // ethers.Wallet.fromEncryptedWallet(json, password).then((wallet: any) => {
-    //  .then(
-    //     async wallet => {
-    //       wallet = wallet.connect(this.provider)
-    //       let signature = '0x'
-    //       if (typeof remark === 'string') {
-    //         signature = await wallet.signMessage(remark)
-    //       }
-    //       const tx = this.getTransaction(gasPrice, toAddress, amount, signature)
-    //       const contract = new ethers.Contract(
-    //         contractConfig.contractAddress,
-    //         contractConfig.contractAbi,
-    //         wallet
-    //       )
-    //       contract.balanceOf(wallet.address).then(
-    //         (balance: any) => {
-    //           // 余额与gas的数量是否需要大于转账数量？
-    //           if (balance.gt(count)) {
-    //             resolve(contract.transfer(toAddress, count, tx))
-    //           }
-    //         },
-    //         (err: any) => {
-    //           reject(err)
-    //         }
-    //       )
-    //     },
-    //     (err: any) => {
-    //       reject(err)
-    //     }
-    //   )
-    // })
   }
 
   /**

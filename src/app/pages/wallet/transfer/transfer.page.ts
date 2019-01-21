@@ -8,38 +8,27 @@ import { EtherService } from 'app/utils/ether.service'
 import { FormBuilder, Validators, FormGroup } from '@angular/forms'
 import { IToken, ITransferParams } from 'app/config/interface.config'
 import { ValidateService } from 'app/utils/validate.service'
+import { CommonService } from 'app/utils/common.service'
+import { Location } from '@angular/common'
 @Component({
   selector: 'app-transfer',
   templateUrl: './transfer.page.html',
   styleUrls: ['./transfer.page.scss']
 })
 export class TransferPage implements OnInit {
-  // private toAddress: string
-  // private fromAddress: string
-  // private balance: string
-  // private sendCount: string
-  // private address: string
-  // private password: string
-  // private remark: string
-  // private tokenName: string
-  // private price: string
-  // private sendAmount: string
-  // private gasPrice: any
-  // private gas: string
-  // private gasAmount: string
-  // private ethBalance: string
-
-  //
   private transferInstance: Transfer
   private currentWallet: Wallet
   private token: TokenEnum
   private transferForm: FormGroup
   private tokenInfo: IToken
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private store: Store,
-    private etherService: EtherService
+    private commonService: CommonService,
+    private etherService: EtherService,
+    private location: Location
   ) {}
 
   public ngOnInit() {
@@ -80,14 +69,29 @@ export class TransferPage implements OnInit {
     if (!this.transferForm.valid) {
       return
     }
-
-    this.transferInstance.sendTransfer(this.currentWallet, {
-      address: this.transferForm.value.address,
-      amount: this.transferForm.value.amount,
-      password: this.transferForm.value.password
-      // gasPrice: this.transferForm.value.gasPrice,
-      // remark: ''
-    })
+    this.commonService
+      .showPromptAlert('请输入密码', 'password', 'text')
+      .then(async ([{ password }]) => {
+        const loading = await this.commonService.loading('正在转账,请稍候...')
+        this.transferInstance
+          .sendTransfer(this.currentWallet, {
+            address: this.transferForm.value.address,
+            amount: this.transferForm.value.amount,
+            password
+            // gasPrice: this.transferForm.value.gasPrice,
+            // remark: ''
+          })
+          .then(() => {
+            this.commonService.toast('转账成功')
+            this.location.back()
+          })
+          .catch(() => {
+            this.commonService.toast('转账失败')
+          })
+          .finally(() => {
+            loading.dismiss()
+          })
+      })
   }
 
   // calAmount() {
@@ -209,7 +213,7 @@ abstract class Transfer {
   }
 
   public abstract getBalance(): Promise<IToken>
-  public abstract sendTransfer(wallet, params: ITransferParams)
+  public abstract sendTransfer(wallet, params: ITransferParams): Promise<any>
 }
 
 /**
@@ -245,7 +249,7 @@ class TransferToken extends Transfer {
    * 获取TOKEN金额
    */
   public getBalance() {
-    return this.etherService.getJcoInfo(this.address)
+    return this.etherService.getTokenInfo(this.address)
   }
 
   public sendTransfer(

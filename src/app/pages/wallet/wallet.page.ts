@@ -43,7 +43,7 @@ export class WalletPage implements OnInit {
       this.getWalletAmount()
     } else {
       //  TODO:跳转到创建钱包
-      this.onChangeWallet()
+      this.onChangeWallet(true)
     }
   }
 
@@ -56,7 +56,7 @@ export class WalletPage implements OnInit {
       this.walletOfETH = eth
     })
     // 获取TOKEN金额
-    this.etherService.getJcoInfo(this.wallet.address).then(token => {
+    this.etherService.getTokenInfo(this.wallet.address).then(token => {
       this.walletOfToken = token
     })
   }
@@ -66,9 +66,9 @@ export class WalletPage implements OnInit {
     this.commonService.toast('地址已复制到粘贴板')
   }
 
-  private onChangeWallet() {
+  private onChangeWallet(replaceUrl) {
     this.router.navigate(['/wallet/wallet-change'], {
-      replaceUrl: true
+      replaceUrl
     })
   }
 }

@@ -148,32 +148,31 @@ export class CommonService {
   public async showPromptAlert(
     title: string,
     textName: string,
-    inputType: any,
-    cancel: (data: any) => void,
-    confirm: (data: any) => void
+    inputType: any
   ) {
-    const alert = await this.atrCtrl.create({
-      header: title,
-      inputs: [
-        {
-          name: textName,
-          placeholder: '单行输入',
-          type: inputType
-        }
-      ],
-      buttons: [
-        {
-          text: '取消',
-          role: 'cancel',
-          handler: cancel
-        },
-        {
-          text: '确定',
-          handler: confirm
-        }
-      ]
+    return new Promise(async (reslove, reject) => {
+      const alert = await this.atrCtrl.create({
+        header: title,
+        inputs: [
+          {
+            name: textName,
+            type: inputType
+          }
+        ],
+        buttons: [
+          {
+            text: '取消',
+            role: 'cancel',
+            handler: (...args) => reject(args)
+          },
+          {
+            text: '确定',
+            handler: (...args) => reslove(args)
+          }
+        ]
+      })
+      alert.present()
     })
-    alert.present()
   }
 
   public async showCommonAlert(
