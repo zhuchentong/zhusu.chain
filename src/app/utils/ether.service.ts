@@ -58,8 +58,11 @@ export class EtherService {
         return source.subscribe({
           next: (tx: any) => {
             this.commonService
-              .showPromptAlert('请输入密码', 'password', 'text')
-              .then(([{ password }]) => {
+              .showPromptAlert('请输入密码', 'password', 'password')
+              .then(async ([{ password }]) => {
+                const loading = await this.commonService.loading(
+                  '验证签名中,请稍后...'
+                )
                 // 获取以太坊钱包
                 ethers.Wallet.fromEncryptedJson(
                   wallet.data,
@@ -79,6 +82,7 @@ export class EtherService {
                   .catch(err => {
                     observer.error(err)
                   })
+                  .finally(() => loading.dismiss())
               })
           },
           error(err) {
@@ -98,14 +102,18 @@ export class EtherService {
     return <T>(source: Observable<Transaction>) =>
       new Observable<Transaction>(observer => {
         return source.subscribe({
-          next: (tx: Transaction) => {
+          next: async (tx: Transaction) => {
             // 调用合约
+            const loading = await this.commonService.loading('执行中,请稍候...')
             transaction(tx.contract as IContract)
               .then(data => {
                 tx.result.push(data)
                 observer.next(tx)
               })
-              .catch(err => observer.error(err))
+              .catch(err => {
+                observer.error(err)
+              })
+              .finally(() => loading.dismiss())
           },
           error(err) {
             observer.error(err)
@@ -122,17 +130,21 @@ export class EtherService {
    * TODO:
    * 验证SIGN,估算GAS
    */
-  public send(transaction) {
+  public send(transaction: (contract: IContract) => Promise<any>) {
     return <T>(source: Observable<Transaction>) =>
       new Observable<Transaction>(observer => {
         return source.subscribe({
-          next: (tx: Transaction) => {
+          next: async (tx: Transaction) => {
+            const loading = await this.commonService.loading('执行中,请稍候...')
             transaction(tx.contract as IContract)
               .then(data => {
                 tx.result.push(data)
                 observer.next(tx)
               })
-              .catch(err => observer.error(err))
+              .catch(err => {
+                observer.error(err)
+              })
+              .finally(() => loading.dismiss())
           },
           error(err) {
             observer.error(err)
@@ -151,7 +163,8 @@ export class EtherService {
     return <T>(source: Observable<Transaction>) =>
       new Observable<Transaction>(observer => {
         return source.subscribe({
-          next: (tx: Transaction) => {
+          next: async (tx: Transaction) => {
+            const loading = await this.commonService.loading('执行中,请稍候...')
             tx.wallet
               .sendTransaction({
                 to: address,
@@ -161,6 +174,7 @@ export class EtherService {
                 tx.result.push(data)
                 observer.next(tx)
               })
+              .finally(() => loading.dismiss())
           },
           error(err) {
             observer.error(err)
@@ -178,11 +192,12 @@ export class EtherService {
    * @param address
    * @param amount
    */
-  public sendToken(wallet: Wallet, address: string, amount: number) {
+  public sendToken(wallet: Wallet, address: string, amount: string) {
     return this.transaction().pipe(
       this.signWallet(wallet),
-
-      this.call(contract => contract.transfer(address, amount))
+      this.send(contract =>
+        contract.transfer(address, ethers.utils.bigNumberify(amount))
+      )
     )
   }
 

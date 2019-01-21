@@ -72,16 +72,11 @@ export class TransferPage implements OnInit {
       return
     }
 
-    const loading = await this.commonService.loading('正在转账,请稍候...', {
-      cssClass: 'under-alert'
-    })
-
     this.transferInstance
       .sendTransfer(this.currentWallet, {
         address: this.transferForm.value.address,
         amount: this.transferForm.value.amount
       })
-      .pipe(finalize(() => loading.dismiss()))
       .subscribe(
         () => {
           this.commonService.toast('转账成功')

@@ -12,6 +12,7 @@ import { SetCurrentWalletAction } from 'app/store/action/wallet.action'
 import { Location } from '@angular/common'
 import { ClipboardService } from 'ngx-clipboard'
 import { CommonService } from 'app/utils/common.service'
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-wallet-change',
   templateUrl: './wallet-change.page.html',
@@ -28,6 +29,7 @@ export class WalletChangePage implements OnInit {
     public etherService: EtherService,
     public loadingCtrl: LoadingController,
     private store: Store,
+    private router: Router,
     private location: Location,
     private menuController: MenuController,
     private commonService: CommonService,
@@ -35,7 +37,7 @@ export class WalletChangePage implements OnInit {
   ) {}
 
   public ngOnInit() {
-    return
+    this.menuController.enable(true, 'menu')
   }
 
   private ionViewWillEnter() {
@@ -66,64 +68,45 @@ export class WalletChangePage implements OnInit {
     this.commonService.toast('地址已复制到粘贴板')
   }
 
-  private updateInfo(address: string, selected: boolean) {
-    const self = this
-    // this.utilProvider.showPromptAlert(
-    //   '输入姓名',
-    //   'name',
-    //   'text',
-    //   (res: any) => {},
-    //   (res: any) => {
-    //     if (res == '' || res == null) {
-    //       self.utilProvider.message('姓名不能为空', 3000)
-    //       return
-    //     }
-    //     if (res.name.length > 10) {
-    //       self.utilProvider.message('姓名不能超过10个字', 3000)
-    //       return
-    //     }
-    //     self.utilProvider.updateWalletName(address, res.name)
-    //     this.initAddress()
-    //     localStorage.removeItem(this.utilProvider.getCurrentUser())
-    //     localStorage.setItem(
-    //       this.utilProvider.getCurrentUser(),
-    //       localStorage.getItem(address)
-    //     )
-    //     this.utilProvider.message('修改成功！', 3000)
-    //   }
-    // )
+  private onRedirect(url) {
+    this.router.navigate([url])
+    this.menuController.close('menu')
   }
 
-  private deleteAddress(address: string) {
-    const self = this
-    // this.loading = this.loadingCtrl.create({
-    //   content: this.utilProvider.content
-    // })
+  // private updateInfo(address: string, selected: boolean) {
 
-    // this.utilProvider.showPromptAlert(
-    //   '输入交易密码',
-    //   'password',
-    //   'password',
-    //   (res: any) => {},
-    //   (res: any) => {
-    //     this.loading.present()
-    //     this.etherService.exportWallet(address, res.password).then(
-    //       (res: any) => {
-    //         this.utilProvider.deleteAddress(address)
-    //         self.initAddress()
-    //         this.loading.dismiss()
-    //         this.utilProvider.message('删除成功！', 3000)
-    //         if (this.utilProvider.isFirstLogin()) {
-    //           this.navCtrl.push(MainWalletPage)
-    //         }
-    //       },
-    //       (err: any) => {
-    //         console.log(err)
-    //         this.loading.dismiss()
-    //         this.utilProvider.message('密码错误！', 3000)
-    //       }
-    //     )
-    //   }
-    // )
-  }
+  // }
+
+  // private deleteAddress(address: string) {
+  //   const self = this
+  //   // this.loading = this.loadingCtrl.create({
+  //   //   content: this.utilProvider.content
+  //   // })
+
+  //   // this.utilProvider.showPromptAlert(
+  //   //   '输入交易密码',
+  //   //   'password',
+  //   //   'password',
+  //   //   (res: any) => {},
+  //   //   (res: any) => {
+  //   //     this.loading.present()
+  //   //     this.etherService.exportWallet(address, res.password).then(
+  //   //       (res: any) => {
+  //   //         this.utilProvider.deleteAddress(address)
+  //   //         self.initAddress()
+  //   //         this.loading.dismiss()
+  //   //         this.utilProvider.message('删除成功！', 3000)
+  //   //         if (this.utilProvider.isFirstLogin()) {
+  //   //           this.navCtrl.push(MainWalletPage)
+  //   //         }
+  //   //       },
+  //   //       (err: any) => {
+  //   //         console.log(err)
+  //   //         this.loading.dismiss()
+  //   //         this.utilProvider.message('密码错误！', 3000)
+  //   //       }
+  //   //     )
+  //   //   }
+  //   // )
+  // }
 }

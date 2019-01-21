@@ -50,8 +50,12 @@
   <ion-content>
     <ion-content>
       <ion-list>
-        <ion-item routerLink="/wallet/wallet-create"> 创建钱包 </ion-item>
-        <ion-item routerLink="/wallet/wallet-import"> 导入钱包 </ion-item>
+        <ion-item (click)="onRedirect('/wallet/wallet-create')">
+          创建钱包
+        </ion-item>
+        <ion-item (click)="onRedirect('/wallet/wallet-import')">
+          导入钱包
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-content>

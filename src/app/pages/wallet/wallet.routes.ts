@@ -5,11 +5,13 @@ import { TransferPage } from './transfer/transfer.page'
 import { WalletChangePage } from './wallet-change/wallet-change.page'
 import { WalletCreatePage } from './wallet-create/wallet-create.page'
 import { WalletImportPage } from './wallet-import/wallet-import.page'
+import { AuthGuard } from 'app/core/guards/auth.guard'
 
 export const walletRoutes: Routes = [
   {
     path: '',
     component: WalletPage,
+    canActivate: [AuthGuard],
     pathMatch: 'full'
   },
   {
