@@ -20,3 +20,7 @@ ion-searchbar.no-right-radius {
     border-bottom-right-radius: 0 !important;
   }
 }
+
+ion-loading.under-alert {
+  z-index: 10000!important;
+}

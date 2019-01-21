@@ -61,10 +61,12 @@ export class CommonService {
     toast.present()
   }
 
-  public async loading(message) {
-    const loading = await this.loadingController.create()
+  public async loading(message, params = {}) {
+    const loading = await this.loadingController.create(params)
     loading.message = message
+
     loading.present()
+
     return loading
   }
   /**

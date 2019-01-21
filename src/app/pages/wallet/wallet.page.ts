@@ -50,15 +50,24 @@ export class WalletPage implements OnInit {
   /**
    * 获取钱包金额
    */
-  private getWalletAmount() {
-    // 获取ETH金额
-    this.etherService.getEthInfo(this.wallet.address).then(eth => {
-      this.walletOfETH = eth
-    })
-    // 获取TOKEN金额
-    this.etherService.getTokenInfo(this.wallet.address).then(token => {
-      this.walletOfToken = token
-    })
+  private async getWalletAmount() {
+    const loading = await this.commonService.loading('获取钱包信息，请稍候...')
+    Promise.all([
+      // 获取ETH信息
+      this.etherService.getEthInfo(this.wallet.address),
+      // 获取TOKEN信息
+      this.etherService.getTokenInfo(this.wallet.address)
+    ])
+      .then(([eth, token]) => {
+        this.walletOfETH = eth
+        this.walletOfToken = token
+      })
+      .catch(() => {
+        this.commonService.toast('获取钱包失败')
+      })
+      .finally(() => {
+        loading.dismiss()
+      })
   }
 
   private onCopyAddress() {

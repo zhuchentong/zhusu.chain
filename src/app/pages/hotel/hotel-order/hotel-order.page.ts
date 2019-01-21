@@ -103,8 +103,8 @@ export class HotelOrderPage implements OnInit {
       })
       .subscribe(
         data => {
-          // TODO:进行支付操作x432
-          this.router.navigate(['tabs/order'])
+          // TODO:进行支付操作
+          this.router.navigate(['tabs/order',{}])
         },
         () => {
           this.commonService.toast('预订失败，请确认房间数量是否充足')

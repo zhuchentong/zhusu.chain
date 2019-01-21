@@ -10,6 +10,8 @@ import { IToken, ITransferParams } from 'app/config/interface.config'
 import { ValidateService } from 'app/utils/validate.service'
 import { CommonService } from 'app/utils/common.service'
 import { Location } from '@angular/common'
+import { Observable } from 'rxjs'
+import { finalize } from 'rxjs/operators'
 @Component({
   selector: 'app-transfer',
   templateUrl: './transfer.page.html',
@@ -64,126 +66,32 @@ export class TransferPage implements OnInit {
   /**
    * 发送交易
    */
-  private onTransfer() {
+  private async onTransfer() {
     // 验证参数
     if (!this.transferForm.valid) {
       return
     }
-    this.commonService
-      .showPromptAlert('请输入密码', 'password', 'text')
-      .then(async ([{ password }]) => {
-        const loading = await this.commonService.loading('正在转账,请稍候...')
-        this.transferInstance
-          .sendTransfer(this.currentWallet, {
-            address: this.transferForm.value.address,
-            amount: this.transferForm.value.amount,
-            password
-            // gasPrice: this.transferForm.value.gasPrice,
-            // remark: ''
-          })
-          .then(() => {
-            this.commonService.toast('转账成功')
-            this.location.back()
-          })
-          .catch(() => {
-            this.commonService.toast('转账失败')
-          })
-          .finally(() => {
-            loading.dismiss()
-          })
+
+    const loading = await this.commonService.loading('正在转账,请稍候...', {
+      cssClass: 'under-alert'
+    })
+
+    this.transferInstance
+      .sendTransfer(this.currentWallet, {
+        address: this.transferForm.value.address,
+        amount: this.transferForm.value.amount
       })
-  }
-
-  // calAmount() {
-  //   this.sendAmount = this.etherService.calAmount(
-  //     this.sendCount,
-  //     parseFloat(this.price)
-  //   )
-  // }
-
-  // calGas() {
-  //   this.gas = this.etherService.calGas(this.gasPrice)
-  //   this.gasAmount = (parseFloat(this.gas) * parseFloat(this.price)).toFixed(2)
-  // }
-
-  private send() {
-    // let tx = {
-    //   gasLimit: 250000,
-    //   gasPrice: 90000,
-    // };
-    // let self = this
-    // let loading = this.loadingCtrl.create({
-    //   content: this.utilProvider.content
-    // })
-    // if (
-    //   typeof this.toAddress !== 'string' ||
-    //   !this.toAddress.match(/^[0-9A-Fa-f]{40}$/)
-    // ) {
-    //   this.utilProvider.message('地址不准确，请核对后再添加！', 3000)
-    //   return
-    // }
-    // if (parseFloat(this.sendCount) > parseFloat(this.balance)) {
-    //   this.utilProvider.message('转账数量超过当前余额！', 3000)
-    //   return
-    // }
-    // this.utilProvider.showPromptAlert(
-    //   '输入密码',
-    //   'name',
-    //   'password',
-    //   (res: any) => {},
-    //   (res: any) => {
-    //     if (res == '' || res == null) {
-    //       self.utilProvider.message('密码不能为空', 3000)
-    //       return
-    //     }
-    //     this.password = res.name
-    //     loading.present()
-    //     if (this.tokenName !== this.utilProvider.tokenType.ETH) {
-    //       this.etherService
-    //         .sendTransaction(
-    //           this.toAddress,
-    //           this.sendCount,
-    //           this.password,
-    //           this.gasPrice,
-    //           this.remark
-    //         )
-    //         .then(
-    //           res => {
-    //             this.utilProvider.message('转账成功！', 3000)
-    //             loading.dismiss()
-    //             self.navCtrl.push(TabsPage)
-    //           },
-    //           err => {
-    //             this.utilProvider.message('转账失败！', 3000)
-    //             loading.dismiss()
-    //             console.log(err)
-    //           }
-    //         )
-    //     } else {
-    //       this.etherService
-    //         .sendETH(this.toAddress, this.sendCount, this.password, this.remark)
-    //         .then(
-    //           res => {
-    //             this.utilProvider.message('转账成功！', 3000)
-    //             loading.dismiss()
-    //             self.navCtrl.push(TabsPage)
-    //           },
-    //           err => {
-    //             this.utilProvider.message('转账失败！', 3000)
-    //             loading.dismiss()
-    //             console.log(err)
-    //           }
-    //         )
-    //     }
-    //   }
-    // )
-  }
-
-  private getAddress() {
-    // this.navCtrl.push(AddressBookPage, {
-    //   transfer: true,
-    //   tokenName: this.tokenName
-    // })
+      .pipe(finalize(() => loading.dismiss()))
+      .subscribe(
+        () => {
+          this.commonService.toast('转账成功')
+          this.location.back()
+        },
+        (ex) => {
+          console.log(ex)
+          this.commonService.toast('转账失败')
+        }
+      )
   }
 }
 
@@ -213,7 +121,7 @@ abstract class Transfer {
   }
 
   public abstract getBalance(): Promise<IToken>
-  public abstract sendTransfer(wallet, params: ITransferParams): Promise<any>
+  public abstract sendTransfer(wallet, params: ITransferParams): Observable<any>
 }
 
 /**
@@ -225,15 +133,20 @@ class TransferETH extends Transfer {
     this.getBalance()
   }
 
+  /**
+   * 获取ETH余额
+   */
   public getBalance() {
     return this.etherService.getEthInfo(this.address)
   }
 
-  public sendTransfer(
-    wallet,
-    { address, amount, password, remark }: ITransferParams
-  ) {
-    return this.etherService.sendETH(address, amount, password, remark)
+  /**
+   * 发送ETH交易
+   * @param wallet
+   * @param param1
+   */
+  public sendTransfer(wallet, { address, amount }: ITransferParams) {
+    return this.etherService.sendETH(wallet, address, amount)
   }
 }
 
@@ -246,23 +159,21 @@ class TransferToken extends Transfer {
   }
 
   /**
-   * 获取TOKEN金额
+   * 获取Token金额
    */
   public getBalance() {
     return this.etherService.getTokenInfo(this.address)
   }
 
+  /**
+   * 发送Token交易
+   * @param wallet
+   * @param param1
+   */
   public sendTransfer(
     wallet,
-    { address, amount, password, gasPrice, remark }: ITransferParams
+    { address, amount, gasPrice, remark }: ITransferParams
   ) {
-    return this.etherService.sendTransaction(
-      wallet,
-      address,
-      amount,
-      password
-      // gasPrice,
-      // remark
-    )
+    return this.etherService.sendToken(wallet, address, amount)
   }
 }

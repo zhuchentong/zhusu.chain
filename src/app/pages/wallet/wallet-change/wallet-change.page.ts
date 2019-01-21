@@ -10,6 +10,8 @@ import { Store } from '@ngxs/store'
 import { WalletState } from 'app/store/state/wallet.state'
 import { SetCurrentWalletAction } from 'app/store/action/wallet.action'
 import { Location } from '@angular/common'
+import { ClipboardService } from 'ngx-clipboard'
+import { CommonService } from 'app/utils/common.service'
 @Component({
   selector: 'app-wallet-change',
   templateUrl: './wallet-change.page.html',
@@ -27,7 +29,9 @@ export class WalletChangePage implements OnInit {
     public loadingCtrl: LoadingController,
     private store: Store,
     private location: Location,
-    private menuController: MenuController // public utilProvider: UtilProvider
+    private menuController: MenuController,
+    private commonService: CommonService,
+    private clipboardService: ClipboardService
   ) {}
 
   public ngOnInit() {
@@ -55,6 +59,11 @@ export class WalletChangePage implements OnInit {
     // 更新当前钱包
     this.currentWallet = wallet
     this.location.back()
+  }
+
+  private onCopyAddress(wallet) {
+    this.clipboardService.copyFromContent(wallet.address)
+    this.commonService.toast('地址已复制到粘贴板')
   }
 
   private updateInfo(address: string, selected: boolean) {

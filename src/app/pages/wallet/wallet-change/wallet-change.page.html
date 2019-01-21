@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <app-back-button col slot="start"></app-back-button>
+    <app-back-button color="black" slot="start"></app-back-button>
     <ion-buttons slot="end">
       <ion-button icon-only icon="menu" (click)="menuController.open('menu')">
         <ion-icon name="menu"></ion-icon>
@@ -17,9 +17,20 @@
       class="wallet-item"
     >
       <div class="name">{{ wallet.name }}</div>
-      <div class="address" [title]="wallet.address">{{ wallet.address }}</div>
+      <div
+        class="address"
+        [title]="wallet.address"
+        (click)="onCopyAddress(wallet)"
+      >
+        {{ wallet.address }}
+      </div>
       <div class="wallet-button row end-span">
-        <a (click)="setCurrentWallet(wallet)">选择钱包</a> <a>修改名称</a> <a>删除钱包</a>
+        <a
+          (click)="setCurrentWallet(wallet)"
+          *ngIf="wallet.address !== currentWallet.address"
+          >选择钱包</a
+        >
+        <a>修改名称</a> <a>删除钱包</a>
       </div>
     </div>
   </ion-list>

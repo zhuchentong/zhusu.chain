@@ -20,7 +20,6 @@ export interface IToken {
 export interface ITransferParams {
   address
   amount
-  password
   remark?
   gasPrice?
 }

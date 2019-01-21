@@ -6,6 +6,10 @@
     border: 1px solid lightgray;
     box-shadow: 2px 2px 2px gray;
 
+    &.current {
+      background-color: #1bd4c6;
+    }
+
     .name {
       margin: 5px;
       font-size: 16px;
@@ -13,8 +17,6 @@
     }
     .address {
       margin: 5px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       overflow: hidden;
     }
     .wallet-button {

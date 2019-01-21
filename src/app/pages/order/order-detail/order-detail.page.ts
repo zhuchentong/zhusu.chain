@@ -83,6 +83,6 @@ export class OrderDetailPage implements OnInit {
     const diff = this.commonService
       .dateParse(Date.now())
       .diff(this.commonService.dateParse(execution.dateCreated), 'second')
-    return diff < 30 * 60 ? diff : 0
+    return diff < 30 * 60 ? 30 * 60 - diff : 0
   }
 }

@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core'
 import { CommonService } from 'app/utils/common.service'
-import { ethers } from 'ethers'
+import { ethers, Contract } from 'ethers'
 import { contractConfig } from 'app/config/contract.config'
 import { Provider } from 'ethers/providers'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { IToken } from 'app/config/interface.config'
 import { Store } from '@ngxs/store'
-import { AddWalletAction } from 'app/store/action/wallet.action'
 import { Wallet } from 'app/models/wallet.model'
+import { IContract } from 'app/config/contract/contract.interface'
+import { Observable } from 'rxjs'
+import { tap, finalize } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -35,28 +37,166 @@ export class EtherService {
   }
 
   /**
-   * 使用钱包签名合约
+   * 执行合约
+   */
+  public transaction(): Observable<Transaction> {
+    return Observable.create(observer => {
+      observer.next({
+        contract: this.contractInstance,
+        result: []
+      })
+    })
+  }
+
+  /**
+   * 签名钱包
    * @param wallet
    */
-  public signWithWallet(wallet: ethers.Wallet): ethers.Contract {
-    return this.contractInstance.connect(wallet.connect(this.provider))
+  public signWallet(wallet: Wallet) {
+    return <T>(source: Observable<T>) =>
+      new Observable<T>(observer => {
+        return source.subscribe({
+          next: (tx: any) => {
+            this.commonService
+              .showPromptAlert('请输入密码', 'password', 'text')
+              .then(([{ password }]) => {
+                // 获取以太坊钱包
+                ethers.Wallet.fromEncryptedJson(
+                  wallet.data,
+                  this.normalizePassword(password)
+                )
+                  .then(ehterWallet => {
+                    // 设置钱包provider
+                    ehterWallet = ehterWallet.connect(this.provider)
+                    // 设置合约钱包
+                    const contract = this.contractInstance.connect(ehterWallet)
+                    // 添加签名后的合约
+                    tx.contract = contract
+                    // 添加签名的钱包
+                    tx.wallet = ehterWallet
+                    observer.next(tx)
+                  })
+                  .catch(err => {
+                    observer.error(err)
+                  })
+              })
+          },
+          error(err) {
+            observer.error(err)
+          },
+          complete() {
+            observer.complete()
+          }
+        })
+      })
   }
 
   /**
-   * 执行合约事务
-   * @param tran
+   * 执行call方法
    */
-  public async transaction(tran) {
-    const tx = await tran
-    this.logger.log(tx.hash)
-    await tx.wait()
+  public call(transaction: (contract: IContract) => Promise<any>) {
+    return <T>(source: Observable<Transaction>) =>
+      new Observable<Transaction>(observer => {
+        return source.subscribe({
+          next: (tx: Transaction) => {
+            // 调用合约
+            transaction(tx.contract as IContract)
+              .then(data => {
+                tx.result.push(data)
+                observer.next(tx)
+              })
+              .catch(err => observer.error(err))
+          },
+          error(err) {
+            observer.error(err)
+          },
+          complete() {
+            observer.complete()
+          }
+        })
+      })
   }
 
   /**
-   * 获取实例化合约
+   * 执行send方法
+   * TODO:
+   * 验证SIGN,估算GAS
    */
-  public getContract() {
-    return this.contractInstance
+  public send(transaction) {
+    return <T>(source: Observable<Transaction>) =>
+      new Observable<Transaction>(observer => {
+        return source.subscribe({
+          next: (tx: Transaction) => {
+            transaction(tx.contract as IContract)
+              .then(data => {
+                tx.result.push(data)
+                observer.next(tx)
+              })
+              .catch(err => observer.error(err))
+          },
+          error(err) {
+            observer.error(err)
+          },
+          complete() {
+            observer.complete()
+          }
+        })
+      })
+  }
+
+  /**
+   * ETH交易
+   */
+  public transfer(address: string, amount: string) {
+    return <T>(source: Observable<Transaction>) =>
+      new Observable<Transaction>(observer => {
+        return source.subscribe({
+          next: (tx: Transaction) => {
+            tx.wallet
+              .sendTransaction({
+                to: address,
+                value: ethers.utils.parseEther(amount)
+              })
+              .then(data => {
+                tx.result.push(data)
+                observer.next(tx)
+              })
+          },
+          error(err) {
+            observer.error(err)
+          },
+          complete() {
+            observer.complete()
+          }
+        })
+      })
+  }
+
+  /**
+   * Token转账交易
+   * @param wallet
+   * @param address
+   * @param amount
+   */
+  public sendToken(wallet: Wallet, address: string, amount: number) {
+    return this.transaction().pipe(
+      this.signWallet(wallet),
+
+      this.call(contract => contract.transfer(address, amount))
+    )
+  }
+
+  /**
+   * ETH转账交易
+   * @param wallet
+   * @param address
+   * @param amount
+   */
+  public sendETH(wallet: Wallet, address: string, amount: number) {
+    return this.transaction().pipe(
+      this.signWallet(wallet),
+      this.transfer(address, amount.toString())
+    )
   }
 
   /**
@@ -148,30 +288,6 @@ export class EtherService {
   }
 
   /**
-   * 测试方法
-   * @param address
-   * @param password
-   */
-  public test(address: string, password: string) {
-    const json = this.commonService.parseWalletJson(
-      '0x4b3200e9650B1f34e3836247f335baf6981b9868'
-    ).json
-    this.logger.log(json)
-    const jo =
-      '{"address":"29872eb7414e91497f186477879c46264650ba31","crypto":{"cipher":"aes-128-ctr","ciphertext":"ded26727239b66bc30db2ead5d1409a6ce41cde584115b3183f9755da7317abe","cipherparams":{"iv":"69d9026b38afcb795bee93c82edea49a"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"1b4cc40895f639c22ccfa8f65334337ba95fee2e00109a9e3a7bf885dfc379c7"},"mac":"54fbd1667aae1fcdd6da4f569dabd8092a122faaf690c24bdd78978ebc3b0416"},"id":"1ae67bd3-96ad-4dd8-bc00-80af14d1a38c","version":3}'
-    this.logger.log(JSON.parse(jo))
-    // ethers.Wallet.fromEncryptedWallet(jo, password).then((res: any) => {
-    ethers.Wallet.fromEncryptedJson(jo, password).then(
-      (res: any) => {
-        this.logger.log(res.privateKey)
-      },
-      () => {
-        return
-      }
-    )
-  }
-
-  /**
    * 获取账户相关ETH信息
    * @param address
    */
@@ -188,14 +304,6 @@ export class EtherService {
       balance,
       amount: balance * price
     }
-  }
-
-  /**
-   *  获取Gas价格
-   */
-  public getGasPrice() {
-    const provider = new ethers.providers.EtherscanProvider()
-    return provider.getGasPrice()
   }
 
   /**
@@ -217,193 +325,20 @@ export class EtherService {
     }
   }
 
-  // /**
-  //  * 获取交易参数
-  //  * @param gasPrice
-  //  * @param toAddress
-  //  * @param value
-  //  * @param data
-  //  */
-  // public getTransaction(
-  //   gasPrice: string,
-  //   toAddress: string,
-  //   value: string,
-  //   data: any
-  // ) {
-  //   const transaction = {
-  //     gasLimit: this.gaslimit,
-  //     gasPrice: ethers.utils.bigNumberify(gasPrice)
-  //     // to: toAddress,
-  //     // data: "0x",
-  //     // value: ethers.utils.parseEther(value)
-  //   }
-  //   return transaction
-  // }
-
   /**
    * 预估需要的Gas
    * @param password
    * @param transaction
    */
-  public estimateGas(password: string, transaction: any) {
-    // let transaction = {
-    //   gasLimit: 1000000,
-    //   to: "0x88a5C2d9919e46F883EB62F7b8Dd9d0CC45bc290",
-    //   data: "0x",
-    //   value: this.etherService.parseEther("1.0")
-    // };
-    // let json = this.commonService.getCurrentWalletJson();
-    // return new Promise(function (resolve, reject) {
-    //   // ethers.Wallet.fromEncryptedWallet(json, password).then((wallet: any) => {
-    //   ethers.Wallet.fromEncryptedJson(json, password).then((wallet) => {
-    //     wallet.connect(this.provider)
-
-    //   }, (err: any) => {
-    //     console.log(reject(err));
-    //   })
-    // });
+  private estimateGas(password: string, transaction: any) {
     return this.provider.estimateGas(transaction)
-  }
-
-  /**
-   * 发送ETH
-   * @param toAddress
-   * @param amount
-   * @param password
-   * @param remark
-   */
-  public sendETH(
-    toAddress: string,
-    amount: string,
-    password: string,
-    remark: string
-  ) {
-    const json = this.commonService.getCurrentWalletJson()
-    return new Promise((resolve, reject) => {
-      // ethers.Wallet.fromEncryptedWallet(json, password).then((wallet: any) => {
-      ethers.Wallet.fromEncryptedJson(json, password).then(
-        (wallet: any) => {
-          wallet = wallet.connect(this.provider)
-          let signature = '0x'
-          if (typeof remark === 'string') {
-            signature = wallet.signMessage(remark)
-          }
-          const transaction = {
-            gasLimit: this.gaslimit,
-            to: toAddress,
-            data: signature,
-            value: this.parseEther(amount)
-          }
-          this.logger.log('sendTh')
-          this.logger.log(transaction)
-          this.logger.log(amount)
-          // resolve(wallet.sendTransaction(transaction));  //给contracts转
-          resolve(wallet.send(toAddress, this.parseEther(amount)))
-        },
-        (err: any) => {
-          this.logger.error(reject(err))
-        }
-      )
-    })
-  }
-
-  public async sign(wallet) {
-    const ehterWallet = await ethers.Wallet.fromEncryptedJson(
-      wallet,
-      this.normalizePassword('123123123')
-    )
-  }
-
-  /**
-   * 发送交易
-   * TODO: 待重写
-   * @param toAddress
-   * @param amount
-   * @param password
-   * @param gasPrice
-   * @param remark
-   */
-  public async sendTransaction(
-    wallet: Wallet,
-    toAddress: string,
-    amount: string,
-    password: string
-    // gasPrice: string,
-    // remark: string
-  ) {
-    try {
-      this.logger.log(wallet, password, toAddress)
-      const ehterWallet = await ethers.Wallet.fromEncryptedJson(
-        wallet.data,
-        this.normalizePassword(password)
-      )
-      this.logger.log(ehterWallet)
-      const contract = this.signWithWallet(ehterWallet)
-      const count = ethers.utils.bigNumberify(amount)
-      return await contract.transfer(toAddress, count)
-    } catch (ex) {
-      this.logger.log(ex)
-    }
-  }
-
-  /**
-   * 测试方法
-   */
-  public testSend() {
-    // let wallet = new ethers.Wallet('0x127771ffc51c970d961228aefcc7d8ecfc5f78c8257d88cdb4fad54fdac29731');
-    const wallet = new ethers.Wallet(
-      '0x127771ffc51c970d961228aefcc7d8ecfc5f78c8257d88cdb4fad54fdac29731',
-      this.provider
-    )
-    const contract = new ethers.Contract(
-      contractConfig.contractAddress,
-      contractConfig.contractAbi,
-      wallet
-    )
-    // let ownaddress = '0x24B05248349Ef47083C4B54ea951D38373721FDF';
-    const address = '0x4b3200e9650B1f34e3836247f335baf6981b9868' // '0x4AEc3392536004134f493d763AE61e7E5450950b';
-
-    // contract.balanceOf(ownaddress).then(res => {
-    //   console.log("owner balance:" + res);
-    // });
-    contract.balanceOf(address).then((res: any) => {
-      this.logger.info('balance:' + res)
-    })
-    // contract.totalSupply().then(res => {
-    //   console.log("total:" + res);
-    // });
-    // contract.symbol().then(res => {
-    //   console.log("name:" + res);
-    // });
-    // contract.name().then(res => {
-    //   console.log("res:" + res);
-    // });
-    const gas = ethers.utils.bigNumberify('4100')
-    // console.log(gas.toString());
-    this.logger.log(contract.functions)
-    const overrideOptions = {
-      gasLimit: 250000,
-      gasPrice: 90000,
-      nonce: 0
-    }
-    contract.transfer(address, gas, overrideOptions).then(
-      (res: any) => {
-        contract.balanceOf(address).then((balance: any) => {
-          this.logger.log('balance22222:' + balance)
-        })
-        this.logger.log('2222')
-      },
-      (err: any) => {
-        this.logger.error(err)
-      }
-    )
   }
 
   /**
    * 格式化Ether
    * @param balance
    */
-  public frommatEther(balance: any) {
+  private frommatEther(balance: any) {
     return ethers.utils.formatEther(balance)
   }
 
@@ -411,7 +346,7 @@ export class EtherService {
    * 转化Ether
    * @param value
    */
-  public parseEther(value: string) {
+  private parseEther(value: string) {
     return ethers.utils.parseEther(value)
   }
 
@@ -421,7 +356,7 @@ export class EtherService {
    * @param balance
    * @param price
    */
-  public calAmount(balance: any, price: number) {
+  private calAmount(balance: any, price: number) {
     const count = ethers.utils.bigNumberify(balance)
     const currencyPrice = ethers.utils.bigNumberify(Math.round(price * 100))
     // return (count.mul(currencyPrice) / 100).toFixed(2).toString();
@@ -437,7 +372,7 @@ export class EtherService {
    * 计算Gas金额
    * @param gwei
    */
-  public calGas(gwei: number) {
+  private calGas(gwei: number) {
     const wei = ethers.utils.bigNumberify(gwei).mul(1000000000)
     const gas = ethers.utils.bigNumberify(this.userGas)
     return ethers.utils.formatEther(wei.mul(gas))
@@ -452,13 +387,15 @@ export class EtherService {
   }
 
   /**
-   *
-   * @param password
+   * 获取实例化合约
    */
-  private async getUserWallet(password): Promise<ethers.Wallet> {
-    // 获取用户本地存储的钱包json
-    const json = this.commonService.getCurrentWalletJson()
-    const wallet = await ethers.Wallet.fromEncryptedJson(json, password)
-    return wallet.connect(this.provider)
+  private getContract() {
+    return this.contractInstance as IContract
   }
+}
+
+class Transaction {
+  public wallet?: ethers.Wallet
+  public contract: Contract | IContract
+  public result?: any[]
 }
