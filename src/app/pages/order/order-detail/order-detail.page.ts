@@ -5,6 +5,7 @@ import { OrderStateEnum } from 'app/config/enum.config'
 import { CommonService } from 'app/utils/common.service'
 import { OrderExecutionService } from 'app/services/order-execution.service'
 import { Order } from 'app/models/order.model'
+import { PaymentComponent } from 'app/shared/components/payment/payment.component'
 
 @Component({
   selector: 'app-order-detail',
@@ -25,7 +26,13 @@ export class OrderDetailPage implements OnInit {
 
   public ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')
-    this.getOrder(id)
+
+    if (id) {
+      this.getOrder(id)
+    }
+
+    // TODO:FOR TEST
+    this.onPayment()
   }
 
   /**
@@ -33,33 +40,57 @@ export class OrderDetailPage implements OnInit {
    * @param id
    */
   public getOrder(id) {
-    this.orderService.getOrder(id).subscribe((order: Order) => {
-      this.order = order
+    this.orderService.getOrder(id).subscribe(
+      (order: Order) => {
+        this.order = order
 
-      if (this.order.status === OrderStateEnum.CREATED) {
-        this.orderExecutionService
-          .getOrderExecution(id)
-          .subscribe(({ orderExecutionCount, orderExecutionList }) => {
-            if (!orderExecutionList) {
-              return
-            }
+        if (this.order.status === OrderStateEnum.CREATED) {
+          this.orderExecutionService
+            .getOrderExecution(id)
+            .subscribe(({ orderExecutionCount, orderExecutionList }) => {
+              if (!orderExecutionList) {
+                return
+              }
 
-            const [orderExecution] = orderExecutionList
-            this.order.payTime = this.getPayTime(orderExecution)
-            if (this.order.payTime) {
-              this.startCountdown()
-            } else {
-              this.order.status = OrderStateEnum.CLOSE
-            }
-          })
+              const [orderExecution] = orderExecutionList
+              this.order.payTime = this.getPayTime(orderExecution)
+              if (this.order.payTime) {
+                this.startCountdown()
+              } else {
+                this.order.status = OrderStateEnum.CLOSE
+              }
+            })
+        }
+      },
+      () => {
+        this.commonService.toast('获取订单失败')
       }
-    })
+    )
+  }
+
+  /**
+   * 进行支付
+   */
+  public async onPayment() {
+    const modal = await this.commonService.modal(
+      PaymentComponent,
+      {
+        amount: 1000
+      },
+      result => {
+        if (result === true) {
+          this.commonService.toast('支付成功')
+        }
+      }
+    )
+
+    modal.present()
   }
 
   /**
    * 开始支付倒计时
    */
-  public startCountdown() {
+  private startCountdown() {
     this.commonService.setCountdown(this.order.payTime * 1000).subscribe(
       time => {
         this.order.payTime = time

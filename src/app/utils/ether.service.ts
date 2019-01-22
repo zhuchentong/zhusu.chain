@@ -5,25 +5,23 @@ import { contractConfig } from 'app/config/contract.config'
 import { Provider } from 'ethers/providers'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { IToken } from 'app/config/interface.config'
-import { Store } from '@ngxs/store'
 import { Wallet } from 'app/models/wallet.model'
 import { IContract } from 'app/config/contract/contract.interface'
 import { Observable } from 'rxjs'
-import { tap, finalize } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
 })
 export class EtherService {
   private jcoPrice = 0.52
-  private userGas = 30000 // 单位gas
-  private gaslimit: 250000
   private provider: Provider
   private contractInstance
-
+  private contractOwner
+  private userGas = 30000 // 单位gas
+  private gaslimit: 250000
+  
   constructor(
     private commonService: CommonService,
-    private store: Store,
     private logger: LoggerService
   ) {
     // v4中自动确定网络
@@ -34,6 +32,10 @@ export class EtherService {
       contractConfig.contractAbi,
       this.provider
     )
+    // 获取合约拥有者
+    this.contractInstance
+      .owner()
+      .then(address => (this.contractOwner = address))
   }
 
   /**
@@ -338,6 +340,18 @@ export class EtherService {
       name: token,
       amount: balance.mul(price * 100).div(100)
     }
+  }
+
+  /**
+   * 获取合约拥有者
+   */
+  public async getContractOwner() {
+    if (!this.contractOwner) {
+      const address = await this.contractInstance.owner()
+      this.contractOwner = address
+    }
+
+    return this.contractOwner
   }
 
   /**

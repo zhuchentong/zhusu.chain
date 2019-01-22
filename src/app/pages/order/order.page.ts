@@ -49,6 +49,10 @@ export class OrderPage implements OnInit {
   ) {}
 
   public ngOnInit() {
+    return
+  }
+
+  public ionViewWillEnter(){
     this.getOrderList()
   }
 

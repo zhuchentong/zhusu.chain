@@ -8,6 +8,7 @@ import { OrderService } from 'app/services/order.service'
 import { User } from 'app/models/user.model'
 import { Router } from '@angular/router'
 import { UserState } from 'app/store/state/user.state'
+import { Order } from 'app/models/order.model'
 
 @Component({
   selector: 'app-hotel-order',
@@ -17,12 +18,15 @@ import { UserState } from 'app/store/state/user.state'
 export class HotelOrderPage implements OnInit {
   private hotel: Hotel
   private room: Room
-  private dateRange
+  private order
+  private dateRange = { start: '', end: '', days: 1 }
   private orderForm
-  private paymentMethod = 'HOME'
+  private today
+  private priceTotal
   private readonly array = Array
   private arriveTime = []
   private user: User
+  private paymentMethod = 'HOME'
   constructor(
     private orderService: OrderService,
     private commonService: CommonService,
@@ -33,22 +37,20 @@ export class HotelOrderPage implements OnInit {
 
   public ngOnInit() {
     this.user = this.store.selectSnapshot(UserState.getUser)
-    // 初始化表单
-    this.initFormGroup()
     // 获取待预订房间酒店信息
-    const currentOrder = this.store.selectSnapshot(state => state.hotel)
-    this.hotel = currentOrder.hotel
-    this.room = currentOrder.room
-    this.dateRange = {
-      start: this.commonService.dateParse(currentOrder.dateRange.start),
-      end: this.commonService.dateParse(currentOrder.dateRange.end),
-      days: this.commonService
-        .dateParse(currentOrder.dateRange.end)
-        .diff(this.commonService.dateParse(currentOrder.dateRange.start), 'day')
-    }
-
+    const order = (this.order = this.store.selectSnapshot(state => state.hotel))
+    // 获取酒店/房价信息
+    this.hotel = order.hotel
+    this.room = order.room
+    // 获取预订时间
+    this.dateRange.start = order.dateRange.start
+    this.dateRange.end = order.dateRange.end
     // 获取预订时间范围
     this.arriveTime = this.getArriveTime()
+    this.today = this.commonService.dateFormat(Date.now())
+    // 初始化表单
+    this.initFormGroup()
+    this.onUpdatePriceTotal()
   }
 
   /**
@@ -59,8 +61,16 @@ export class HotelOrderPage implements OnInit {
       count: [1, Validators.required],
       name: [this.user.displayName, Validators.required],
       phone: [this.user.username, Validators.required], // username即手机号
-      time: ['']
+      time: [this.arriveTime[0]]
     })
+  }
+
+  private getDayDiff() {
+    if (this.dateRange.end === this.dateRange.start) return 1
+    this.dateRange.days = this.commonService
+      .dateParse(this.dateRange.end)
+      .diff(this.commonService.dateParse(this.dateRange.start), 'day')
+    return this.dateRange.days
   }
 
   /**
@@ -83,8 +93,9 @@ export class HotelOrderPage implements OnInit {
   /**
    * 计算价格
    */
-  private getriceTotal() {
-    return (this.room.price * this.orderForm.value.count).toFixed(2)
+  private onUpdatePriceTotal() {
+    this.priceTotal =
+      this.room.price * this.orderForm.value.count * this.getDayDiff()
   }
 
   /**
@@ -99,15 +110,17 @@ export class HotelOrderPage implements OnInit {
         count: this.orderForm.value.count,
         name: this.orderForm.value.name,
         phone: this.orderForm.value.phone,
-        time: this.orderForm.value.time
+        time: this.orderForm.value.time,
+        start: this.dateRange.start,
+        end: this.dateRange.end
       })
       .subscribe(
         data => {
           // TODO:进行支付操作
-          this.router.navigate(['tabs/order',{}])
+          this.router.navigate(['tabs/order', {}])
         },
         () => {
-          this.commonService.toast('预订失败，请确认房间数量是否充足')
+          this.commonService.toast('预订失败')
         }
       )
   }

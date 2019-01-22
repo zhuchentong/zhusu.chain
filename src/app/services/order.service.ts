@@ -48,47 +48,40 @@ export class OrderService {
    * 添加订单
    * @param param0
    */
-  public addOrder({
-    user,
-    room,
-    count,
-    name,
-    phone,
-    email,
-    time
-  }: {
-    user: number
-    room: number
-    count: number
-    name: string
-    phone: string
-    email?: string
-    time?: string
-  }): Observable<any> {
-    const dateRange = this.store.selectSnapshot(
-      state => state.hotel.dateRange
-    ) as IDateRange
+  public addOrder(params: IAddOrderParams): Observable<any> {
     return this.net.send({
       service: orderController.addOrder,
       params: {
-        user,
-        room,
+        user: params.user,
+        room: params.room,
         beginDate: this.commonService.dateFormat(
-          dateRange.start,
+          params.start,
           'YYYY-MM-DD hh:mm:ss'
         ),
         endDate: this.commonService.dateFormat(
-          dateRange.end,
+          params.end,
           'YYYY-MM-DD hh:mm:ss'
         ),
         attributes: {
-          roomCount: count,
-          personName: name,
-          telephone: phone,
-          email,
-          arrivalTime: time
+          roomCount: params.count,
+          personName: params.name,
+          telephone: params.phone,
+          email: params.email,
+          arrivalTime: params.time
         }
       }
     })
   }
+}
+
+interface IAddOrderParams {
+  user: number
+  room: number
+  count: number
+  name: string
+  phone: string
+  email?: string
+  time?: string
+  start: string
+  end: string
 }

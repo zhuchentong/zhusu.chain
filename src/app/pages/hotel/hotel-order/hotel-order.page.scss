@@ -1,16 +1,4 @@
 @import '../../../../assets/style//helper.scss';
-
-ion-card {
-  .title {
-    font-size: 16px;
-  }
-  .subtitle {
-    font-size: 10px;
-    color: darkgray;
-    transform: scale(0.8);
-  }
-}
-
 ion-footer {
   .footer {
     height: 50px;
@@ -33,8 +21,7 @@ ion-footer {
       flex-basis: 120px;
       font-size: 20px;
       text-align: center;
-      color: white;
-      // background: darkcyan;
+      color: white; // background: darkcyan;
       margin: auto;
       --border-radius: 0;
       --background: darkcyan;
@@ -42,6 +29,7 @@ ion-footer {
   }
   box-shadow: -2px 2px 2px gray;
 }
+
 .order-content {
   ion-item {
     font-size: 12px;
@@ -55,9 +43,15 @@ ion-footer {
       @include set-font(12px, bold);
     }
   }
+  .date {
+    &>div {
+      line-height: 42px;
+    }
+  }
 }
-.order-info {
-}
+
+.order-info {}
+
 .payment-info {
   .flow-item {
     .item-header {
@@ -82,11 +76,22 @@ ion-footer {
 .tip-info {
   padding: 0 25px;
   margin-bottom: 10px;
-  & > * {
+  &>* {
     padding: 2px;
     @include set-font(12px, normal, gray);
   }
   .header {
     @include set-font(12px, bold);
+  }
+}
+
+ion-card {
+  .title {
+    font-size: 16px;
+  }
+  .subtitle {
+    font-size: 10px;
+    color: darkgray;
+    transform: scale(0.8);
   }
 }

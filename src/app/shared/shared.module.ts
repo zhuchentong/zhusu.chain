@@ -17,6 +17,7 @@ import { ClonePipe } from './pipes/clone.pipe'
 import { NgPipesModule } from 'ngx-pipes'
 import { StringPipe } from './pipes/string.pipe'
 import { ClipboardModule } from 'ngx-clipboard'
+import { PaymentComponent } from './components/payment/payment.component'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -27,7 +28,8 @@ import { ClipboardModule } from 'ngx-clipboard'
     ClonePipe,
     StringPipe,
     SelectStarComponent,
-    ScoreStarComponent
+    ScoreStarComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,
@@ -51,11 +53,12 @@ import { ClipboardModule } from 'ngx-clipboard'
     SelectDateComponent,
     SelectStarComponent,
     ScoreStarComponent,
+    PaymentComponent,
     NgPipesModule,
     ClipboardModule
   ],
   providers: [CommonService, DeviceService, Geolocation, PageService],
-  entryComponents: [SelectStarComponent]
+  entryComponents: [SelectStarComponent, PaymentComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

@@ -9,13 +9,13 @@
   <div class="footer row nowrap middle-span">
     <div class="row price col-span middle-span">
       <div class="sign">HOME</div>
-      <div class="amount">{{ getriceTotal() }}</div>
+      <div class="amount">{{ priceTotal.toFixed(2) }}</div>
     </div>
     <ion-button
       class="submit"
       [disabled]="!orderForm.valid"
       (click)="onSubmitOrder()"
-      >提交支付</ion-button
+      >提交</ion-button
     >
   </div>
 </ion-footer>
@@ -27,10 +27,31 @@
         <div class="name">{{ room?.name }}</div>
       </div>
       <div class="date row between-span">
-        <div>{{ dateRange?.start.format('MM月DD日') }}</div>
+        <ion-datetime
+          placeholder="入店日期"
+          [(ngModel)]="dateRange.start"
+          display-format="MM月DD日"
+          picker-format="YYYY MM DD"
+          [min]="today"
+          [max]="dateRange.end"
+          (ionChange)="onUpdatePriceTotal()"
+          cancelText="取消"
+          onchange=""
+          doneText="确定"
+        ></ion-datetime>
         <div>{{ dateRange?.start | week: 'today' }}</div>
         <div>-</div>
-        <div>{{ dateRange?.end.format('MM月DD日') }}</div>
+        <ion-datetime
+          placeholder="入店日期"
+          [(ngModel)]="dateRange.end"
+          display-format="MM月DD日"
+          (ionChange)="onUpdatePriceTotal()"
+          picker-format="YYYY MM DD"
+          [min]="dateRange.start || today"
+          cancelText="取消"
+          doneText="确定"
+        ></ion-datetime>
+        <!--<div>{{ dateRange?.end.format('MM月DD日') }}</div>-->
         <div>{{ dateRange?.end | week: 'today' }}</div>
         <div>住{{ dateRange.days }}天</div>
       </div>
@@ -51,6 +72,7 @@
             okText="确定"
             formControlName="count"
             placeholder="选择间数"
+            (ionChange)="onUpdatePriceTotal()"
           >
             <ion-select-option
               *ngFor="let item of array(room.total); let index = index"
@@ -79,7 +101,6 @@
         </ion-item>
         <ion-item>
           <ion-label>到店时间</ion-label>
-          <ion-input type="text" formControlName="time"></ion-input>
           <ion-select cancelText="取消" okText="确定" formControlName="time">
             <ion-select-option *ngFor="let item of arriveTime" [value]="item">{{
               item

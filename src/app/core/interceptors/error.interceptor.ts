@@ -7,7 +7,14 @@ import {
   HttpHeaders,
   HttpClient
 } from '@angular/common/http'
-import { Observable, throwError, EmptyError, EMPTY, observable } from 'rxjs'
+import {
+  Observable,
+  throwError,
+  EmptyError,
+  EMPTY,
+  observable,
+  Observer
+} from 'rxjs'
 import { catchError, retry, retryWhen, tap } from 'rxjs/operators'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { Store } from '@ngxs/store'
@@ -28,7 +35,8 @@ export class ErrorInterceptor implements HttpInterceptor {
   // 对应错误码处理函数
   private readonly errorHandlerMapping = {
     401: this.unauthorizedErrorHandle,
-    500: this.ServerErrorHandle
+    4013: this.forbiddenErrorHandle,
+    500: this.serverErrorHandle
   }
 
   constructor(
@@ -49,20 +57,23 @@ export class ErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
-      catchError(err => {
+      catchError(error => {
         // 获取对应错误处理函数
         const errorHandler = (
-          this.errorHandlerMapping[err.status] || this.defaultErrorHandle
+          this.errorHandlerMapping[error.status] || this.defaultErrorHandle
         ).bind(this)
         // 获取错误处理返回结果
-        const error = errorHandler(err)
-        this.logger.error(err)
-        return throwError(error || err.message || err.statusText)
+        const result = errorHandler(error)
+        this.logger.error(result)
+        return throwError(result || error.message || error.statusText)
       }),
+      // 通讯异常重试
       retryWhen(errors =>
         Observable.create(observer => {
           errors.pipe(catchError(observer.error)).subscribe(error => {
+            // accessToken过期,则通过refreshToken更新
             if (
+              error.status === 401 &&
               error.user &&
               error.user.accessToken &&
               error.user.refreshToken
@@ -85,7 +96,12 @@ export class ErrorInterceptor implements HttpInterceptor {
                   this.store.dispatch(
                     new UpdateUserAction(plainToClass(User, response))
                   )
+                  // 修正异常状态
+                  observer.complete()
                 })
+            } else {
+              // 恢复异常状态
+              observer.error(error)
             }
           })
         })
@@ -94,30 +110,38 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   /**
-   * 未认证异常处理
+   * 401异常处理
    */
-  private unauthorizedErrorHandle(err) {
+  private unauthorizedErrorHandle(error) {
     const user = this.store.selectSnapshot(UserState.getUser)
     this.store.dispatch(LogoutAction)
-    return {
-      status: err.status,
+    return Object.assign(error, {
+      status: error.status,
       message: '用户认证失败',
       user
-    }
+    })
   }
 
   /**
    * 500异常处理
-   * @param err
+   * @param error
    */
-  private ServerErrorHandle(err) {
-    return
+  private serverErrorHandle(error) {
+    return error
+  }
+
+  /**
+   * 403异常处理
+   * @param error
+   */
+  private forbiddenErrorHandle(error) {
+    return error
   }
 
   /**
    * 默认异常处理
    */
-  private defaultErrorHandle(err) {
-    return
+  private defaultErrorHandle(error) {
+    return error
   }
 }
