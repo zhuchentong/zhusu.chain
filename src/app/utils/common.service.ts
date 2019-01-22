@@ -196,6 +196,11 @@ export class CommonService {
     alert.present()
   }
 
+  public async showAlert(option) {
+    const alert = await this.atrCtrl.create(option)
+    alert.present()
+  }
+
   /**
    * 检测手机号
    * @param phoneNo 手机号码

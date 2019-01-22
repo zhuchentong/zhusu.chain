@@ -1,7 +1,45 @@
 <ion-header>
-  <ion-toolbar> <ion-title>收银台</ion-title> </ion-toolbar>
+  <ion-toolbar>
+    <app-back-button color="black" slot="start"></app-back-button>
+    <ion-title>收银台</ion-title>
+  </ion-toolbar>
 </ion-header>
-<ion-content> </ion-content>
+<ion-content no-padding>
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>支付金额</ion-label>
+        <ion-text>{{ amount.toFixed(2) }}</ion-text>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-list class="wallet-list">
+    <ion-radio-group [(ngModel)]="currentWallet">
+      <div
+        *ngFor="let wallet of walletList"
+        [ngClass]="{ current: wallet.address === currentWallet.address }"
+        class="wallet-item row nowarp"
+      >
+        <div class="col-span">
+          <div class="name">{{ wallet.name }}</div>
+          <div class="address" [title]="wallet.address">
+            {{ wallet.address }}
+          </div>
+          <div class="balance row end-span" *ngIf="wallet.balance">
+            <div>钱包余额:{{ wallet.balance }}</div>
+          </div>
+        </div>
+        <div class="row middle-span center-span">
+          <ion-radio [value]="wallet"></ion-radio>
+        </div>
+      </div>
+    </ion-radio-group>
+  </ion-list>
+</ion-content>
 <ion-footer>
-  <ion-toolbar> <ion-title>支付</ion-title> </ion-toolbar>
+  <ion-toolbar class="footer">
+    <ion-title text-center (click)="onSendToken()"
+      >支付{{ amount.toFixed(2) }}</ion-title
+    >
+  </ion-toolbar>
 </ion-footer>

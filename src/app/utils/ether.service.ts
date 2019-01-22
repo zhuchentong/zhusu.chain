@@ -19,7 +19,7 @@ export class EtherService {
   private contractOwner
   private userGas = 30000 // 单位gas
   private gaslimit: 250000
-  
+
   constructor(
     private commonService: CommonService,
     private logger: LoggerService
@@ -194,7 +194,7 @@ export class EtherService {
    * @param address
    * @param amount
    */
-  public sendToken(wallet: Wallet, address: string, amount: string) {
+  public sendToken(wallet: Wallet, address: string, amount: string | number) {
     return this.transaction().pipe(
       this.signWallet(wallet),
       this.send(contract =>
@@ -317,6 +317,7 @@ export class EtherService {
     const price = await mainProvider.getEtherPrice()
     // bigNumber 不能和小数进行计算，所以要先将汇率变成整数
     return {
+      address,
       price,
       balance,
       amount: balance * price
@@ -335,6 +336,7 @@ export class EtherService {
     ])
 
     return {
+      address,
       balance,
       price,
       name: token,

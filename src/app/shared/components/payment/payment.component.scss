@@ -1,0 +1,26 @@
+.wallet-list {
+  .wallet-item {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    box-shadow: 2px 2px 2px gray;
+    .name {
+      margin: 5px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .address {
+      margin: 5px;
+      overflow: hidden;
+    }
+    .balance {
+      color: red;
+      font-size: 12px;
+    }
+  }
+}
+
+ion-toolbar.footer {
+  --background: #1bd4c6;
+}

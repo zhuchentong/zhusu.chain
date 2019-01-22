@@ -25,7 +25,7 @@ export class WalletState extends ExtendState {
   public static getCurrentWallet(state) {
     if (state.current) {
       const wallet = state.walletList.find(x => x.address === state.current)
-      return plainToClass(Wallet, wallet)
+      return plainToClass<Wallet,Wallet>(Wallet, wallet)
     } else {
       return null
     }

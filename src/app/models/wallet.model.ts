@@ -15,18 +15,6 @@ export class Wallet extends Model {
   public address: string
   // 钱包所属用户
   public user
-
-  /**
-   * 支付
-   */
-  private payment() {
-    return
-  }
-
-  /**
-   * 获取Ether钱包
-   */
-  private getEtherWallet(password) {
-    ethers.Wallet.fromEncryptedJson(this.data, password)
-  }
+  // 钱包余额
+  public balance?
 }

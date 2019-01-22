@@ -9,6 +9,7 @@ import { AddWalletAction } from 'app/store/action/wallet.action'
 import { UserState } from 'app/store/state/user.state'
 import { WalletState } from 'app/store/state/wallet.state'
 import { Location } from '@angular/common'
+import { ClipboardService } from 'ngx-clipboard'
 
 @Component({
   selector: 'app-wallet-create',
@@ -25,7 +26,8 @@ export class WalletCreatePage implements OnInit {
     private etherService: EtherService,
     private store: Store,
     private location: Location,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private clipboardService: ClipboardService
   ) {
     return
   }
@@ -61,8 +63,20 @@ export class WalletCreatePage implements OnInit {
         wallet.data = encrypt
         // 添加用户钱包
         this.store.dispatch(new AddWalletAction(wallet))
-        this.commonService.toast('钱包添加成功')
-        this.location.back()
+        this.commonService.showAlert({
+          header: '创建成功',
+          subHeader: `请备份好助记词，以免丢失`,
+          message: etherWallet.mnemonic,
+          buttons: [
+            {
+              text: '复制',
+              handler: () => {
+                this.clipboardService.copyFromContent(etherWallet.mnemonic)
+                this.location.back()
+              }
+            }
+          ]
+        })
       })
       .catch(error => {
         this.commonService.toast('创建钱包失败，请重试。', 3000)

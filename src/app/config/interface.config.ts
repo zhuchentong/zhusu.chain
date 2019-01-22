@@ -11,6 +11,7 @@ export interface IDateRange {
 }
 
 export interface IToken {
+  address
   name?: string
   balance
   amount
