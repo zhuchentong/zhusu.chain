@@ -5,7 +5,7 @@ export class LoginAction {
   constructor(public user: User) { }
 }
 
-export class UpdateAction {
+export class UpdateUserAction {
   public static readonly type = '[User] UpdateLogin'
   constructor(public user: User) { }
 }

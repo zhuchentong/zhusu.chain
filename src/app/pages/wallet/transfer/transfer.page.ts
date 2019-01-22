@@ -11,7 +11,6 @@ import { ValidateService } from 'app/utils/validate.service'
 import { CommonService } from 'app/utils/common.service'
 import { Location } from '@angular/common'
 import { Observable } from 'rxjs'
-import { finalize } from 'rxjs/operators'
 @Component({
   selector: 'app-transfer',
   templateUrl: './transfer.page.html',

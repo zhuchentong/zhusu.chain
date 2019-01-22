@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
    * 检查用户状态
    */
   private checkUser(): boolean {
-    const user = this.store.selectSnapshot(UserState.user)
+    const user = this.store.selectSnapshot(UserState.getUser)
     return user && user.accessToken && user.accessToken.length > 0
   }
 }

@@ -3,25 +3,41 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpHeaders,
+  HttpClient
 } from '@angular/common/http'
-import { Observable, throwError } from 'rxjs'
-import { catchError } from 'rxjs/operators'
+import { Observable, throwError, EmptyError, EMPTY, observable } from 'rxjs'
+import { catchError, retry, retryWhen, tap } from 'rxjs/operators'
 import { LoggerService } from '@ngx-toolkit/logger'
 import { Store } from '@ngxs/store'
-import { LogoutAction } from 'app/store/action/user.action'
+import {
+  LogoutAction,
+  LoginAction,
+  UpdateUserAction
+} from 'app/store/action/user.action'
+import { CommonService } from 'app/utils/common.service'
+import { UserService } from 'app/services/user.service'
+import { UserState } from 'app/store/state/user.state'
+import { appConfig } from 'app/config/app.config'
+import { plainToClass } from 'class-transformer'
+import { User } from 'app/models/user.model'
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   // 对应错误码处理函数
   private readonly errorHandlerMapping = {
-    401: this.unauthorizedErrorHandle
+    401: this.unauthorizedErrorHandle,
+    500: this.ServerErrorHandle
   }
 
   constructor(
+    private userService: UserService,
+    private commonService: CommonService,
     private store: Store,
-    private logger: LoggerService
-  ) { }
+    private logger: LoggerService,
+    private http: HttpClient
+  ) {}
 
   /**
    * 网络异常拦截器
@@ -42,7 +58,38 @@ export class ErrorInterceptor implements HttpInterceptor {
         const error = errorHandler(err)
         this.logger.error(err)
         return throwError(error || err.message || err.statusText)
-      })
+      }),
+      retryWhen(errors =>
+        Observable.create(observer => {
+          errors.pipe(catchError(observer.error)).subscribe(error => {
+            if (
+              error.user &&
+              error.user.accessToken &&
+              error.user.refreshToken
+            ) {
+              const body = new URLSearchParams()
+              body.set('grant_type', 'refresh_token')
+              body.set('refresh_token', error.user.refreshToken)
+              this.http
+                .post(
+                  `${appConfig.server}/oauth/access_token`,
+                  body.toString(),
+                  {
+                    headers: new HttpHeaders().set(
+                      'Content-Type',
+                      'application/x-www-form-urlencoded'
+                    )
+                  }
+                )
+                .subscribe(response => {
+                  this.store.dispatch(
+                    new UpdateUserAction(plainToClass(User, response))
+                  )
+                })
+            }
+          })
+        })
+      )
     )
   }
 
@@ -50,7 +97,21 @@ export class ErrorInterceptor implements HttpInterceptor {
    * 未认证异常处理
    */
   private unauthorizedErrorHandle(err) {
-    this.store.dispatch(new LogoutAction())
+    const user = this.store.selectSnapshot(UserState.getUser)
+    this.store.dispatch(LogoutAction)
+    return {
+      status: err.status,
+      message: '用户认证失败',
+      user
+    }
+  }
+
+  /**
+   * 500异常处理
+   * @param err
+   */
+  private ServerErrorHandle(err) {
+    return
   }
 
   /**

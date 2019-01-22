@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { UserService } from 'app/services/user.service'
 import { Store } from '@ngxs/store'
-import { UpdateAction } from 'app/store/action/user.action'
+import { UpdateUserAction } from 'app/store/action/user.action'
 import { DeviceService } from 'app/utils/decive.service'
 
 @Injectable({
@@ -17,7 +17,7 @@ export class LaunchService {
   public start() {
     // 检测用户登录过期
     this.userService.getUser().subscribe(user => {
-      this.store.dispatch(new UpdateAction(user))
+      this.store.dispatch(new UpdateUserAction(user))
     })
 
     // 初始化地理信息

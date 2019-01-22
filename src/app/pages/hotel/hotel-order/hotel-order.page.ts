@@ -32,7 +32,7 @@ export class HotelOrderPage implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.user = this.store.selectSnapshot(UserState.user)
+    this.user = this.store.selectSnapshot(UserState.getUser)
     // 初始化表单
     this.initFormGroup()
     // 获取待预订房间酒店信息
@@ -91,7 +91,7 @@ export class HotelOrderPage implements OnInit {
    * 提交订单
    */
   private onSubmitOrder() {
-    const user = this.store.selectSnapshot(UserState.user)
+    const user = this.store.selectSnapshot(UserState.getUser)
     this.orderService
       .addOrder({
         user: user.id,

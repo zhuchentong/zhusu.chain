@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store'
 import { User } from 'app/models/user.model'
-import { LoginAction, UpdateAction, LogoutAction } from '../action/user.action'
+import { LoginAction, UpdateUserAction, LogoutAction } from '../action/user.action'
 import { ExtendState } from '.'
 import { plainToClass, classToPlain } from 'class-transformer'
 
@@ -14,7 +14,7 @@ export class UserState extends ExtendState {
    * @param state
    */
   @Selector()
-  public static user(state: User) {
+  public static getUser(state: User) {
     if (state) {
       return plainToClass(User, state)
     } else {
@@ -28,8 +28,8 @@ export class UserState extends ExtendState {
     setState(classToPlain(user))
   }
 
-  @Action(UpdateAction)
-  public update<T>(state: StateContext<User>, { user }: UpdateAction) {
+  @Action(UpdateUserAction)
+  public update<T>(state: StateContext<User>, { user }: UpdateUserAction) {
     const curretUser = classToPlain(user)
     // 剔除用户中的空值
     Object.entries(curretUser).forEach(([key, value]) => {

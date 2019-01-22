@@ -31,7 +31,7 @@ export class WalletCreatePage implements OnInit {
   }
 
   public ngOnInit() {
-    this.user = this.store.selectSnapshot(UserState.user)
+    this.user = this.store.selectSnapshot(UserState.getUser)
     this.walletList = this.store.selectSnapshot(WalletState.getWalletList)
     this.createForm = this.formBuilder.group({
       password: ['', Validators.minLength(6)],

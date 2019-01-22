@@ -30,7 +30,7 @@ export class WalletImportPage implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.user = this.store.selectSnapshot(UserState.user)
+    this.user = this.store.selectSnapshot(UserState.getUser)
     this.walletList = this.store.selectSnapshot(WalletState.getWalletList)
     this.importForm = this.formBuilder.group({
       mnemonic: ['', Validators.required],
