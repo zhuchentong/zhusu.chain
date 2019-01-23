@@ -1,5 +1,5 @@
 <div class="header">
-  <app-back-button color="black" slot="start"></app-back-button>
+  <app-back-button  slot="start"></app-back-button>
 </div>
 <ion-content padding>
   <div class="logo row middle-span center-span nowrap">
@@ -16,6 +16,7 @@
               type="text"
               formControlName="username"
               required
+              [maxlength]="11"
             ></ion-input>
           </ion-item>
           <ion-item>
@@ -24,6 +25,8 @@
               type="password"
               formControlName="password"
               required
+              [minlength]="6"
+              [maxlength]="12"
             ></ion-input>
           </ion-item>
           <ion-item>
@@ -32,6 +35,7 @@
               min="4"
               type="text"
               formControlName="code"
+              [maxlength]="6"
               required
             ></ion-input>
             <ion-button

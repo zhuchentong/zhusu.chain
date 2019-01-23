@@ -4,6 +4,7 @@ import { Router } from '@angular/router'
 import { UserService } from 'app/services/user.service'
 import { CommonService } from 'app/utils/common.service'
 import { ValidateService } from 'app/utils/validate.service'
+import { LoggerService } from '@ngx-toolkit/logger'
 
 @Component({
   selector: 'app-register',
@@ -14,10 +15,11 @@ export class RegisterPage implements OnInit {
   private registerForm: FormGroup
   private sendTime = 0
   constructor(
-    public formBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private router: Router,
     private commonService: CommonService,
-    private userService: UserService
+    private userService: UserService,
+    private logger: LoggerService
   ) {}
 
   public ngOnInit() {
@@ -41,7 +43,8 @@ export class RegisterPage implements OnInit {
       ({ smsCode }) => {
         // 本地保留验证码，注册时需验证是否一致
         this.startCountdown()
-        sessionStorage.setItem('smscode', smsCode)
+        sessionStorage.setItem('smsCode', smsCode)
+        this.logger.log(smsCode)
         this.commonService.message('已发送验证码，请查收。', 5000)
       },
       () => {
@@ -55,9 +58,8 @@ export class RegisterPage implements OnInit {
    */
   private async onRegister() {
     // 验证注册码
-    const smscode = sessionStorage.getItem('smscode')
-    // TODO:用于测试
-    if (!smscode === this.registerForm.value.registercode) {
+    const smscode = sessionStorage.getItem('smsCode')
+    if (!smscode && smscode === this.registerForm.value.registercode) {
       this.commonService.message('验证码错误，请核查！', 3000)
       return
     }

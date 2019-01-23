@@ -8,7 +8,7 @@ import { NavController } from '@ionic/angular'
 })
 export class BackButtonComponent implements OnInit {
   @Input()
-  public color = 'white'
+  public color = 'black'
 
   constructor(private navCtrl: NavController) {}
 

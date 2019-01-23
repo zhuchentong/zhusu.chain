@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { Select } from '@ngxs/store'
+import { Select, Store } from '@ngxs/store'
+import { LogoutAction } from 'app/store/action/user.action'
+import { Location } from '@angular/common'
+import { UserState } from 'app/store/state/user.state'
 
 @Component({
   selector: 'app-user-info',
@@ -7,12 +10,20 @@ import { Select } from '@ngxs/store'
   styleUrls: ['./user-info.page.scss']
 })
 export class UserInfoPage implements OnInit {
-  @Select(state => state.user)
-  private user$
+  private user
 
-  // constructor() {}
+  constructor(private store: Store, private location: Location) {}
 
   public ngOnInit() {
-    return
+    this.user = this.store.selectSnapshot(UserState.getUser)
+  }
+
+  /**
+   * 注销登录
+   */
+  private onLogout() {
+    this.store.dispatch(LogoutAction).subscribe(() => {
+      this.location.back()
+    })
   }
 }

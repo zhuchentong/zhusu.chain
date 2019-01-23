@@ -3,7 +3,7 @@
   [ngClass]="{ 'show-title': scrollTop > 200 }"
 >
   <div class="row nowrap">
-    <app-back-button color="black"></app-back-button>
+    <app-back-button ></app-back-button>
     <label class="title" *ngIf="scrollTop > 200">{{ hotel?.name }}</label>
   </div>
   <div>

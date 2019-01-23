@@ -8,6 +8,7 @@ import { LoggerService } from '@ngx-toolkit/logger'
 import { Store } from '@ngxs/store'
 import { LoginAction } from 'app/store/action/user.action'
 import { ValidateService } from 'app/utils/validate.service'
+import { WalletState } from 'app/store/state/wallet.state'
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -72,12 +73,15 @@ export class LoginPage implements OnInit {
           })
           return
         }
+        // 获取当前钱包
+        const wallet = this.store.selectSnapshot(WalletState.getCurrentWallet)
 
-        if (this.commonService.isFirstLogin()) {
-          this.commonService.setDefaultCurrency()
+        if (!wallet) {
+          // this.commonService.setDefaultCurrency()
           // TODO: 首次登录进入钱包
           // TODO: 首次登录注册钱包
-          this.router.navigate(['/wallet'], { replaceUrl: true })
+          this.commonService.toast('未发现用户钱包,请导入或创建钱包')
+          this.router.navigate(['/wallet/wallet-change'], { replaceUrl: true })
         } else {
           // 登录成功，返回之前页面
           this.navCtrl.goBack()

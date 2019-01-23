@@ -12,15 +12,14 @@
       <ion-row>
         <ion-col size="auto">
           <ion-item>
-            <ion-avatar>
+            <ion-avatar routerLink="/user/info">
               <img src="/assets/image/user_photo.jpg" />
             </ion-avatar>
           </ion-item>
         </ion-col>
         <ion-col>
-          <div>测试人员</div>
+          <div>{{ currentUser?.displayName }}</div>
           <div>Home</div>
-          <div>1,233,555,00</div>
         </ion-col>
       </ion-row>
       <div class="user-sign">签到有理</div>

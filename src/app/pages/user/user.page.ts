@@ -34,27 +34,27 @@ export class UserPage implements OnInit {
     {
       label: '个人信息',
       icon: 'assets/icon/browser.svg',
-      target: 'user/user-info'
+      target: '/user/info'
     },
     {
       label: '实名认证',
       icon: 'assets/icon/collect.svg',
-      target: 'user/auth'
+      target: '/user/auth'
     },
     {
       label: '系统设置',
       icon: 'assets/icon/wallet.svg',
-      target: 'user/setting'
+      target: '/user/setting'
     },
     {
       label: '订房记录',
       icon: 'assets/icon/wallet.svg',
-      target: 'order'
+      target: '/tabs/order'
     },
     {
       label: '联系我们',
       icon: 'assets/icon/wallet.svg',
-      target: 'contact'
+      target: '/user/contact'
     }
   ]
 
