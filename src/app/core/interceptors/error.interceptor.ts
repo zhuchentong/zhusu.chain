@@ -92,13 +92,19 @@ export class ErrorInterceptor implements HttpInterceptor {
                     )
                   }
                 )
-                .subscribe(response => {
-                  this.store.dispatch(
-                    new UpdateUserAction(plainToClass(User, response))
-                  )
-                  // 修正异常状态
-                  observer.complete()
-                })
+                .subscribe(
+                  response => {
+                    this.store.dispatch(
+                      new UpdateUserAction(plainToClass(User, response))
+                    )
+                    // 修正异常状态
+                    observer.complete()
+                  },
+                  // refreshToken认证
+                  () => {
+                    observer.error(error)
+                  }
+                )
             } else {
               // 恢复异常状态
               observer.error(error)
