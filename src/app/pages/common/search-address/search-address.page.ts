@@ -61,7 +61,12 @@ export class SearchAddressPage implements OnInit {
    */
   private onSelectAddress(item) {
     this.store.dispatch(new UpdateAddressAction(item.name))
-    this.store.dispatch(new UpdatePositionAction(item.location))
+    this.store.dispatch(
+      new UpdatePositionAction({
+        latitude: item.location.lat,
+        longitude: item.location.lng
+      })
+    )
     this.navCtrl.goBack()
   }
 }

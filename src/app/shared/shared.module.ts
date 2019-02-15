@@ -18,6 +18,7 @@ import { NgPipesModule } from 'ngx-pipes'
 import { StringPipe } from './pipes/string.pipe'
 import { ClipboardModule } from 'ngx-clipboard'
 import { PaymentComponent } from './components/payment/payment.component'
+import { HotelItemComponent } from './components/hotel-item/hotel-item.component'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -29,7 +30,8 @@ import { PaymentComponent } from './components/payment/payment.component'
     StringPipe,
     SelectStarComponent,
     ScoreStarComponent,
-    PaymentComponent
+    PaymentComponent,
+    HotelItemComponent
   ],
   imports: [
     CommonModule,
@@ -54,11 +56,12 @@ import { PaymentComponent } from './components/payment/payment.component'
     SelectStarComponent,
     ScoreStarComponent,
     PaymentComponent,
+    HotelItemComponent,
     NgPipesModule,
     ClipboardModule
   ],
   providers: [CommonService, DeviceService, Geolocation, PageService],
-  entryComponents: [SelectStarComponent, PaymentComponent]
+  entryComponents: [SelectStarComponent, PaymentComponent, HotelItemComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

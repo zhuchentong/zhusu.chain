@@ -5,7 +5,6 @@ import {
   UpdatePositionAction
 } from '../action/location.action'
 import { ExtendState } from '.'
-import { ILngLat } from 'ngx-amap'
 
 @State({
   name: 'location',
@@ -56,7 +55,7 @@ export class LocationState extends ExtendState {
    */
   @Action(UpdatePositionAction)
   public updatePosition<T>(
-    state: StateContext<ILngLat>,
+    state: StateContext<T>,
     { position }: UpdatePositionAction
   ) {
     this.updateState(state, {

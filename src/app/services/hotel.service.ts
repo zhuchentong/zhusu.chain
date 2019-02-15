@@ -30,9 +30,10 @@ export class HotelService {
         name,
         type,
         minGrand: level && level.length > 0 ? level[0] : null,
-        maxGrand: level && level.length > 0 ? level[level.length - 1] : null,
-        lat: location.position.latitude,
-        lng: location.position.longitude
+        maxGrand: level && level.length > 0 ? level[level.length - 1] : null
+        // TODO: 测试屏蔽位置
+        // lat: location.position.latitude,
+        // lng: location.position.longitude
       }
     })
   }

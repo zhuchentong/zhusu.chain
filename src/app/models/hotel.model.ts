@@ -3,6 +3,7 @@ import { Type } from 'class-transformer'
 import { User } from './user.model'
 import { UpdateHotelAction } from 'app/store/action/hotel.action'
 import { Model } from 'app/models'
+import { AddRecord } from 'app/store/action/record.action'
 
 export class Hotel extends Model {
   // ID
@@ -43,5 +44,6 @@ export class Hotel extends Model {
    */
   public updateStore(store) {
     store.dispatch(new UpdateHotelAction(this))
+    store.dispatch(new AddRecord(this))
   }
 }

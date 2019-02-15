@@ -21,7 +21,7 @@ export class HotelItemComponent implements OnInit {
   private array = Array
 
   constructor(
-    private roomService: RoomService,
+    // private roomService: RoomService,
     private logger: LoggerService,
     private page: PageService,
     private store: Store,
@@ -29,7 +29,7 @@ export class HotelItemComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.getRoomList()
+    // this.getRoomList()
   }
 
   @HostListener('click')
@@ -44,15 +44,15 @@ export class HotelItemComponent implements OnInit {
    * 获取房间价格
    */
   public getRoomList() {
-    this.roomService
-      .getRoomList(this.hotel.id, {
-        page: this.page
-      })
-      .subscribe(rooms => {
-        this.price =
-          rooms.length > 0
-            ? rooms.map(x => x.price).reduce((x, y) => x + y) / rooms.length
-            : -1
-      })
+  //   this.roomService
+  //     .getRoomList(this.hotel.id, {
+  //       page: this.page
+  //     })
+  //     .subscribe(rooms => {
+  //       this.price =
+  //         rooms.length > 0
+  //           ? rooms.map(x => x.price).reduce((x, y) => x + y) / rooms.length
+  //           : -1
+  //     })
   }
 }

@@ -101,7 +101,6 @@ export class WalletChangePage implements OnInit {
   //   //         }
   //   //       },
   //   //       (err: any) => {
-  //   //         console.log(err)
   //   //         this.loading.dismiss()
   //   //         this.utilProvider.message('密码错误！', 3000)
   //   //       }

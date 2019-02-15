@@ -71,7 +71,8 @@ export class HotelDetailPage implements OnInit {
     this.hotelService.getHotel(id).subscribe(hotel => {
       this.hotel = hotel
       this.position = [this.hotel.position.lng, this.hotel.position.lat]
-      this.hiddenServer = this.hotel.facilities.length > 3
+      this.hiddenServer =
+        this.hotel.facilities && this.hotel.facilities.length > 3
     })
   }
   /**
