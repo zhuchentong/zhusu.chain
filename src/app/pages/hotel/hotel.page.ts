@@ -79,15 +79,15 @@ export class HotelPage implements OnInit {
   }
 
   private async onSelectLevel() {
-    this.commonService.modal(
-      SelectStarComponent,
-      {
+    this.commonService.modal({
+      component:SelectStarComponent,
+      options:{
         cssClass: 'top-50'
-      },
-      ({ data }) => {
+      }, 
+      callback:({ data }) => {
         if (data) this.level = data
       }
-    )
+    })
   }
 
   /**

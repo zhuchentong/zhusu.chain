@@ -91,7 +91,7 @@ $color: #3bc395;
 
 .hotel-info {
   position: relative;
-  &>*:not(.name) {
+  & > *:not(.name) {
     margin-bottom: 3px;
   }
   .name {
@@ -216,6 +216,7 @@ $color: #3bc395;
       padding-right: 10px;
       .room-image {
         width: 100px;
+        height: 80px;
         border-radius: 10px;
       }
       .room-info {

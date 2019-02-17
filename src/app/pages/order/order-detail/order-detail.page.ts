@@ -30,9 +30,6 @@ export class OrderDetailPage implements OnInit {
     if (id) {
       this.getOrder(id)
     }
-
-    // TODO:FOR TEST
-    this.onPayment()
   }
 
   /**
@@ -72,18 +69,18 @@ export class OrderDetailPage implements OnInit {
    * 进行支付
    */
   public async onPayment() {
-    const modal = await this.commonService.modal(
-      PaymentComponent,
-      {
+    const modal = await this.commonService.modal({
+      component:PaymentComponent,
+       componentProps:{
         amount: 1000
-      },
-      result => {
+      }, 
+       callback:result => {
         if (result === true) {
           this.commonService.toast('支付成功')
         }
       }
-    )
-
+    })
+    
     modal.present()
   }
 

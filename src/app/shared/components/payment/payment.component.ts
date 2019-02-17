@@ -60,6 +60,10 @@ export class PaymentComponent implements OnInit {
     loading.dismiss()
   }
 
+  public onClose(){
+    this.modalController.dismiss()
+  }
+
   /**
    * 支付转账
    */

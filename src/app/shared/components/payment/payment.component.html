@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <app-back-button  slot="start"></app-back-button>
+    <button type="button" class="back-button" (click)="onClose()" slot="start" >
+      <span class="button-inner">
+        <ion-icon
+          class="back-icon"
+          [ngStyle]="{ color: color }"
+          icon="arrow-back"
+        ></ion-icon>
+      </span>
+    </button>
     <ion-title>收银台</ion-title>
   </ion-toolbar>
 </ion-header>

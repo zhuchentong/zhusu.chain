@@ -131,9 +131,10 @@ export class CommonService {
    * @param options
    * @param callback
    */
-  public async modal(component, options = {}, callback?) {
+  public async modal({ component, componentProps, options, callback }:{component, componentProps?, options?, callback }) {
     const modal = await this.modalController.create({
       component,
+      componentProps,
       showBackdrop: true,
       backdropDismiss: true,
       ...options
