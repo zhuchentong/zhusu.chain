@@ -8,6 +8,7 @@ import { IonInfiniteScroll, MenuController } from '@ionic/angular'
 import { CommonService } from 'app/utils/common.service'
 import { HotelFilterComponent } from './hotel-filter/hotel-filter.component'
 import { LevelList } from 'app/config/dict.config'
+import { ifStmt } from '@angular/compiler/src/output/output_ast'
 
 @Component({
   selector: 'app-hotel-list',
@@ -15,11 +16,9 @@ import { LevelList } from 'app/config/dict.config'
   styleUrls: ['./hotel-list.page.scss']
 })
 export class HotelListPage implements OnInit {
-  @ViewChild(IonInfiniteScroll)
-  private infiniteScroll: IonInfiniteScroll
   @ViewChild(HotelFilterComponent)
   private hotelFilterComponent
-
+  private page = new PageService()
   // 搜索匹配名称
   private filter = {
     name: '',
@@ -32,7 +31,6 @@ export class HotelListPage implements OnInit {
     private hotelService: HotelService,
     private route: ActivatedRoute,
     private logger: LoggerService,
-    private page: PageService,
     private commonService: CommonService,
     private menuController: MenuController
   ) {}
@@ -52,6 +50,12 @@ export class HotelListPage implements OnInit {
    * @param event
    */
   private getHotelList(event?) {
+    if (this.page.complete) {
+      return
+    }
+    // 更新页数
+    event && this.page.next()
+
     this.hotelService
       .getHotelList(
         {
@@ -64,11 +68,8 @@ export class HotelListPage implements OnInit {
         }
       )
       .subscribe((list: Hotel[]) => {
-        this.hotelList = list
-        // TODO:最后一页禁用
-        if (event) {
-          event.target.complete()
-        }
+        this.hotelList.push(...list)
+        event && event.target.complete()
       })
   }
 

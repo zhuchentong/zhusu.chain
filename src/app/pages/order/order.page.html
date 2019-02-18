@@ -54,8 +54,12 @@
         </div>
       </div>
     </ion-list>
-
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="getOrderList($event)">
+    <app-end-line *ngIf="page.complete"></app-end-line>
+    <ion-infinite-scroll
+      [disabled]="page.complete"
+      threshold="50px"
+      (ionInfinite)="getOrderList($event)"
+    >
       <ion-infinite-scroll-content
         loadingSpinner="bubbles"
         loadingText="正在加载..."

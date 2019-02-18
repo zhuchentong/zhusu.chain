@@ -59,9 +59,13 @@ export class NetService {
       .pipe(
         // 取body数据
         map(response => {
-          const body = options.page
-            ? this.getPageData(response.body).list
-            : response.body
+          let body = response.body
+          // 更新分页数据
+          if (options.page) {
+            const data = this.getPageData(response.body)
+            body = data.list
+            options.page.update(data.count)
+          }
 
           return options.model ? plainToClass(options.model, body) : body
         }),
@@ -105,6 +109,11 @@ export class NetService {
     if (options.params instanceof Model) {
       params = classToPlain(options.params)
     }
+
+    if (options.page) {
+      Object.assign(options.params, this.getPageParams(options.page))
+    }
+
     return new HttpParams({
       fromObject: params
     })
@@ -123,8 +132,19 @@ export class NetService {
     if (options.params instanceof Model) {
       return classToPlain(options.params)
     }
-    // TODO:分页处理
+
+    if (options.page) {
+      Object.assign(options.params, this.getPageParams(options.page))
+    }
+
     return options.params
+  }
+
+  private getPageParams(page: PageService) {
+    return {
+      offset: (page.pageIndex - 1) * page.pageSize,
+      max: page.pageSize
+    }
   }
 
   /**

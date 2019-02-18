@@ -23,7 +23,6 @@ export class HotelItemComponent implements OnInit {
   constructor(
     // private roomService: RoomService,
     private logger: LoggerService,
-    private page: PageService,
     private store: Store,
     private router: Router
   ) {}

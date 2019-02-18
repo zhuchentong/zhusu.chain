@@ -11,7 +11,6 @@ import { WeekPipe } from './pipes/week.pipe'
 import { SelectPositionComponent } from './components/select-position/select-position.component'
 import { SelectDateComponent } from './components/select-date/select-date.component'
 import { SelectStarComponent } from './components/select-star/select-star.component'
-import { PageService } from 'app/utils/page.service'
 import { ScoreStarComponent } from './components/score-star/score-star.component'
 import { ClonePipe } from './pipes/clone.pipe'
 import { NgPipesModule } from 'ngx-pipes'
@@ -60,7 +59,7 @@ import { HotelItemComponent } from './components/hotel-item/hotel-item.component
     NgPipesModule,
     ClipboardModule
   ],
-  providers: [CommonService, DeviceService, Geolocation, PageService],
+  providers: [CommonService, DeviceService, Geolocation],
   entryComponents: [SelectStarComponent, PaymentComponent, HotelItemComponent]
 })
 export class SharedModule {

@@ -16,7 +16,10 @@ export class OrderPage implements OnInit {
   private currentUser
   // 订单列表
   private orderList = []
+  // 订单类型
   private orderStateEnum = OrderStateEnum
+  // 分页服务
+  private page = new PageService()
   // 订单状态列表
   private orderStateList = [
     {
@@ -44,7 +47,6 @@ export class OrderPage implements OnInit {
   constructor(
     private orderService: OrderService,
     private commonService: CommonService,
-    private page: PageService,
     private router: Router
   ) {}
 
@@ -52,7 +54,7 @@ export class OrderPage implements OnInit {
     return
   }
 
-  public ionViewWillEnter(){
+  public ionViewWillEnter() {
     this.getOrderList()
   }
 
@@ -60,6 +62,9 @@ export class OrderPage implements OnInit {
    * 获取订单列表
    */
   public getOrderList(event?) {
+    if (this.page.complete) return
+    event && this.page.next()
+
     this.orderService
       .getOrderList(
         {

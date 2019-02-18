@@ -7,11 +7,12 @@ export class PageService {
   public pageSize: number
   public loading: boolean
   public totalPage: number
+  public complete = false
 
-  constructor() {
+  constructor({ pageSize } = { pageSize: 10 }) {
     this.pageIndex = 1
     this.total = 0
-    this.pageSize = 10
+    this.pageSize = pageSize
     this.loading = false
   }
 
@@ -25,12 +26,32 @@ export class PageService {
     }
   }
 
+  public next() {
+    if (!this.complete) {
+      this.pageIndex += 1
+      this.checkComplete()
+    }
+  }
+
+  public reset() {
+    this.pageIndex = 1
+    this.loading = false
+    this.complete = false
+  }
+
   /**
    * 更新分页配置信息
    * @param param
    */
-  public update({ totalElements, totalPages }) {
-    this.total = totalElements
-    this.totalPage = totalPages
+  public update(total) {
+    this.total = total
+    this.totalPage = Math.ceil(this.total / this.pageSize)
+    this.checkComplete()
+  }
+
+  private checkComplete() {
+    if (this.pageIndex >= this.totalPage) {
+      this.complete = true
+    }
   }
 }

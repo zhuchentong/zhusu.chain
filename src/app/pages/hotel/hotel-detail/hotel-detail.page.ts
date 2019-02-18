@@ -39,6 +39,8 @@ export class HotelDetailPage implements OnInit {
   private price
   // 是否收藏
   private isCollect
+  // 分页服务
+  private page = new PageService({ pageSize: 100 })
   // slide配置
   private readonly slideOptions = {
     autoplay: {
@@ -53,7 +55,6 @@ export class HotelDetailPage implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
-    private page: PageService,
     private store: Store
   ) {}
 

@@ -7,7 +7,7 @@
   ></ngx-amap>
   <ion-header class="header" mode="ios">
     <ion-toolbar mode="ios">
-      <app-back-button slot="start" ></app-back-button>
+      <app-back-button slot="start"></app-back-button>
       <ion-searchbar
         class="no-right-radius"
         mode="ios"
@@ -30,10 +30,11 @@
           [hotel]="hotel"
         ></app-hotel-item>
       </ion-list>
-
+      <app-end-line *ngIf="page.complete"></app-end-line>
       <ion-infinite-scroll
-        threshold="100px"
+        threshold="50px"
         (ionInfinite)="getHotelList($event)"
+        [disabled]="page.complete"
       >
         <ion-infinite-scroll-content
           loadingSpinner="bubbles"
