@@ -29,8 +29,8 @@ export class HotelService {
       params: {
         name,
         type,
-        minGrand: level && level.length > 0 ? level[0] : null,
-        maxGrand: level && level.length > 0 ? level[level.length - 1] : null
+        minGrand: level && level.length > 0 ? Math.min(...level) : null,
+        maxGrand: level && level.length > 0 ? Math.max(...level) : null
         // TODO: 测试屏蔽位置
         // lat: location.position.latitude,
         // lng: location.position.longitude

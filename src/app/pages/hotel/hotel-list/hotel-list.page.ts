@@ -50,12 +50,9 @@ export class HotelListPage implements OnInit {
    * @param event
    */
   private getHotelList(event?) {
-    if (this.page.complete) {
-      return
-    }
+    if (this.page.complete) return event && event.target.complete()
     // 更新页数
     event && this.page.next()
-
     this.hotelService
       .getHotelList(
         {
@@ -86,6 +83,8 @@ export class HotelListPage implements OnInit {
 
   private onSumbitFilter() {
     this.filter = this.hotelFilterComponent.getFilter()
+    this.page.reset()
+    this.hotelList = []
     this.getHotelList()
     this.menuController.close('filter')
   }

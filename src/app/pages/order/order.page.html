@@ -9,6 +9,9 @@
       {{ item.label }}
     </div>
   </div>
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="orderList && orderList.length">
     <ion-list class="order-list">
       <div
@@ -58,7 +61,7 @@
     <ion-infinite-scroll
       [disabled]="page.complete"
       threshold="50px"
-      (ionInfinite)="getOrderList($event)"
+      (ionInfinite)="getOrderList($event, 'next')"
     >
       <ion-infinite-scroll-content
         loadingSpinner="bubbles"

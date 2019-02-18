@@ -10,18 +10,7 @@ import { plainToClass } from 'class-transformer'
   defaults: []
 })
 export class RecordState extends ExtendState {
-  /**
-   * 获取浏览记录
-   * @param state
-   */
-  @Selector()
-  public static getRecord(state: Hotel[]) {
-    if (state) {
-      return plainToClass(Hotel, state)
-    } else {
-      return []
-    }
-  }
+  private readonly maxCount = 50
   /**
    * 添加浏览记录
    * @param param0
@@ -37,10 +26,10 @@ export class RecordState extends ExtendState {
     // 去除重复记录
     recordList = recordList.filter(x => x.id !== hotel.id)
     // 添加浏览记录
-    recordList.push(hotel)
+    recordList.unshift(hotel)
     // 浏览记录最大50条
-    if (recordList.length > 50) {
-      recordList.length = 50
+    if (recordList.length > this.maxCount) {
+      recordList.length = this.maxCount
     }
     // 更新浏览记录
     setState(recordList)

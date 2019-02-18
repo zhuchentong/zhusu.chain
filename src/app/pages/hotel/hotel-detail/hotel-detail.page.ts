@@ -60,7 +60,7 @@ export class HotelDetailPage implements OnInit {
 
   public ngOnInit() {
     // 对应酒店ID
-    const id = this.route.snapshot.paramMap.get('id')
+    const id = parseInt(this.route.snapshot.paramMap.get('id'), 10)
 
     if (id) {
       // 获取酒店信息
@@ -126,11 +126,11 @@ export class HotelDetailPage implements OnInit {
    * 修改收藏状态
    */
   private onCollect() {
-    this.isCollect = !this.isCollect
     // 收藏/取消收藏
     this.store.dispatch(
       new (this.isCollect ? RemoveCollect : AddCollect)(this.hotel)
     )
+    this.isCollect = !this.isCollect
     this.commonService.toast(this.isCollect ? '收藏成功' : '取消收藏', 1000)
   }
 }

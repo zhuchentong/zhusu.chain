@@ -61,10 +61,9 @@ export class OrderPage implements OnInit {
   /**
    * 获取订单列表
    */
-  public getOrderList(event?) {
-    if (this.page.complete) return
-    event && this.page.next()
-
+  public getOrderList(event?, type?) {
+    if (this.page.complete) return event && event.target.complete()
+    if (event && type) this.page[type]()
     this.orderService
       .getOrderList(
         {
@@ -98,7 +97,8 @@ export class OrderPage implements OnInit {
    */
   private onChangeStatus(status) {
     this.currentState = status
-    // TODO:重置分页
+    this.page.reset()
+    this.orderList = []
     this.getOrderList()
   }
 
@@ -111,5 +111,10 @@ export class OrderPage implements OnInit {
     if (state) {
       return state.label
     }
+  }
+
+  private onRefresh(event) {
+    this.orderList = []
+    this.getOrderList(event, 'reset')
   }
 }

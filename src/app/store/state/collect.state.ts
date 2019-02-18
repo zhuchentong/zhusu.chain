@@ -16,19 +16,6 @@ import { AddCollect, RemoveCollect } from '../action/collect.action'
 })
 export class CollectState extends ExtendState {
   /**
-   * 获取收藏记录
-   * @param state
-   */
-  @Selector()
-  public static getCollect(state: Hotel[]) {
-    if (state) {
-      return plainToClass(Hotel, state)
-    } else {
-      return []
-    }
-  }
-
-  /**
    * 是否收藏该记录
    * @param state
    */
@@ -58,7 +45,7 @@ export class CollectState extends ExtendState {
     const target = collectList.find(x => x.id === hotel.id)
     if (!target) {
       // 添加收藏记录
-      collectList.push(hotel)
+      collectList.unshift(hotel)
       // 更新收藏记录
       setState(collectList)
     }
