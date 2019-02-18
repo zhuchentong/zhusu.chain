@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import { Store } from '@ngxs/store'
+import { Hotel } from 'app/models/hotel.model'
+import { CollectState } from 'app/store/state/collect.state'
 
 @Component({
   selector: 'app-collect',
@@ -6,9 +9,10 @@ import { Component, OnInit } from '@angular/core'
   styleUrls: ['./collect.page.scss']
 })
 export class CollectPage implements OnInit {
-  // constructor() { }
+  private hotelList: Hotel[] = []
+  constructor(private store: Store) {}
 
   public ngOnInit() {
-    return
+    this.hotelList = this.store.selectSnapshot(CollectState.getCollect)
   }
 }

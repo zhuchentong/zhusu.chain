@@ -1,8 +1,31 @@
 <ion-header>
   <ion-toolbar>
     <app-back-button slot="start"></app-back-button>
-    <ion-title>collect</ion-title>
+    <ion-title>收藏记录</ion-title>
   </ion-toolbar>
 </ion-header>
+<div class="content">
+  <div class="v-list" *ngIf="hotelList && hotelList.length">
+    <ion-list>
+      <app-hotel-item
+        *ngFor="let hotel of hotelList"
+        [hotel]="hotel"
+      ></app-hotel-item>
+    </ion-list>
 
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="getHotelList($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="正在加载..."
+      >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
+  <div
+    *ngIf="hotelList && hotelList.length === 0"
+    class="empty-list row middle-span center-span"
+  >
+    <label>还没有收藏过房间</label>
+  </div>
+</div>
 <ion-content padding> </ion-content>

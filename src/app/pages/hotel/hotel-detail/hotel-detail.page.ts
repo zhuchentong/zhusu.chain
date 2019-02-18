@@ -12,6 +12,9 @@ import {
 } from 'app/store/action/hotel.action'
 import { Hotel } from 'app/models/hotel.model'
 import { HotelService } from 'app/services/hotel.service'
+import { CollectState } from 'app/store/state/collect.state'
+import { AddCollect, RemoveCollect } from 'app/store/action/collect.action'
+import { CommonService } from 'app/utils/common.service'
 
 @Component({
   selector: 'app-hotel-detail',
@@ -34,6 +37,8 @@ export class HotelDetailPage implements OnInit {
   private scrollTop = 0
   // 最低价格
   private price
+  // 是否收藏
+  private isCollect
   // slide配置
   private readonly slideOptions = {
     autoplay: {
@@ -45,6 +50,7 @@ export class HotelDetailPage implements OnInit {
     private hotelService: HotelService,
     private roomService: RoomService,
     private logger: LoggerService,
+    private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
     private page: PageService,
@@ -60,6 +66,8 @@ export class HotelDetailPage implements OnInit {
       this.getHotel(id)
       // 获取房间列表
       this.getRoomList(id)
+      // 判断收否已经收藏
+      this.isCollect = this.store.selectSnapshot(CollectState.hasCollect(id))
     }
   }
 
@@ -111,5 +119,17 @@ export class HotelDetailPage implements OnInit {
     // 保存待预订的房间信息
     this.store.dispatch(new UpdateRoomAction(room))
     this.router.navigate(['hotel/hotel-order'])
+  }
+
+  /**
+   * 修改收藏状态
+   */
+  private onCollect() {
+    this.isCollect = !this.isCollect
+    // 收藏/取消收藏
+    this.store.dispatch(
+      new (this.isCollect ? RemoveCollect : AddCollect)(this.hotel)
+    )
+    this.commonService.toast(this.isCollect ? '收藏成功' : '取消收藏', 1000)
   }
 }

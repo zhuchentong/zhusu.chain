@@ -3,11 +3,15 @@
   [ngClass]="{ 'show-title': scrollTop > 200 }"
 >
   <div class="row nowrap">
-    <app-back-button ></app-back-button>
+    <app-back-button></app-back-button>
     <label class="title" *ngIf="scrollTop > 200">{{ hotel?.name }}</label>
   </div>
   <div>
-    <ion-icon class="collect has-collect" name="heart"></ion-icon>
+    <ion-icon
+      class="collect has-collect"
+      [name]="isCollect ? 'heart' : 'heart-empty'"
+      (click)="onCollect()"
+    ></ion-icon>
     <ion-icon class="share" name="share"></ion-icon>
   </div>
 </div>
