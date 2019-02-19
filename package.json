@@ -66,6 +66,7 @@
     "ngx-amap": "~2.2.0",
     "ngx-clipboard": "~11.1.9",
     "ngx-pipes": "~2.3.6",
+    "qs": "^6.6.0",
     "reflect-metadata": "~0.1.13",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.27"

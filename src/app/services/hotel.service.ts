@@ -16,9 +16,15 @@ export class HotelService {
    * 获取用户
    */
   public getHotelList(
-    { name, level, type }: { name?; level?; type: HotelEnum },
+    {
+      name,
+      level,
+      type,
+      tags
+    }: { name?; level?; type: HotelEnum; tags: string },
     { page }: { page?: PageService }
   ): Observable<Hotel[]> {
+    // TODO:tags应传入数组
     // 获取位置信息
     const location = this.store.selectSnapshot(state => state.location)
 
@@ -29,6 +35,7 @@ export class HotelService {
       params: {
         name,
         type,
+        tags: [tags],
         minGrand: level && level.length > 0 ? Math.min(...level) : null,
         maxGrand: level && level.length > 0 ? Math.max(...level) : null
         // TODO: 测试屏蔽位置

@@ -8,7 +8,7 @@ export const orderRoutes: Routes = [
     component: OrderPage,
     pathMatch: 'full'
   },
-  { path: 'order-detail', component: OrderDetailPage }
+  { path: 'order-detail/:id', component: OrderDetailPage }
 ]
 
 export const orderPages = [OrderPage, OrderDetailPage]

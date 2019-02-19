@@ -10,6 +10,7 @@ import { LoggerService } from '@ngx-toolkit/logger'
 import * as dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Observable } from 'rxjs'
+import { isUndefined } from 'util'
 @Injectable({
   providedIn: 'root'
 })
@@ -131,7 +132,17 @@ export class CommonService {
    * @param options
    * @param callback
    */
-  public async modal({ component, componentProps, options, callback }:{component, componentProps?, options?, callback }) {
+  public async modal({
+    component,
+    componentProps,
+    options,
+    callback
+  }: {
+    component
+    componentProps?
+    options?
+    callback
+  }) {
     const modal = await this.modalController.create({
       component,
       componentProps,
@@ -357,5 +368,18 @@ export class CommonService {
       }
     }
     return data
+  }
+
+  /**
+   * 去除对象空值
+   * @param obj
+   */
+  public filterEmptyValue(obj) {
+    Object.entries(obj).forEach(([key, value]) => {
+      if (value === '' || value === undefined) {
+        delete obj[key]
+      }
+    })
+    return obj
   }
 }

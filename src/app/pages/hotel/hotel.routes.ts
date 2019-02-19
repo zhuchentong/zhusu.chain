@@ -12,7 +12,7 @@ export const hotelRoutes: Routes = [
     pathMatch: 'full'
   },
   { path: 'hotel-list', component: HotelListPage },
-  { path: 'hotel-detail', component: HotelDetailPage },
+  { path: 'hotel-detail/:id', component: HotelDetailPage },
   {
     path: 'hotel-order',
     canActivate: [AuthGuard],

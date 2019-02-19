@@ -14,6 +14,8 @@ import { Store } from '@ngxs/store'
 import { SelectDateComponent } from 'app/shared/components/select-date/select-date.component'
 import { HotelEnum } from 'app/config/enum.config'
 import { UpdateDateAction } from 'app/store/action/hotel.action'
+import { AdvertisementsService } from 'app/services/advertisements.service'
+import { SplashesService } from 'app/services/splashes.service'
 
 @Component({
   selector: 'app-hotel',
@@ -21,6 +23,8 @@ import { UpdateDateAction } from 'app/store/action/hotel.action'
   styleUrls: ['./hotel.page.scss']
 })
 export class HotelPage implements OnInit {
+  private adList: any[] = []
+  private splashList: any[] = []
   // slide配置
   private readonly slideOptions = {
     autoplay: {
@@ -57,12 +61,34 @@ export class HotelPage implements OnInit {
     private renderer2: Renderer2,
     private modalController: ModalController,
     private commonService: CommonService,
+    private advertisementsService: AdvertisementsService,
+    private splashesService: SplashesService,
     private router: Router,
     private store: Store
   ) {}
 
   public ngOnInit() {
-    return
+    this.getAdList()
+    this.getSplashList()
+  }
+
+  /**
+   * 获取广告图列表
+   */
+  private getAdList() {
+    this.advertisementsService.getAdList().subscribe(list => {
+      this.adList = list
+      this.updateAdList()
+    })
+  }
+
+  /**
+   * 获取轮播图列表
+   */
+  private getSplashList() {
+    this.splashesService.getSplashList().subscribe(list => {
+      this.splashList = list
+    })
   }
 
   private getLevelLabel() {
@@ -80,11 +106,11 @@ export class HotelPage implements OnInit {
 
   private async onSelectLevel() {
     this.commonService.modal({
-      component:SelectStarComponent,
-      options:{
+      component: SelectStarComponent,
+      options: {
         cssClass: 'top-50'
-      }, 
-      callback:({ data }) => {
+      },
+      callback: ({ data }) => {
         if (data) this.level = data
       }
     })
@@ -93,8 +119,16 @@ export class HotelPage implements OnInit {
   /**
    * 跳转搜索页面
    */
-  private async onSearch() {
+  private async onSearch(tags = '') {
+    // 日期范围
     const dateRange = this.selectDateComponent.getDateRange()
+    // 筛选条件
+    const filter = {
+      type: HotelEnum.HOTEL,
+      level: this.level.length ? this.level : undefined,
+      tags
+    }
+
     // 获取位置信息
     const position = this.store.selectSnapshot(state => state.location.position)
     // 当位置正确是进行搜索
@@ -103,25 +137,38 @@ export class HotelPage implements OnInit {
       this.store.dispatch(new UpdateDateAction(dateRange))
       this.router.navigate([
         '/hotel/hotel-list',
-        {
-          type: HotelEnum.HOTEL,
-          level: this.level
-        }
+        this.commonService.filterEmptyValue(filter)
       ])
     } else {
       this.commonService.toast('无法定位当前位置,请重试.')
     }
   }
 
-  private ngAfterViewInit() {
+  /**
+   * 更新广告图列表
+   */
+  private updateAdList() {
     const aditems = this.elementRef.nativeElement.querySelectorAll('.ad-item')
     aditems.forEach(item => {
+      const targetId = parseInt(item.attributes['ad-id'].value, 10)
+      const targetItem = this.adList.find(x => x.id === targetId)
       // 设置背景
+      // TODO: 默认无图图片
       this.renderer2.setStyle(
         item,
         'background-image',
-        'url("/assets/image/hotel.jpg")'
+        targetItem
+          ? 'url(' + targetItem.imgUrl + ')'
+          : 'url("/assets/image/hotel.jpg")'
       )
+
+      // 添加导航跳转
+      if (targetId && targetItem) {
+        item.onclick = () => {
+          this.router.navigateByUrl(targetItem.link)
+        }
+      }
+
       // 设置宽高比
       if (item.classList.contains('left') > -1) {
         this.renderer2.setStyle(item, 'background-size', 'auto 100%')

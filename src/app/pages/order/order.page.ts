@@ -83,12 +83,7 @@ export class OrderPage implements OnInit {
    * 打开order详情
    */
   public onOpenDetail(id) {
-    this.router.navigate([
-      'order/order-detail',
-      {
-        id
-      }
-    ])
+    this.router.navigateByUrl('order/order-detail/' + id)
   }
 
   /**

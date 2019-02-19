@@ -20,7 +20,7 @@ export class EmptyInterceptor implements HttpInterceptor {
 
     for (const key of request.params.keys()) {
       const value = request.params.get(key)
-      if (value === '' || value === undefined || value === 'undefined') {
+      if (value === '' || value === undefined || value === null || value === 'undefined') {
         params = params || request.params
         params = params.delete(key)
       }

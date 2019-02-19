@@ -23,7 +23,8 @@ export class HotelListPage implements OnInit {
   private filter = {
     name: '',
     level: [],
-    type: undefined
+    type: undefined,
+    tags: ''
   }
   // TODO:日期范围
   private hotelList = []
@@ -37,11 +38,12 @@ export class HotelListPage implements OnInit {
 
   public ngOnInit() {
     this.menuController.enable(true, 'filter')
-    this.filter.level = this.route.snapshot.paramMap
-      .get('level')
+
+    this.filter.type = this.route.snapshot.paramMap.get('type')
+    this.filter.tags = this.route.snapshot.paramMap.get('tags')
+    this.filter.level = (this.route.snapshot.paramMap.get('level') || '')
       .split(',')
       .filter(x => !!x)
-    this.filter.type = this.route.snapshot.paramMap.get('type')
     this.getHotelList()
   }
 
@@ -54,16 +56,9 @@ export class HotelListPage implements OnInit {
     // 更新页数
     event && this.page.next()
     this.hotelService
-      .getHotelList(
-        {
-          name: this.filter.name,
-          level: this.filter.level,
-          type: this.filter.type
-        },
-        {
-          page: this.page
-        }
-      )
+      .getHotelList(this.filter, {
+        page: this.page
+      })
       .subscribe((list: Hotel[]) => {
         this.hotelList.push(...list)
         event && event.target.complete()

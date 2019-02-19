@@ -7,6 +7,7 @@ import { LoadingController } from '@ionic/angular'
 import { Model } from 'app/models'
 import { classToPlain, plainToClass } from 'class-transformer'
 import { PageService } from './page.service'
+import * as qs from 'qs'
 
 interface IReqestService {
   controller?: string
@@ -115,7 +116,7 @@ export class NetService {
     }
 
     return new HttpParams({
-      fromObject: params
+      fromString: qs.stringify(params)
     })
   }
 

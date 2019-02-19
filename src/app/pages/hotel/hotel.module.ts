@@ -7,10 +7,18 @@ import { HotelService } from 'app/services/hotel.service'
 import { RoomService } from 'app/services/room.service'
 import { OrderService } from 'app/services/order.service'
 import { HotelFilterComponent } from './hotel-list/hotel-filter/hotel-filter.component'
+import { SplashesService } from 'app/services/splashes.service'
+import { AdvertisementsService } from 'app/services/advertisements.service'
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(hotelRoutes), NgxAmapModule],
   declarations: [...hotelPages, HotelFilterComponent],
-  providers: [HotelService, RoomService, OrderService]
+  providers: [
+    HotelService,
+    RoomService,
+    OrderService,
+    AdvertisementsService,
+    SplashesService
+  ]
 })
 export class HotelPageModule {}

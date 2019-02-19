@@ -1,8 +1,8 @@
 <ion-content class="page hotel">
   <ion-slides class="slider-container" pager="true" [options]="slideOptions">
-    <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
-    <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
-    <ion-slide> <img src="assets/image/hotel.jpg" /> </ion-slide>
+    <ion-slide *ngFor="let item of splashList">
+      <img [src]="item.imgUrl" [routerLink]="item.link" />
+    </ion-slide>
   </ion-slides>
   <div class="search-container row nowarp">
     <app-select-position></app-select-position>
@@ -27,6 +27,7 @@
     <div
       class="recommand-item col middle-span center-span"
       *ngFor="let item of recommandList"
+      (click)="onSearch(item.label)"
     >
       <img [src]="item.icon" />
       <div class="label">{{ item.label }}</div>
@@ -34,19 +35,19 @@
   </div>
   <div class="ad-container">
     <div class="row nowrap">
-      <div #aditem class="col-span ad-item left"></div>
+      <div #aditem ad-id="1" class="col-span ad-item left"></div>
       <div class="split"></div>
       <div class="col col-span nowrap">
-        <div #item class="row-span ad-item right"></div>
+        <div #aditem ad-id="2" class="row-span ad-item right"></div>
         <div class="split"></div>
-        <div #aditem class="row-span ad-item right"></div>
+        <div #aditem ad-id="3" class="row-span ad-item right"></div>
       </div>
     </div>
     <div class="split"></div>
     <div class="row nowrap">
-      <div #aditem class="col-span ad-item left"></div>
+      <div #aditem ad-id="4" class="col-span ad-item left"></div>
       <div class="split"></div>
-      <div #aditem class="col-span ad-item left"></div>
+      <div #aditem ad-id="5" class="col-span ad-item left"></div>
     </div>
   </div>
   <app-end-line></app-end-line>
