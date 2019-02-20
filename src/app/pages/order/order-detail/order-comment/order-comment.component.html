@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <button type="button" class="back-button" (click)="onClose()" slot="start">
+      <span class="button-inner">
+        <ion-icon
+          class="back-icon"
+          [ngStyle]="{ color: color }"
+          icon="arrow-back"
+        ></ion-icon>
+      </span>
+    </button>
+    <ion-title>评论</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content no-padding>
+  <form>
+    <ion-item> <app-score-star [(star)]="star"></app-score-star> </ion-item>
+    <ion-item>
+      <ion-textarea rows="6" placeholder="请填写评论" value="comment">
+      </ion-textarea>
+    </ion-item>
+
+    <button (click)="onCommit()">提交</button>
+  </form>
+</ion-content>

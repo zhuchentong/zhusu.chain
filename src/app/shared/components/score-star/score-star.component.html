@@ -2,6 +2,7 @@
   <ion-icon
     [ngStyle]="{ color: color }"
     name="star"
+    (click)="onUpdateStar(item)"
     *ngFor="let item of array(leftCount)"
   ></ion-icon>
   <ion-icon
@@ -12,6 +13,7 @@
   <ion-icon
     [ngStyle]="{ color: color }"
     name="star-outline"
+    (click)="onUpdateStar(leftCount + item)"
     *ngFor="let item of array(rightCount)"
   ></ion-icon>
 </div>

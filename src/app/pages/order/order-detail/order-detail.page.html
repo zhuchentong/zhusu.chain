@@ -12,7 +12,11 @@
             <ion-card-title class="title">待付款</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            已成功预订，房间已为您预留，订单需要在30分钟内进行支付，如果为按时支付订单会自动关闭。
+            已成功预订，等待用户付款。订单会在{{
+              order?.payTime / (1000 * 60) | floor | string | lpad: 2:'0'
+            }}:{{
+              (order?.payTime / 1000) % 60 | string | lpad: 2:'0'
+            }}后自动关闭。
           </ion-card-content>
         </ion-card>
         <!--支付超时-->
@@ -96,7 +100,13 @@
   </div>
 </ion-content>
 
-<ion-footer *ngIf="order && order.status === orderStatus.CREATED">
+<ion-footer
+  *ngIf="
+    order &&
+    [orderStatus.CREATED, orderStatus.PAID, orderStatus.CHECKIN].includes(
+      order.status
+    )
+  ">
   <div class="order-footer row between-span nowrap" [ngSwitch]="order.status">
     <ng-container *ngSwitchCase="orderStatus.CREATED">
       <div class="content ">

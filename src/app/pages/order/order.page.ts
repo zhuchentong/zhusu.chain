@@ -4,6 +4,8 @@ import { Router } from '@angular/router'
 import { OrderService } from 'app/services/order.service'
 import { PageService } from 'app/utils/page.service'
 import { CommonService } from 'app/utils/common.service'
+import { PaymentComponent } from 'app/shared/components/payment/payment.component'
+import { OrderCommentComponent } from './order-detail/order-comment/order-comment.component'
 
 @Component({
   selector: 'app-order',
@@ -13,6 +15,7 @@ import { CommonService } from 'app/utils/common.service'
 export class OrderPage implements OnInit {
   // 当前查看状态
   private currentState = ''
+  // 当前用户
   private currentUser
   // 订单列表
   private orderList = []
@@ -62,8 +65,8 @@ export class OrderPage implements OnInit {
    * 获取订单列表
    */
   public getOrderList(event?, type?) {
-    if (this.page.complete) return event && event.target.complete()
     if (event && type) this.page[type]()
+
     this.orderService
       .getOrderList(
         {
@@ -108,8 +111,53 @@ export class OrderPage implements OnInit {
     }
   }
 
+  /**
+   * 下拉刷新
+   * @param event
+   */
   private onRefresh(event) {
     this.orderList = []
     this.getOrderList(event, 'reset')
+  }
+
+  /**
+   * 支付订单
+   */
+  private async onPayment(price) {
+    const modal = await this.commonService.modal({
+      component: PaymentComponent,
+      componentProps: {
+        amount: parseFloat(price)
+      },
+      callback: result => {
+        if (result === true) {
+          this.commonService.toast('支付成功')
+          // 刷新订单列表
+          this.getOrderList()
+        }
+      }
+    })
+
+    modal.present()
+  }
+
+  /**
+   * 提交评论
+   */
+  private async onComment(id) {
+    const modal = await this.commonService.modal({
+      component: OrderCommentComponent,
+      componentProps: {
+        id
+      },
+      callback: result => {
+        if (result === true) {
+          // 刷新订单列表
+          this.getOrderList()
+        }
+      }
+    })
+
+    modal.present()
   }
 }

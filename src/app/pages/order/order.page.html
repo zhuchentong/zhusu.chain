@@ -47,10 +47,18 @@
         </div>
         <div class="order-footer row end-span">
           <ng-container [ngSwitch]="order.status">
-            <div class="order-button" *ngSwitchCase="orderStateEnum.CREATED">
+            <div
+              class="order-button"
+              *ngSwitchCase="orderStateEnum.CREATED"
+              (click)="onPayment(order.price);$event.stopPropagation()"
+            >
               支付
             </div>
-            <div class="order-button" *ngSwitchCase="orderStateEnum.CHECKOUT">
+            <div
+              class="order-button"
+              *ngSwitchCase="orderStateEnum.CHECKOUT"
+              (click)="onComment(order.id);$event.stopPropagation()"
+            >
               评价
             </div>
           </ng-container>

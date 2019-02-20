@@ -7,6 +7,7 @@ import { Order } from 'app/models/order.model'
 import { IDateRange } from 'app/config/interface.config'
 import { CommonService } from 'app/utils/common.service'
 import { PageService } from 'app/utils/page.service'
+import { map } from 'rxjs/operators'
 @Injectable()
 export class OrderService {
   constructor(
@@ -22,14 +23,15 @@ export class OrderService {
     { state },
     { page }: { page: PageService }
   ): Observable<Order[]> {
-    return this.net.send({
-      service: orderController.getOrderList,
-      model: Order,
-      params: {
-        status: state
-      },
-      page
-    })
+    return this.net
+      .send({
+        service: orderController.getOrderList,
+        model: Order,
+        params: {
+          status: state
+        },
+        page
+      })
   }
 
   /**
