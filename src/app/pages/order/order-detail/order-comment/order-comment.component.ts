@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { ModalController } from '@ionic/angular'
+import { CommentService } from 'app/services/commnet.service'
+import { Order } from 'app/models/order.model'
 
 @Component({
   selector: 'app-order-comment',
@@ -9,12 +11,15 @@ import { ModalController } from '@ionic/angular'
 export class OrderCommentComponent implements OnInit {
   // 订单ID
   @Input()
-  public id: number
+  public order: Order
   // 用户评分
   private star = 2
   private comment = ''
 
-  constructor(private modalController: ModalController) {
+  constructor(
+    private commentService: CommentService,
+    private modalController: ModalController
+  ) {
     return
   }
 
@@ -22,6 +27,9 @@ export class OrderCommentComponent implements OnInit {
     return
   }
 
+  /**
+   * 关闭modal
+   */
   private onClose() {
     this.modalController.dismiss()
   }
@@ -30,6 +38,11 @@ export class OrderCommentComponent implements OnInit {
    * 评论
    */
   private onCommit() {
-    return
+    this.commentService.addComment(this.order.room.hotel.id, {
+      ranking: this.star,
+      content: this.comment
+    }).subscribe(()=>{
+      this.modalController.dismiss(true)
+    })
   }
 }

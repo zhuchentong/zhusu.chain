@@ -74,7 +74,7 @@ export class LoginPage implements OnInit {
           return
         }
         // 获取当前钱包
-        const wallet = this.store.selectSnapshot(WalletState.getCurrentWallet)
+        const wallet = this.store.selectSnapshot(WalletState.getCurrentWallet())
 
         if (!wallet) {
           // this.commonService.setDefaultCurrency()

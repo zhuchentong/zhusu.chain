@@ -6,12 +6,13 @@ import { WalletChangePage } from './wallet-change/wallet-change.page'
 import { WalletCreatePage } from './wallet-create/wallet-create.page'
 import { WalletImportPage } from './wallet-import/wallet-import.page'
 import { AuthGuard } from 'app/core/guards/auth.guard'
+import { WalletGrand } from 'app/core/guards/wallet.grard'
 
 export const walletRoutes: Routes = [
   {
     path: '',
     component: WalletPage,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, WalletGrand],
     pathMatch: 'full'
   },
   {

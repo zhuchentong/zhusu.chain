@@ -42,13 +42,11 @@ export class WalletChangePage implements OnInit {
 
   private ionViewWillEnter() {
     // 获取钱包列表
-    this.walletList = this.store.selectSnapshot(
-      WalletState.getWalletList
-    ) as any
+    this.walletList = this.store.selectSnapshot(WalletState.getWalletList)
     // 获取当前钱包
     this.currentWallet = this.store.selectSnapshot(
-      WalletState.getCurrentWallet
-    ) as any
+      WalletState.getCurrentWallet()
+    )
   }
 
   /**

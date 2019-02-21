@@ -38,7 +38,7 @@ export class WalletPage implements OnInit {
    * 进入页面获取当前钱包
    */
   private ionViewWillEnter() {
-    this.wallet = this.store.selectSnapshot(WalletState.getCurrentWallet) as any
+    this.wallet = this.store.selectSnapshot(WalletState.getCurrentWallet())
     if (this.wallet) {
       this.getWalletAmount()
     } else {

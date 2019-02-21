@@ -1,4 +1,10 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store'
+import {
+  State,
+  Action,
+  StateContext,
+  Selector,
+  createSelector
+} from '@ngxs/store'
 import { ExtendState } from 'app/store/state'
 import {
   AddWalletAction,
@@ -22,13 +28,18 @@ export class WalletState extends ExtendState {
    * @param state
    */
   @Selector()
-  public static getCurrentWallet(state) {
-    if (state.current) {
-      const wallet = state.walletList.find(x => x.address === state.current)
-      return plainToClass<Wallet,Wallet>(Wallet, wallet)
-    } else {
-      return null
-    }
+  public static getCurrentWallet() {
+    return createSelector(
+      [WalletState],
+      ({ wallet: state }) => {
+        if (state.current) {
+          const wallet = state.walletList.find(x => x.address === state.current)
+          return plainToClass<Wallet, Wallet>(Wallet, wallet)
+        } else {
+          return null
+        }
+      }
+    )
   }
 
   /**

@@ -1,7 +1,7 @@
 .slider-container {
   height: 250px;
   img {
-    width: 100%!important;
+    width: 100% !important;
   }
 }
 .search-container {
@@ -39,7 +39,6 @@
   .ad-item {
     $radius: 5px;
     min-height: 100px;
-    background: red;
     &.left {
       border-top-left-radius: $radius;
       border-bottom-left-radius: $radius;

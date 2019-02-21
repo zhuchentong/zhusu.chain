@@ -26,6 +26,7 @@ export class UserPage implements OnInit {
     {
       label: '钱包',
       icon: 'assets/icon/wallet.svg',
+      handler: this.onOpenButton,
       target: '/wallet'
     }
   ]

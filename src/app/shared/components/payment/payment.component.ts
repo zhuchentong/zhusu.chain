@@ -7,6 +7,7 @@ import { ethers } from 'ethers'
 import { EtherService } from 'app/utils/ether.service'
 import { CommonService } from 'app/utils/common.service'
 import { LoggerService } from '@ngx-toolkit/logger'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-payment',
@@ -21,6 +22,7 @@ export class PaymentComponent implements OnInit {
 
   constructor(
     private store: Store,
+    private router: Router,
     private etherService: EtherService,
     private modalController: ModalController,
     private commonService: CommonService,
@@ -29,17 +31,19 @@ export class PaymentComponent implements OnInit {
 
   public ngOnInit() {
     // 获取钱包列表
-    this.walletList = this.store.selectSnapshot(
-      WalletState.getWalletList
-    )
+    this.walletList = this.store.selectSnapshot(WalletState.getWalletList)
     // 获取当前钱包
-    const current = this.store.selectSnapshot(
-      WalletState.getCurrentWallet
-    )
+    const current = this.store.selectSnapshot(WalletState.getCurrentWallet())
 
     this.currentWallet = this.walletList.find(
       x => x.address === current.address
     )
+
+    // 判断是否有可用钱包
+    if (this.walletList.length === 0) {
+      this.commonService.toast('请创建或导入钱包后进行支付。')
+      return this.router.navigate(['/wallet/wallet-create'])
+    }
 
     // 获取钱包余额
     this.getWalletBalance()
@@ -60,7 +64,7 @@ export class PaymentComponent implements OnInit {
     loading.dismiss()
   }
 
-  public onClose(){
+  public onClose() {
     this.modalController.dismiss()
   }
 

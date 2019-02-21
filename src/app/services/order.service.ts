@@ -58,11 +58,11 @@ export class OrderService {
         room: params.room,
         beginDate: this.commonService.dateFormat(
           params.start,
-          'YYYY-MM-DD hh:mm:ss'
-        ),
+          'YYYY-MM-DD 00:00:00'
+        ), 
         endDate: this.commonService.dateFormat(
           params.end,
-          'YYYY-MM-DD hh:mm:ss'
+          'YYYY-MM-DD 00:00:00'
         ),
         attributes: {
           roomCount: params.count,

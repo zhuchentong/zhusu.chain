@@ -43,8 +43,8 @@ export class TransferPage implements OnInit {
     this.token = this.route.snapshot.paramMap.get('token') as TokenEnum
     // 获取当前钱包
     this.currentWallet = this.store.selectSnapshot(
-      WalletState.getCurrentWallet
-    ) as any
+      WalletState.getCurrentWallet()
+    )
     // 获取交易实例
     this.transferInstance = Transfer.getTransfer(
       this.token,

@@ -18,7 +18,7 @@ export class EtherService {
   private contractInstance
   private contractOwner
   private userGas = 30000 // 单位gas
-  private gaslimit: 250000
+  private gaslimit: 250000 // gas限制
 
   constructor(
     private commonService: CommonService,
@@ -299,9 +299,10 @@ export class EtherService {
    * @param password
    */
   public exportWallet(address: string, password: string) {
-    const json = this.commonService.parseWalletJson(address).json
+    // 从localstorage获取钱包数据
+    // const json = this.commonService.parseWalletJson(address).json
     // return ethers.Wallet.fromEncryptedWallet(json, password);
-    return ethers.Wallet.fromEncryptedJson(json, password)
+    // return ethers.Wallet.fromEncryptedJson(json, password)
   }
 
   /**
