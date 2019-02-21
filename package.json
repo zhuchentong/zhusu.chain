@@ -69,6 +69,7 @@
     "qs": "^6.6.0",
     "reflect-metadata": "~0.1.13",
     "rxjs": "~6.3.3",
+    "spritejs": "^2.27.3",
     "zone.js": "~0.8.27"
   },
   "devDependencies": {

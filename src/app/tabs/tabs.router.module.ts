@@ -9,12 +9,16 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'coin',
+        loadChildren: '../pages/coin/coin.module#CoinModule'
+      },
+      {
         path: 'hotel',
         loadChildren: '../pages/hotel/hotel.module#HotelPageModule'
       },
       {
-        path: 'order',
-        loadChildren: '../pages/order/order.module#OrderPageModule'
+        path: 'invest',
+        loadChildren: '../pages/invest/invest.module#InvestModule'
       },
       {
         path: 'user',
@@ -22,14 +26,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/hotel',
+        redirectTo: '/tabs/coin',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/hotel',
+    redirectTo: '/tabs/coin',
     pathMatch: 'full'
   }
   // TODO:404

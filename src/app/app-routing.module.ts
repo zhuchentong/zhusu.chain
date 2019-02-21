@@ -16,7 +16,9 @@ const routes: Routes = [
     loadChildren: './pages/wallet/wallet.module#WalletPageModule'
   },
   // 公共模块
-  { path: 'common', loadChildren: './pages/common/common.module#CommonModule' }
+  { path: 'common', loadChildren: './pages/common/common.module#CommonModule' },
+  { path: 'invest', loadChildren: './pages/invest/invest.module#InvestModule' },
+  { path: 'coin', loadChildren: './pages/coin/coin.module#CoinModule' }
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
