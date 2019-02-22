@@ -1,17 +1,17 @@
 <div class="star">
   <ion-icon
-    [ngStyle]="{ color: color }"
+    [ngStyle]="{ color: color, fontSize: size }"
     name="star"
     *ngFor="let item of convertArray(leftCount)"
     (click)="onUpdateStar(item)"
   ></ion-icon>
   <ion-icon
-    [ngStyle]="{ color: color }"
+    [ngStyle]="{ color: color, fontSize: size }"
     name="star-half"
     *ngIf="hasHalf"
   ></ion-icon>
   <ion-icon
-    [ngStyle]="{ color: color }"
+    [ngStyle]="{ color: color, fontSize: size }"
     name="star-outline"
     (click)="onUpdateStar(leftCount + item)"
     *ngFor="let item of convertArray(rightCount)"
