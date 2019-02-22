@@ -14,14 +14,12 @@ export class OrderCommentComponent implements OnInit {
   public order: Order
   // 用户评分
   private star = 2
-  private conetnt = ''
+  private content = ''
 
   constructor(
     private commentService: CommentService,
     private modalController: ModalController
-  ) {
-    return
-  }
+  ) {}
 
   public ngOnInit() {
     return
@@ -41,7 +39,7 @@ export class OrderCommentComponent implements OnInit {
     this.commentService
       .addComment(this.order.room.hotel.id, {
         ranking: this.star,
-        content: this.conetnt
+        content: this.content
       })
       .subscribe(() => {
         this.modalController.dismiss(true)

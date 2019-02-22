@@ -43,12 +43,15 @@ export class CommentService {
    * 获取酒店评论
    */
   public addComment(hotelId, { ranking, content }): Observable<Hotel> {
+    const user = this.store.selectSnapshot(state => state.user)
+
     return this.net.send({
       service: commentController.addComment,
       params: {
         hotelId,
         ranking,
-        content
+        content,
+        writerId: user.id
       }
     })
   }
