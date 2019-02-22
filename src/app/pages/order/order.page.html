@@ -1,3 +1,9 @@
+<ion-header>
+  <ion-toolbar>
+    <app-back-button slot="start"></app-back-button>
+    <ion-title>订单列表</ion-title>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
   <div class="row nowrap tags around-span">
     <div
@@ -50,14 +56,14 @@
             <div
               class="order-button"
               *ngSwitchCase="orderStateEnum.CREATED"
-              (click)="onPayment(order.price);$event.stopPropagation()"
+              (click)="onPayment(order.price); $event.stopPropagation()"
             >
               支付
             </div>
             <div
               class="order-button"
               *ngSwitchCase="orderStateEnum.CHECKOUT"
-              (click)="onComment(order.id);$event.stopPropagation()"
+              (click)="onComment(order.id); $event.stopPropagation()"
             >
               评价
             </div>

@@ -1,6 +1,8 @@
 .page.hotel-list {
   .amap {
     height: 100%;
+    width: 100%;
+    position: fixed;
   }
   .header {
     position: absolute;
@@ -30,7 +32,6 @@
     top: 56px;
     width: 100%;
     height: calc(100% - 56px);
-    overflow: auto;
 
     .v-list {
       background-color: transparent;

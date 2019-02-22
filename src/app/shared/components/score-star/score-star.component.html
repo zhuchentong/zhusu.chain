@@ -2,8 +2,8 @@
   <ion-icon
     [ngStyle]="{ color: color }"
     name="star"
+    *ngFor="let item of convertArray(leftCount)"
     (click)="onUpdateStar(item)"
-    *ngFor="let item of array(leftCount)"
   ></ion-icon>
   <ion-icon
     [ngStyle]="{ color: color }"
@@ -14,6 +14,6 @@
     [ngStyle]="{ color: color }"
     name="star-outline"
     (click)="onUpdateStar(leftCount + item)"
-    *ngFor="let item of array(rightCount)"
+    *ngFor="let item of convertArray(rightCount)"
   ></ion-icon>
 </div>

@@ -14,7 +14,7 @@ export class OrderCommentComponent implements OnInit {
   public order: Order
   // 用户评分
   private star = 2
-  private comment = ''
+  private conetnt = ''
 
   constructor(
     private commentService: CommentService,
@@ -38,11 +38,13 @@ export class OrderCommentComponent implements OnInit {
    * 评论
    */
   private onCommit() {
-    this.commentService.addComment(this.order.room.hotel.id, {
-      ranking: this.star,
-      content: this.comment
-    }).subscribe(()=>{
-      this.modalController.dismiss(true)
-    })
+    this.commentService
+      .addComment(this.order.room.hotel.id, {
+        ranking: this.star,
+        content: this.conetnt
+      })
+      .subscribe(() => {
+        this.modalController.dismiss(true)
+      })
   }
 }

@@ -6,6 +6,8 @@ import { PageService } from 'app/utils/page.service'
 import { CommonService } from 'app/utils/common.service'
 import { PaymentComponent } from 'app/shared/components/payment/payment.component'
 import { OrderCommentComponent } from './order-detail/order-comment/order-comment.component'
+import { WalletState } from 'app/store/state/wallet.state'
+import { Store } from '@ngxs/store'
 
 @Component({
   selector: 'app-order',
@@ -50,6 +52,7 @@ export class OrderPage implements OnInit {
   constructor(
     private orderService: OrderService,
     private commonService: CommonService,
+    private store: Store,
     private router: Router
   ) {}
 
@@ -124,6 +127,14 @@ export class OrderPage implements OnInit {
    * 支付订单
    */
   private async onPayment(price) {
+    // 获取当前钱包
+    const wallet = !!this.store.selectSnapshot(WalletState.getCurrentWallet())
+    // 获取当前无，则跳转钱包列表
+    if (!wallet) {
+      this.commonService.toast('支付前请先导入或创建钱包')
+      return this.router.navigate(['/wallet/wallet-change'])
+    }
+
     const modal = await this.commonService.modal({
       component: PaymentComponent,
       componentProps: {

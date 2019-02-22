@@ -13,6 +13,8 @@ export class ScoreStarComponent implements OnInit {
   @Input()
   public color = 'gray'
   @Input()
+  public size = '22px'
+  @Input()
   public count = 5
   @Input()
   public edit = false
@@ -20,11 +22,15 @@ export class ScoreStarComponent implements OnInit {
   private leftCount
   private rightCount
   private hasHalf: boolean
-  private array = Array
-
-  // constructor() {}
 
   public ngOnInit() {
+    this.getStarCount()
+  }
+
+  /**
+   * 计算星数
+   */
+  public getStarCount() {
     this.leftCount = Math.floor(this.star)
     this.hasHalf = this.star % 1 > 0
     this.rightCount = this.count - (this.hasHalf ? 1 : 0) - this.leftCount
@@ -35,7 +41,16 @@ export class ScoreStarComponent implements OnInit {
    * @param star
    */
   private onUpdateStar(star) {
-    this.star = star
+    this.star = star + 1
+    this.getStarCount()
     this.starChange.emit(this.star)
+  }
+
+  /**
+   * 生成序列
+   * @param count
+   */
+  private convertArray(count) {
+    return Array.from(new Array(count), (val, index) => index)
   }
 }

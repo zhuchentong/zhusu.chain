@@ -50,7 +50,7 @@ export class UserPage implements OnInit {
     {
       label: '订房记录',
       icon: 'assets/icon/wallet.svg',
-      target: '/tabs/order'
+      target: '/order'
     },
     {
       label: '联系我们',

@@ -106,21 +106,18 @@
     [orderStatus.CREATED, orderStatus.PAID, orderStatus.CHECKIN].includes(
       order.status
     )
-  ">
-  <div class="order-footer row between-span nowrap" [ngSwitch]="order.status">
+  "
+>
+  <div
+    class="order-footer row end-span middle-span nowrap"
+    [ngSwitch]="order.status"
+  >
     <ng-container *ngSwitchCase="orderStatus.CREATED">
-      <div class="content ">
-        <div class="row">
-          <div>距离支付结束还有</div>
-          <div *ngIf="order.payTime">
-            {{ order?.payTime / (1000 * 60) | floor | string | lpad: 2:'0' }}:{{
-              (order?.payTime / 1000) % 60 | string | lpad: 2:'0'
-            }}
-          </div>
-        </div>
-        <div>{{ order.room.hotel.location }}</div>
-      </div>
-      <div class="submit-button" (click)="onPayment()">支付订单</div>
+      <div class="action-button" (click)="onPayment()">支付</div>
+      <div class="action-button" (click)="onComment()">评价</div>
+    </ng-container>
+    <ng-container *ngSwitchCase="orderStatus.PAID">
+      <div class="action-button" (click)="onComment()">评价</div>
     </ng-container>
   </div>
 </ion-footer>

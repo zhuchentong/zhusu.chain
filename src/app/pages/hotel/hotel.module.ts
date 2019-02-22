@@ -9,6 +9,7 @@ import { OrderService } from 'app/services/order.service'
 import { HotelFilterComponent } from './hotel-list/hotel-filter/hotel-filter.component'
 import { SplashesService } from 'app/services/splashes.service'
 import { AdvertisementsService } from 'app/services/advertisements.service'
+import { CommentService } from 'app/services/commnet.service'
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(hotelRoutes), NgxAmapModule],
@@ -18,7 +19,8 @@ import { AdvertisementsService } from 'app/services/advertisements.service'
     RoomService,
     OrderService,
     AdvertisementsService,
-    SplashesService
+    SplashesService,
+    CommentService
   ]
 })
 export class HotelPageModule {}

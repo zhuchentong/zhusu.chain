@@ -11,6 +11,7 @@ import { CommentService } from 'app/services/commnet.service'
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(orderRoutes), NgxAmapModule],
   declarations: [...orderPages, OrderCommentComponent],
+  entryComponents: [...orderPages, OrderCommentComponent],
   providers: [OrderService, OrderExecutionService, CommentService]
 })
 export class OrderPageModule {}

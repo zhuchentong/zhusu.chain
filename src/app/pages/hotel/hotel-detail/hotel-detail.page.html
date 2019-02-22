@@ -12,21 +12,21 @@
       [name]="isCollect ? 'heart' : 'heart-empty'"
       (click)="onCollect()"
     ></ion-icon>
-    <ion-icon class="share" name="share"></ion-icon>
+    <ion-icon class="share" name="share" (click)="onShare()"></ion-icon>
   </div>
 </div>
 <div class="footer row middle-span nowrap">
   <div class="good col-span-4 row nowrap middle-span">
     <label>好评</label>
-    <label class="number">{{ hotel?.commenterCount }}条</label>
+    <label class="number">{{ comment?.positive }}条</label>
   </div>
   <div class="bad col-span-4 row nowrap middle-span">
     <label>差评</label>
-    <label class="number">{{ hotel?.commenterCount }}条</label>
+    <label class="number">{{ comment?.negative }}条</label>
   </div>
   <div class="write col-span-4 row nowrap middle-span center-span">
     <ion-icon name="clipboard"></ion-icon>
-    <label>写点评</label>
+    <label>更多评价</label>
   </div>
 </div>
 <ion-content [scrollEvents]="true" (ionScroll)="onScroll($event)">

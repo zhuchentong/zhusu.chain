@@ -64,10 +64,12 @@ ion-content {
 .order-footer {
   height: 50px;
   background-color: white;
-  .submit-button {
-    height: 50px;
-    width: 100px;
-    line-height: 50px;
+  .action-button {
+    height: 30px;
+    line-height: 30px;
+    width: 80px;
+    margin: 0 5px;
+    border-radius: 10px;
     text-align: center;
     background-color: rgb(96, 155, 96);
     color: white;

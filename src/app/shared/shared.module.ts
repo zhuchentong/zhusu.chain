@@ -18,6 +18,7 @@ import { StringPipe } from './pipes/string.pipe'
 import { ClipboardModule } from 'ngx-clipboard'
 import { PaymentComponent } from './components/payment/payment.component'
 import { HotelItemComponent } from './components/hotel-item/hotel-item.component'
+import { NativeService } from 'app/utils/native.service'
 @NgModule({
   declarations: [
     BackButtonComponent,
@@ -59,7 +60,7 @@ import { HotelItemComponent } from './components/hotel-item/hotel-item.component
     NgPipesModule,
     ClipboardModule
   ],
-  providers: [CommonService, DeviceService, Geolocation],
+  providers: [CommonService, DeviceService, Geolocation, NativeService],
   entryComponents: [SelectStarComponent, PaymentComponent, HotelItemComponent]
 })
 export class SharedModule {

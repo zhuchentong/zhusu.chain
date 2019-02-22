@@ -19,7 +19,20 @@ export class CommentService {
   public getCommentByHotel(hotelId): Observable<Hotel> {
     return this.net.send({
       service: commentController.getCommentsByHotel,
-      // model: C,
+      model: Comment,
+      params: {
+        hotelId
+      }
+    })
+  }
+
+  /**
+   * 获取酒店评论统计
+   * @param hotelId
+   */
+  public commentDetail(hotelId) {
+    return this.net.send({
+      service: commentController.commentDetail,
       params: {
         hotelId
       }
@@ -32,7 +45,6 @@ export class CommentService {
   public addComment(hotelId, { ranking, content }): Observable<Hotel> {
     return this.net.send({
       service: commentController.addComment,
-      // model: C,
       params: {
         hotelId,
         ranking,

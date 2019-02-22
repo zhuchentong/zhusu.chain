@@ -18,6 +18,7 @@ $height: 100px;
   .photo {
     flex-basis: 80px;
     width: 80px;
+    background-size: 100% 100%;
     height: $height;
     border-radius: 10px;
     background-image: url('/assets/image/hotel.jpg');

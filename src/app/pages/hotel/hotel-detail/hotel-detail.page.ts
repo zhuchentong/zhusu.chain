@@ -10,11 +10,12 @@ import {
   UpdateRoomAction,
   UpdateHotelAction
 } from 'app/store/action/hotel.action'
-import { Hotel } from 'app/models/hotel.model'
 import { HotelService } from 'app/services/hotel.service'
 import { CollectState } from 'app/store/state/collect.state'
 import { AddCollect, RemoveCollect } from 'app/store/action/collect.action'
 import { CommonService } from 'app/utils/common.service'
+import { NativeService } from 'app/utils/native.service'
+import { CommentService } from 'app/services/commnet.service'
 
 @Component({
   selector: 'app-hotel-detail',
@@ -39,6 +40,8 @@ export class HotelDetailPage implements OnInit {
   private price
   // 是否收藏
   private isCollect
+  // 评论数据
+  private comment
   // 分页服务
   private page = new PageService({ pageSize: 100 })
   // slide配置
@@ -52,9 +55,11 @@ export class HotelDetailPage implements OnInit {
     private hotelService: HotelService,
     private roomService: RoomService,
     private logger: LoggerService,
+    private nativeService: NativeService,
     private commonService: CommonService,
     private router: Router,
     private route: ActivatedRoute,
+    private commentSerivce: CommentService,
     private store: Store
   ) {}
 
@@ -67,6 +72,8 @@ export class HotelDetailPage implements OnInit {
       this.getHotel(id)
       // 获取房间列表
       this.getRoomList(id)
+      // 获取酒店评论信息
+      this.getComment(id)
       // 判断收否已经收藏
       this.isCollect = this.store.selectSnapshot(CollectState.hasCollect(id))
     }
@@ -82,6 +89,12 @@ export class HotelDetailPage implements OnInit {
       this.position = [this.hotel.position.lng, this.hotel.position.lat]
       this.hiddenServer =
         this.hotel.facilities && this.hotel.facilities.length > 3
+    })
+  }
+
+  public getComment(id) {
+    this.commentSerivce.commentDetail(id).subscribe(comment => {
+      this.comment = comment
     })
   }
   /**
@@ -132,5 +145,12 @@ export class HotelDetailPage implements OnInit {
     )
     this.isCollect = !this.isCollect
     this.commonService.toast(this.isCollect ? '收藏成功' : '取消收藏', 1000)
+  }
+
+  /**
+   * 分享
+   */
+  private onShare() {
+    this.nativeService.share('TODO: 在这里填写分享内容')
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { NavController } from '@ionic/angular'
+import { NavController, ModalController } from '@ionic/angular'
 
 @Component({
   selector: 'app-back-button',
@@ -9,14 +9,22 @@ import { NavController } from '@ionic/angular'
 export class BackButtonComponent implements OnInit {
   @Input()
   public color = 'black'
+  @Input()
+  public modal = false
 
-  constructor(private navCtrl: NavController) {}
+  constructor(
+    private navCtrl: NavController,
+    private modalController: ModalController
+  ) {}
 
   public ngOnInit() {
     return
   }
 
   private onClick() {
+    if (this.modal) {
+      this.modalController.dismiss()
+    }
     this.navCtrl.goBack()
   }
 }

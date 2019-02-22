@@ -21,5 +21,13 @@ export const commentController = {
   addComment: {
     controller: 'comments',
     method: 'POST'
+  },
+  /**
+   * 评论统计信息
+   */
+  commentDetail: {
+    controller: 'comments',
+    action: 'commentDetail',
+    method: 'GET'
   }
 }

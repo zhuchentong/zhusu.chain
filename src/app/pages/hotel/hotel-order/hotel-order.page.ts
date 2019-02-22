@@ -116,8 +116,8 @@ export class HotelOrderPage implements OnInit {
       })
       .subscribe(
         data => {
-          // TODO:进行支付操作
-          this.router.navigate(['tabs/order', {}])
+          // TODO:进入订单详情
+          this.router.navigate(['/order', { replaceUrl: true }])
         },
         () => {
           this.commonService.toast('预订失败')
