@@ -155,11 +155,11 @@ export class OrderPage implements OnInit {
   /**
    * 提交评论
    */
-  private async onComment(id) {
+  private async onComment(order) {
     const modal = await this.commonService.modal({
       component: OrderCommentComponent,
       componentProps: {
-        id
+        order
       },
       callback: result => {
         if (result === true) {

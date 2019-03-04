@@ -105,7 +105,7 @@ export class OrderDetailPage implements OnInit {
     const modal = await this.commonService.modal({
       component: OrderCommentComponent,
       componentProps: {
-        id: this.order.id
+        order: this.order
       },
       callback: result => {
         if (result === true) {

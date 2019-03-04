@@ -63,7 +63,7 @@
             <div
               class="order-button"
               *ngSwitchCase="orderStateEnum.CHECKOUT"
-              (click)="onComment(order.id); $event.stopPropagation()"
+              (click)="onComment(order); $event.stopPropagation()"
             >
               评价
             </div>

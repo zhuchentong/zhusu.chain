@@ -2,7 +2,7 @@
   <ion-toolbar>
     <app-back-button slot="start" [modal]="true"></app-back-button>
     <ion-title>评论</ion-title>
-    <ion-button (click)="(onCommit)" slot="end">提交</ion-button>
+    <ion-button (click)="onCommit()" slot="end">提交</ion-button>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
@@ -11,7 +11,7 @@
     <app-score-star [(star)]="star" [edit]="true" slot="end"></app-score-star>
   </ion-item>
   <ion-item>
-    <ion-textarea rows="15" placeholder="请在这离填写评论" [(ngModel)]="conetnt">
+    <ion-textarea rows="15" placeholder="请在这离填写评论" [(ngModel)]="content">
     </ion-textarea>
   </ion-item>
 </ion-content>
