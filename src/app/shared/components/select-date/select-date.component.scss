@@ -1,17 +1,16 @@
-$height: 80px;
+@import 'theme.scss';
+
 :host {
   width: 100%;
-}
+  $height: 80px;
 
-.component.select-date {
-  height: $height;
-  border-radius: 5px;
-  background-color: lightgray;
-  padding: 0 10px;
-
-  ion-datetime {
-    font-weight: bold;
+  .component.select-date {
+    height: $height;
+    border-radius: 5px;
+    background-color: $COLOR2;
+    padding: 0 10px;
   }
+
   .split {
     width: 30px;
   }
@@ -19,4 +18,8 @@ $height: 80px;
   .days {
     width: 50px;
   }
+}
+
+ion-datetime {
+  font-weight: bold;
 }

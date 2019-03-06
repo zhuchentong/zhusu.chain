@@ -1,13 +1,13 @@
 // 添加金币
 export class AddCoin {
   public static readonly type = '[coin] AddCoin'
-  constructor(public count: number) {}
+  constructor(public coins) {}
 }
 
 // 删除金币
 export class RemoveCoin {
   public static readonly type = '[coin] RemoveCoin'
-  constructor() {
+  constructor(public id) {
     return
   }
 }

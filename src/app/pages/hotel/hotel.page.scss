@@ -1,9 +1,12 @@
+@import 'theme.scss';
+
 .slider-container {
   height: 250px;
   img {
     width: 100% !important;
   }
 }
+// 搜索区域
 .search-container {
   margin: 0 10px;
   & > * {
@@ -12,7 +15,7 @@
   .level {
     height: 50px;
     border-radius: 5px;
-    background-color: lightgray;
+    background-color: $COLOR2;
     padding: 0 10px;
     width: 100%;
   }
@@ -31,6 +34,7 @@
     transform: scale(0.8);
   }
 }
+// 广告区域
 .ad-container {
   margin: 10px;
   .split {

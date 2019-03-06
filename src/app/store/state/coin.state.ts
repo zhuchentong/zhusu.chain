@@ -8,15 +8,19 @@ import {
 } from '@ngxs/store'
 import { ExtendState } from 'app/store/state'
 import { UpdateCollectTime, AddCoin, RemoveCoin } from '../action/coin.action'
+import { CommonService } from 'app/utils/common.service'
 
 @State({
   name: 'coin',
   defaults: {
     lastTime: 0,
-    coinCount: 0
+    coinList: []
   }
 })
 export class CoinState extends ExtendState {
+  constructor(private commonService: CommonService) {
+    super()
+  }
   /**
    * 更新采集时间
    * @param param0
@@ -34,10 +38,14 @@ export class CoinState extends ExtendState {
    * @param param1
    */
   @Action(AddCoin)
-  public addCoin<T>(state: StateContext<any>, { count }: AddCoin) {
-    const coinCount = state.getState().coinCount
+  public addCoin<T>(state: StateContext<any>, { coins }: AddCoin) {
+    if (coins.length < 0) {
+      return
+    }
+    const coinList = [...state.getState().coinList, ...coins]
+
     this.updateState(state, {
-      coinCount: coinCount + count
+      coinList
     })
   }
 
@@ -47,11 +55,11 @@ export class CoinState extends ExtendState {
    * @param param1
    */
   @Action(RemoveCoin)
-  public removeCoin<T>(state: StateContext<any>) {
-    const coinCount = state.getState().coinCount
-    if (coinCount > 0) {
+  public removeCoin<T>(state: StateContext<any>, { id }: RemoveCoin) {
+    const coinList = state.getState().coinList
+    if (coinList.length > 0) {
       this.updateState(state, {
-        coinCount: coinCount - 1
+        coinList: coinList.filter(coin => coin.id !== id)
       })
     }
   }

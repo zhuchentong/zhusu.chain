@@ -1,42 +1,48 @@
-$height: 50px;
+@import 'theme.scss';
 :host {
+  $height: 50px;
   width: 100%;
-}
 
-.component.select-position {
-  height: $height;
-  line-height: $height;
-  border-radius: 5px;
-  background-color: lightgray;
-  padding: 0 10px;
-  .city {
-    font-size: 1.1rem;
+  .component.select-position {
     height: $height;
-    min-width: 80px;
-  }
-  .address {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    height: $height;
-    &.wrap {
-      line-height: $height/2;
-      white-space: pre-line;
+    line-height: $height;
+    border-radius: 5px;
+    background-color: $COLOR2;
+    padding: 0 10px;
+    // 城市信息
+    .city {
+      font-size: 1.1rem;
+      height: $height;
+      min-width: 80px;
     }
-  }
-  .split {
-    height: $height - 20px;
-    width: 1px;
-    background-color: darkgray;
-  }
-  .geolocation {
-    flex-basis: 80px;
-    width: 80px; // transform: scale(0.5, 0.5);
-    &>* {
-      display: block;
+    // 地址信息
+    .address {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      height: $height;
+      &.wrap {
+        line-height: $height/2;
+        white-space: pre-line;
+      }
     }
-    label {
-      transform: scale(0.8);
+    // 分割线
+    .split {
+      height: $height - 20px;
+      width: 1px;
+      background-color: $COLOR2 - #1a1a1a;
+    }
+    // 定位按钮
+    .geolocation {
+      color: $COLOR2;
+      flex-basis: 80px;
+      width: 80px; // transform: scale(0.5, 0.5);
+      & > * {
+        display: block;
+      }
+      label {
+        transform: scale(0.8);
+      }
     }
   }
 }

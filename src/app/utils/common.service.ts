@@ -240,4 +240,15 @@ export class CommonService {
     })
     return obj
   }
+
+  /**
+   * 获取随机位置
+   * @param min
+   * @param max
+   */
+  public getRandomNumber(min = 0, max = 0, decimal = 2) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return parseFloat((Math.random() * (max - min) + min).toFixed(decimal))
+  }
 }

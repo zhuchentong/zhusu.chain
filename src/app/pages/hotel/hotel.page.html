@@ -1,9 +1,11 @@
-<ion-content class="page hotel">
+<ion-content>
+  <!-- 轮播区域-->
   <ion-slides class="slider-container" pager="true" [options]="slideOptions">
     <ion-slide *ngFor="let item of splashList">
       <img [src]="item.imgUrl" [routerLink]="item.link" />
     </ion-slide>
   </ion-slides>
+  <!--搜索区域-->
   <div class="search-container row nowarp">
     <app-select-position></app-select-position>
     <app-select-date></app-select-date>
@@ -23,6 +25,7 @@
       搜索
     </ion-button>
   </div>
+  <!--推荐区域-->
   <div class="recommand-container row nowrap around-span">
     <div
       class="recommand-item col middle-span center-span"
@@ -33,6 +36,7 @@
       <div class="label">{{ item.label }}</div>
     </div>
   </div>
+  <!--广告区域-->
   <div class="ad-container">
     <div class="row nowrap">
       <div #aditem ad-id="1" class="col-span ad-item left"></div>

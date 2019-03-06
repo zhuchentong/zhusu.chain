@@ -1,12 +1,16 @@
 import { Component, OnInit, ElementRef } from '@angular/core'
-import { Scene, Sprite } from 'spritejs'
+import { Scene, Sprite, Label, Group } from 'spritejs'
 import { Store } from '@ngxs/store'
 import {
   UpdateCollectTime,
   AddCoin,
   RemoveCoin
 } from 'app/store/action/coin.action'
+import { CommonService } from 'app/utils/common.service'
 
+const MIN_COIN_AMOUNT = 0.01
+const MAX_COIN_AMOUNT = 0.0001
+const EXPIRE_TIME = 30 * 60 * 1000
 @Component({
   selector: 'app-coin',
   templateUrl: './coin.page.html',
@@ -15,13 +19,28 @@ import {
 export class CoinPage implements OnInit {
   private layer
   private amount = 0.0 // TODO: 为提取总金额,需要从服务端获取
-  private iconAmount = 0.01 // 单币金额
   private width = window.innerWidth * 2
-  private height = (window.innerHeight - 56) * 2
+  private height = 400 * 2
   private readonly maxCoinCount = 8
-  private readonly createSpeed = 3000 // 金币生产速度(ms)
+  private readonly createSpeed = 1000 * 3 // 金币生产速度(ms)
+  private recordList = [
+    {
+      state: '提现',
+      amount: '0.0233',
+      time: new Date()
+    },
+    {
+      state: '过期',
+      amount: '0.0233',
+      time: new Date()
+    }
+  ]
 
-  constructor(private elementRef: ElementRef, private store: Store) {}
+  constructor(
+    private elementRef: ElementRef,
+    private store: Store,
+    private commonService: CommonService
+  ) {}
 
   public ngOnInit() {
     this.createScene()
@@ -36,12 +55,10 @@ export class CoinPage implements OnInit {
    *  添加历史coin
    */
   private addLastCoin() {
-    const count = this.store.selectSnapshot(state => state.coin.coinCount)
+    const coinList = this.store.selectSnapshot(state => state.coin.coinList)
 
-    if (count > 0) {
-      Array(count)
-        .fill('')
-        .forEach(() => this.createCoin())
+    if (coinList && coinList.length > 0) {
+      coinList.forEach(coin => this.createCoin(coin))
     }
   }
 
@@ -50,17 +67,26 @@ export class CoinPage implements OnInit {
    */
   private addNewCoin() {
     const lastTime = this.store.selectSnapshot(state => state.coin.lastTime)
-    const lastCount = this.store.selectSnapshot(state => state.coin.coinCount)
+    const coinList = this.store.selectSnapshot(state => state.coin.coinList)
     // 计算应生成金币数量
     if (lastTime) {
       // 应生成金币数
       const count = Math.floor((Date.now() - lastTime) / this.createSpeed)
       // 实际生成金币数
-      const addCount = Math.min(this.maxCoinCount - lastCount, count)
+      const addCount = Math.min(this.maxCoinCount - coinList.length, count)
+
       if (addCount > 0) {
-        Array(addCount)
-          .fill('')
-          .forEach(() => this.createCoin())
+        const addCoinList = Array.from(Array(addCount), () => ({
+          id: 1,
+          amount: this.commonService.getRandomNumber(
+            MIN_COIN_AMOUNT,
+            MAX_COIN_AMOUNT,
+            5
+          ),
+          createTime: +new Date(),
+          expireTime: +new Date() + EXPIRE_TIME
+        }))
+        addCoinList.forEach(coin => this.createCoin(coin))
         this.store.dispatch(new AddCoin(addCount))
       }
     }
@@ -87,17 +113,38 @@ export class CoinPage implements OnInit {
    * 创建金币
    * TODO:需要添加金币金额需要创建GROUP
    */
-  private createCoin() {
-    const coin = new Sprite('/assets/image/login_icon.png')
-    const x = this.getRandomInt(100, this.width - 100)
-    const y = this.getRandomInt(100, this.height - 100)
+  private createCoin(data) {
+    const coin = new Sprite('/assets/image/coin/coin.png')
+    const label = new Label('111')
+    const group = new Group()
+    const size = 80
+    const x = this.commonService.getRandomNumber(size, this.width - size)
+    const y = this.commonService.getRandomNumber(
+      size * 2,
+      this.height - size * 2
+    )
 
     // 设置金币位置
     coin.attr({
       anchor: [0.5, 0.5],
-      pos: [x, y],
-      size: [100, 100]
+      pos: [size / 2, size / 2],
+      size: [size, size]
     })
+
+    label.attr({
+      anchor: [0.5, 0.5],
+      pos: [size / 2, size + 20],
+      font: 'bold 24px Arial',
+      color: '#ffffff'
+    })
+
+    group.attr({
+      anchor: [0.5, 0.5],
+      pos: [x, y]
+    })
+    group.append(coin)
+    group.append(label)
+    group.data = data
 
     // 添加旋转动画
     const animate1 = coin.animate(
@@ -109,7 +156,7 @@ export class CoinPage implements OnInit {
     )
 
     // 添加竖直动画
-    const animate2 = coin.animate([{ y: y + 10 }, { y: y - 10 }], {
+    const animate2 = group.animate([{ y: y + 10 }, { y: y - 10 }], {
       duration: 1000 + Math.random() * 1000,
       delay: Math.random() * 1000,
       fill: 'forwards',
@@ -119,43 +166,33 @@ export class CoinPage implements OnInit {
     })
 
     // 添加金币点击处理
-    coin.on('touchstart', evt => {
+    group.on('touchstart', evt => {
       // 取消动画
       animate1.cancel(true)
       animate2.cancel(true)
       evt.stopDispatch()
       // 金币采集动画
-      coin
+      group
         .transition(0.8)
         .attr({
           pos: [this.width / 2, -100]
         })
-        .then(() => this.collectCoin(coin))
+        .then(() => this.collectCoin(group))
     })
 
     // 添加到图层
-    this.layer.append(coin)
-  }
-
-  /**
-   * 获取随机位置
-   * @param min
-   * @param max
-   */
-  private getRandomInt(min, max) {
-    min = Math.ceil(min)
-    max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min)) + min
+    this.layer.append(group)
   }
 
   /**
    * 采集金币
    * @param coin
    */
-  private collectCoin(coin) {
-    this.amount += this.iconAmount
-    this.layer.remove(coin)
-    this.store.dispatch(new RemoveCoin())
+  private collectCoin(group) {
+    const coin = group.data
+    this.amount += coin.amount
+    this.layer.remove(group)
+    this.store.dispatch(new RemoveCoin(coin.id))
     // TODO: 调用后台收币
   }
 }

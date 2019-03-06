@@ -1,4 +1,23 @@
 <ion-content class="page coin-page">
-  <div class="scene"></div>
-  <div class="amount">金币 : {{ amount.toFixed(5) }}</div>
+  <div class="col full">
+    <div class="scene">
+      <div class="tip">努力挖矿中...</div>
+      <div class="amount row middle-span center-span">
+        <ion-text>{{ amount.toFixed(5) }}</ion-text>
+        <div class="withdraw">提现</div>
+      </div>
+    </div>
+    <div class="record row-span">
+      <div class="title">
+        最新动态
+      </div>
+      <div class="record-list">
+        <div class="row record-item middle-span center-span" *ngFor="let item of recordList">
+          <div class="col-span-2">{{ item.state }}</div>
+          <div class="col-span">HOME {{ item.amount }}</div>
+          <div class="col-span-6">HOME {{ item.time | date }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
