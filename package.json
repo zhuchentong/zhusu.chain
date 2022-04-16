@@ -14,7 +14,7 @@
     "lint": "ng lint",
     "test": "ng test",
     "e2e": "ng e2e",
-    "commit": "git-cz"
+    "commit": "commit"
   },
   "husky": {
     "hooks": {
